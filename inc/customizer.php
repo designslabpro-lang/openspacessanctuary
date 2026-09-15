@@ -21,6 +21,9 @@ function oss_child_customize_register( $wp_customize ) {
 		'oss_instagram'      => array( 'label' => __( 'Instagram URL', 'astra-child' ), 'default' => '' ),
 		'oss_header_cta_text' => array( 'label' => __( 'Header CTA Text', 'astra-child' ), 'default' => 'Learn More' ),
 		'oss_header_cta_url'  => array( 'label' => __( 'Header CTA URL', 'astra-child' ), 'default' => '/contact' ),
+		'oss_donate_url'      => array( 'label' => __( 'Donate URL', 'astra-child' ), 'default' => '/contact' ),
+		'oss_volunteer_url'   => array( 'label' => __( 'Volunteer URL', 'astra-child' ), 'default' => '/contact' ),
+		'oss_nonprofit_info'  => array( 'label' => __( 'Nonprofit Status Line', 'astra-child' ), 'default' => 'Open Space Sanctuary is a 501(c)(3) nonprofit organization. EIN: 00-0000000. All donations are tax-deductible.' ),
 	);
 
 	foreach ( $fields as $id => $args ) {
@@ -40,6 +43,7 @@ function oss_child_customize_register( $wp_customize ) {
 		'oss_programs_intro' => __( 'Programs Page Intro Text', 'astra-child' ),
 		'oss_events_intro'   => __( 'Events Page Intro Text', 'astra-child' ),
 		'oss_blog_intro'     => __( 'Blog Page Intro Text', 'astra-child' ),
+		'oss_mission_statement' => __( 'Footer Mission Statement', 'astra-child' ),
 	);
 	foreach ( $text_fields as $id => $label ) {
 		$wp_customize->add_setting( $id, array( 'sanitize_callback' => 'sanitize_textarea_field' ) );

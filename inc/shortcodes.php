@@ -178,3 +178,29 @@ function oss_child_contact_form_shortcode() {
 	return ob_get_clean();
 }
 add_shortcode( 'oss_contact_form', 'oss_child_contact_form_shortcode' );
+
+/**
+ * Newsletter signup. Uses a mailing-list plugin's shortcode if one is
+ * installed (Mailchimp for WP, Newsletter, etc.); otherwise shows a
+ * styled placeholder so the footer layout is complete pending a real
+ * integration. No email addresses are ever collected by theme code.
+ */
+function oss_child_newsletter_signup_shortcode() {
+	if ( shortcode_exists( 'mc4wp_form' ) ) {
+		return do_shortcode( '[mc4wp_form]' );
+	}
+	if ( shortcode_exists( 'newsletter' ) ) {
+		return do_shortcode( '[newsletter]' );
+	}
+	ob_start();
+	?>
+	<form class="oss-newsletter-form" onsubmit="return false;">
+		<label class="screen-reader-text" for="oss-newsletter-email"><?php esc_html_e( 'Email address', 'astra-child' ); ?></label>
+		<input type="email" id="oss-newsletter-email" placeholder="<?php esc_attr_e( 'Your email address', 'astra-child' ); ?>" required>
+		<button type="submit" class="oss-btn oss-btn--on-sage oss-btn--sm"><?php esc_html_e( 'Subscribe', 'astra-child' ); ?></button>
+	</form>
+	<p class="oss-newsletter-form__note"><?php esc_html_e( 'Connect a mailing list plugin (Mailchimp for WP, Newsletter, etc.) to activate this form — no theme changes required.', 'astra-child' ); ?></p>
+	<?php
+	return ob_get_clean();
+}
+add_shortcode( 'oss_newsletter_signup', 'oss_child_newsletter_signup_shortcode' );

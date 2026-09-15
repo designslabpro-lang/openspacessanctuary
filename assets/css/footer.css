@@ -5,11 +5,72 @@
 .oss-footer {
 	background-color: var(--oss-primary);
 	color: var(--oss-bg);
-	padding-top: clamp(3rem, 6vw, 5rem);
 }
 
 .oss-footer a { color: var(--oss-bg); }
 .oss-footer a:hover { color: var(--oss-gold); }
+
+/* -------------------------------------------------------------------- */
+/* Newsletter band                                                        */
+/* -------------------------------------------------------------------- */
+
+.oss-footer__newsletter {
+	background-color: var(--oss-primary-dark);
+	border-bottom: 1px solid rgba(245,240,230,0.18);
+}
+.oss-footer__newsletter-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1.5rem;
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+}
+.oss-footer__newsletter h3 {
+	font-family: var(--oss-font-heading);
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 1.3rem;
+	color: var(--oss-bg);
+	margin: 0 0 0.35rem;
+}
+.oss-footer__newsletter p { margin: 0; font-size: 0.92rem; opacity: 0.85; }
+.oss-newsletter-form {
+	display: flex;
+	gap: 0.75rem;
+	flex-wrap: wrap;
+}
+.oss-newsletter-form input[type="email"] {
+	min-width: 260px;
+	padding: 0.85em 1.1em;
+	border: 1px solid rgba(245,240,230,0.35);
+	background: transparent;
+	color: var(--oss-bg);
+	font-family: var(--oss-font-body);
+	font-size: 0.9rem;
+}
+.oss-newsletter-form input[type="email"]::placeholder { color: rgba(245,240,230,0.6); }
+.oss-newsletter-form__note {
+	flex-basis: 100%;
+	font-size: 0.75rem !important;
+	opacity: 0.55;
+	margin-top: 0.5rem !important;
+}
+
+/* -------------------------------------------------------------------- */
+/* Grid columns                                                          */
+/* -------------------------------------------------------------------- */
+
+.oss-footer__grid { padding-top: clamp(3rem, 6vw, 5rem); }
+.oss-footer__mission { font-size: 0.9rem; opacity: 0.85; line-height: 1.6; }
+.oss-footer__nonprofit {
+	font-size: 0.75rem;
+	opacity: 0.65;
+	margin-top: 1.25rem;
+	padding-top: 1.25rem;
+	border-top: 1px solid rgba(245,240,230,0.18);
+}
 
 .oss-footer__grid {
 	display: grid;
@@ -19,7 +80,11 @@
 	border-bottom: 1px solid rgba(245,240,230,0.18);
 }
 
-.oss-footer__brand img { max-height: 56px; margin-bottom: 1rem; }
+.oss-footer__brand img {
+	max-height: 72px;
+	width: auto !important;
+	margin-bottom: 1rem;
+}
 .oss-footer__brand .oss-footer__site-name {
 	font-family: var(--oss-font-heading);
 	font-size: 1.3rem;
