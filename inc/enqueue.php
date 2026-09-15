@@ -9,10 +9,10 @@ function oss_child_enqueue_assets() {
 	// Parent Astra stylesheet.
 	wp_enqueue_style( 'astra-parent-style', get_template_directory_uri() . '/style.css', array(), OSS_CHILD_VERSION );
 
-	// Brand fonts: Playfair Display (headings) + Montserrat (body).
+	// Brand fonts: Playfair Display (headings) + Montserrat (body) + Alex Brush (script accents).
 	wp_enqueue_style(
 		'oss-fonts',
-		'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap',
+		'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Montserrat:wght@300;400;500;600;700&family=Alex+Brush&display=swap',
 		array(),
 		null
 	);

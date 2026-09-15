@@ -234,6 +234,83 @@
 }
 
 /* -------------------------------------------------------------------- */
+/* Healing Power of Horses — layered photo + editorial quote block       */
+/* -------------------------------------------------------------------- */
+
+.oss-power__media {
+	position: relative;
+	max-width: 520px;
+}
+.oss-power__media-frame {
+	position: absolute;
+	left: -24px;
+	bottom: -24px;
+	width: 88%;
+	height: 88%;
+	background: var(--oss-primary);
+	z-index: 0;
+}
+.oss-power__media-photo {
+	position: relative;
+	z-index: 1;
+	margin-left: 24px;
+	overflow: hidden;
+}
+.oss-power__media-photo img { width: 100%; height: 100%; object-fit: cover; display: block; aspect-ratio: 4/5; }
+.oss-power__media-caption {
+	position: absolute;
+	left: 1.75rem;
+	bottom: 1.75rem;
+	font-family: 'Alex Brush', cursive;
+	font-size: 2rem;
+	line-height: 1.25;
+	color: var(--oss-white);
+	text-shadow: 0 2px 12px rgba(0,0,0,0.35);
+}
+.oss-power__media-caption-rule {
+	width: 48px;
+	height: 2px;
+	background: var(--oss-gold);
+	margin-top: 0.6rem;
+}
+
+.oss-power__eyebrow-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.85rem; }
+.oss-power__eyebrow-row .oss-eyebrow { margin-bottom: 0; white-space: nowrap; }
+.oss-power__eyebrow-line { flex: 1 1 auto; max-width: 140px; height: 1px; background: var(--oss-gold); }
+
+.oss-power__quote {
+	display: flex;
+	gap: 1.25rem;
+	margin-top: 2rem;
+	padding-top: 1.75rem;
+	border-top: 1px solid rgba(117,91,69,0.18);
+}
+.oss-power__quote-mark {
+	font-family: var(--oss-font-heading);
+	font-size: 3.5rem;
+	line-height: 1;
+	color: var(--oss-gold);
+	flex-shrink: 0;
+}
+.oss-power__quote blockquote {
+	font-family: var(--oss-font-heading);
+	font-style: italic;
+	font-size: 1.2rem;
+	line-height: 1.55;
+	margin: 0 0 0.85rem;
+	color: var(--oss-text);
+}
+.oss-power__quote-rule { width: 40px; height: 1px; background: var(--oss-gold); margin-bottom: 0.6rem; }
+.oss-power__quote cite {
+	font-style: normal;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--oss-brown);
+}
+
+/* -------------------------------------------------------------------- */
 /* Quote / pullout                                                       */
 /* -------------------------------------------------------------------- */
 
