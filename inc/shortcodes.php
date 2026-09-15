@@ -128,6 +128,31 @@ function oss_child_blog_grid_shortcode( $atts ) {
 add_shortcode( 'oss_blog_grid', 'oss_child_blog_grid_shortcode' );
 
 /**
+ * Contact info block — reads Customizer settings so it stays editable
+ * from Appearance → Customize → Open Space Sanctuary Settings.
+ */
+function oss_child_contact_info_shortcode() {
+	ob_start();
+	?>
+	<div class="oss-contact-info">
+		<dl>
+			<dt><?php esc_html_e( 'Address', 'astra-child' ); ?></dt>
+			<dd><?php echo esc_html( get_theme_mod( 'oss_address', '' ) ); ?></dd>
+			<dt><?php esc_html_e( 'Phone', 'astra-child' ); ?></dt>
+			<dd><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', get_theme_mod( 'oss_phone', '' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'oss_phone', '' ) ); ?></a></dd>
+			<dt><?php esc_html_e( 'Email', 'astra-child' ); ?></dt>
+			<dd><a href="mailto:<?php echo esc_attr( get_theme_mod( 'oss_email', '' ) ); ?>"><?php echo esc_html( get_theme_mod( 'oss_email', '' ) ); ?></a></dd>
+			<dt><?php esc_html_e( 'Hours', 'astra-child' ); ?></dt>
+			<dd><?php echo esc_html( get_theme_mod( 'oss_hours', '' ) ); ?></dd>
+		</dl>
+		<?php oss_social_links(); ?>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+add_shortcode( 'oss_contact_info', 'oss_child_contact_info_shortcode' );
+
+/**
  * Contact form container. Uses whichever form plugin is installed;
  * falls back to a styled, editable placeholder if none is active yet.
  * Replace by editing the Elementor "Shortcode" widget on the Contact page,

@@ -274,6 +274,22 @@
 	margin: 1.75rem 0;
 }
 
+/* -------------------------------------------------------------------- */
+/* Elementor editor safety net (loaded inside the editor iframe too)     */
+/* -------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------- */
+/* On-dark utility (photo / sage backgrounds) — !important because      */
+/* Elementor's per-widget generated CSS can outrank plain tag selectors  */
+/* -------------------------------------------------------------------- */
+
+.oss-on-dark,
+.oss-on-dark h1, .oss-on-dark h2, .oss-on-dark h3,
+.oss-on-dark p, .oss-on-dark li,
+.oss-on-dark blockquote, .oss-on-dark .elementor-heading-title,
+.oss-on-dark .elementor-widget-text-editor { color: var(--oss-bg) !important; }
+.oss-on-dark .oss-eyebrow, .oss-on-dark cite { color: var(--oss-gold) !important; }
+
 .oss-empty-state {
 	padding: 2rem;
 	text-align: center;

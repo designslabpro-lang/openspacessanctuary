@@ -11,6 +11,19 @@ function oss_child_elementor_support() {
 add_action( 'after_setup_theme', 'oss_child_elementor_support' );
 
 /**
+ * Hide Astra's default page title/banner on pages built with Elementor —
+ * the Elementor content already supplies its own hero/heading.
+ */
+function oss_child_hide_title_for_elementor_pages( $visibility ) {
+	$post_id = get_the_ID();
+	if ( $post_id && 'builder' === get_post_meta( $post_id, '_elementor_edit_mode', true ) ) {
+		return false;
+	}
+	return $visibility;
+}
+add_filter( 'astra_single_layout_one_banner_visibility', 'oss_child_hide_title_for_elementor_pages' );
+
+/**
  * Widen Elementor's editor preview so it inherits the child theme's fonts.
  */
 function oss_child_elementor_editor_styles() {
