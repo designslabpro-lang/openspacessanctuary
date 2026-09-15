@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Open Space Sanctuary — Footer
+   Open Spaces Sanctuary — Footer
    ========================================================================== */
 
 .oss-footer {
@@ -45,7 +45,7 @@
 	overflow: hidden;
 	box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
-.oss-newsletter-form input[type="email"] {
+.oss-newsletter-form input[type="email"], .oss-newsletter-form input[type="text"] {
 	flex: 1;
 	min-width: 0;
 	padding: 0.95em 1.2em;
@@ -55,8 +55,11 @@
 	font-family: var(--oss-font-body);
 	font-size: 0.9rem;
 }
-.oss-newsletter-form input[type="email"]::placeholder { color: rgba(53,58,53,0.5); }
-.oss-newsletter-form input[type="email"]:focus { outline: 2px solid var(--oss-gold); outline-offset: -2px; }
+.oss-newsletter-form input[type="email"]::placeholder,
+.oss-newsletter-form input[type="text"]::placeholder { color: rgba(53,58,53,0.5); }
+.oss-newsletter-form input[type="email"]:focus,
+.oss-newsletter-form input[type="text"]:focus { outline: 2px solid var(--oss-gold); outline-offset: -2px; }
+.oss-newsletter-form input[type="text"] { border-right: 1px solid rgba(53,58,53,0.12); }
 .oss-newsletter-form button.oss-btn {
 	border-radius: 0;
 	white-space: nowrap;

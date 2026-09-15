@@ -92,7 +92,7 @@ endif;
 <section class="oss-section oss-section--sage oss-cta">
 	<div class="oss-container">
 		<h2><?php esc_html_e( 'Ready to Begin?', 'astra-child' ); ?></h2>
-		<p><?php esc_html_e( 'Explore how Open Space Sanctuary can help create meaningful connection and healing.', 'astra-child' ); ?></p>
+		<p><?php esc_html_e( 'Explore how Open Spaces Sanctuary can help create meaningful connection and healing.', 'astra-child' ); ?></p>
 		<div class="oss-cta__actions">
 			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( home_url( '/contact' ) ); ?>"><?php esc_html_e( 'Get In Touch', 'astra-child' ); ?></a>
 		</div>

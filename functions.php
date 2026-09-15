@@ -1,6 +1,6 @@
 <?php
 /**
- * Astra Child Theme functions — Open Space Sanctuary
+ * Astra Child Theme functions — Open Spaces Sanctuary
  */
 
 defined( 'ABSPATH' ) || exit;

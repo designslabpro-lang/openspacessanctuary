@@ -1,6 +1,6 @@
 <?php
 /**
- * Open Space Sanctuary — custom header.
+ * Open Spaces Sanctuary — custom header.
  * Mirrors Astra's head/body scaffold (so astra_* hooks + body_class still fire)
  * but renders a fully custom, brand-designed navigation bar.
  */

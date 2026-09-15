@@ -1,29 +1,29 @@
 <?php
 /**
  * Customizer additions: sanctuary contact info + social links.
- * Site → Customize → Open Space Sanctuary Settings.
+ * Site → Customize → Open Spaces Sanctuary Settings.
  */
 
 defined( 'ABSPATH' ) || exit;
 
 function oss_child_customize_register( $wp_customize ) {
 	$wp_customize->add_section( 'oss_sanctuary_settings', array(
-		'title'    => __( 'Open Space Sanctuary Settings', 'astra-child' ),
+		'title'    => __( 'Open Spaces Sanctuary Settings', 'astra-child' ),
 		'priority' => 30,
 	) );
 
 	$fields = array(
 		'oss_phone'          => array( 'label' => __( 'Phone Number', 'astra-child' ), 'default' => '(555) 123-4567' ),
-		'oss_email'          => array( 'label' => __( 'Email Address', 'astra-child' ), 'default' => 'hello@openspacesanctuary.org' ),
-		'oss_address'        => array( 'label' => __( 'Address', 'astra-child' ), 'default' => '123 Pasture Lane, Open Space, ST 00000' ),
-		'oss_hours'          => array( 'label' => __( 'Hours', 'astra-child' ), 'default' => 'Tue–Sat, 9am–5pm' ),
+		'oss_email'          => array( 'label' => __( 'Email Address', 'astra-child' ), 'default' => 'info@openspacessanctuary.org' ),
+		'oss_address'        => array( 'label' => __( 'Address', 'astra-child' ), 'default' => 'PO Box 129, Citra, FL 32113' ),
+		'oss_hours'          => array( 'label' => __( 'Hours', 'astra-child' ), 'default' => 'By Appointment' ),
 		'oss_facebook'       => array( 'label' => __( 'Facebook URL', 'astra-child' ), 'default' => '' ),
 		'oss_instagram'      => array( 'label' => __( 'Instagram URL', 'astra-child' ), 'default' => '' ),
 		'oss_header_cta_text' => array( 'label' => __( 'Header CTA Text', 'astra-child' ), 'default' => 'Learn More' ),
 		'oss_header_cta_url'  => array( 'label' => __( 'Header CTA URL', 'astra-child' ), 'default' => '/contact' ),
 		'oss_donate_url'      => array( 'label' => __( 'Donate URL', 'astra-child' ), 'default' => '/contact' ),
 		'oss_volunteer_url'   => array( 'label' => __( 'Volunteer URL', 'astra-child' ), 'default' => '/contact' ),
-		'oss_nonprofit_info'  => array( 'label' => __( 'Nonprofit Status Line', 'astra-child' ), 'default' => 'Open Space Sanctuary is a 501(c)(3) nonprofit organization. EIN: 00-0000000. All donations are tax-deductible.' ),
+		'oss_nonprofit_info'  => array( 'label' => __( 'Nonprofit Status Line', 'astra-child' ), 'default' => 'Open Spaces Sanctuary is a 501(c)(3) nonprofit organization. EIN: 00-0000000. All donations are tax-deductible.' ),
 	);
 
 	foreach ( $fields as $id => $args ) {

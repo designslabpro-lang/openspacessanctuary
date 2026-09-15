@@ -129,7 +129,7 @@ add_shortcode( 'oss_blog_grid', 'oss_child_blog_grid_shortcode' );
 
 /**
  * Contact info block — reads Customizer settings so it stays editable
- * from Appearance → Customize → Open Space Sanctuary Settings.
+ * from Appearance → Customize → Open Spaces Sanctuary Settings.
  */
 function oss_child_contact_info_shortcode() {
 	ob_start();
@@ -185,7 +185,12 @@ add_shortcode( 'oss_contact_form', 'oss_child_contact_form_shortcode' );
  * styled placeholder so the footer layout is complete pending a real
  * integration. No email addresses are ever collected by theme code.
  */
-function oss_child_newsletter_signup_shortcode() {
+function oss_child_newsletter_signup_shortcode( $atts ) {
+	$atts = shortcode_atts( array(
+		'button'    => 'Subscribe',
+		'show_name' => '0',
+	), $atts, 'oss_newsletter_signup' );
+
 	if ( shortcode_exists( 'mc4wp_form' ) ) {
 		return do_shortcode( '[mc4wp_form]' );
 	}
@@ -195,9 +200,13 @@ function oss_child_newsletter_signup_shortcode() {
 	ob_start();
 	?>
 	<form class="oss-newsletter-form" onsubmit="return false;">
+		<?php if ( '1' === $atts['show_name'] ) : ?>
+			<label class="screen-reader-text" for="oss-newsletter-name"><?php esc_html_e( 'First name', 'astra-child' ); ?></label>
+			<input type="text" id="oss-newsletter-name" placeholder="<?php esc_attr_e( 'First Name', 'astra-child' ); ?>" required>
+		<?php endif; ?>
 		<label class="screen-reader-text" for="oss-newsletter-email"><?php esc_html_e( 'Email address', 'astra-child' ); ?></label>
-		<input type="email" id="oss-newsletter-email" placeholder="<?php esc_attr_e( 'Your email address', 'astra-child' ); ?>" required>
-		<button type="submit" class="oss-btn oss-btn--on-sage oss-btn--sm"><?php esc_html_e( 'Subscribe', 'astra-child' ); ?></button>
+		<input type="email" id="oss-newsletter-email" placeholder="<?php esc_attr_e( 'Email Address', 'astra-child' ); ?>" required>
+		<button type="submit" class="oss-btn oss-btn--on-sage oss-btn--sm"><?php echo esc_html( $atts['button'] ); ?></button>
 	</form>
 	<p class="oss-newsletter-form__note"><?php esc_html_e( 'Connect a mailing list plugin (Mailchimp for WP, Newsletter, etc.) to activate this form — no theme changes required.', 'astra-child' ); ?></p>
 	<?php

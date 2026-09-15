@@ -1,6 +1,6 @@
 <?php
 /**
- * Open Space Sanctuary — custom footer.
+ * Open Spaces Sanctuary — custom footer.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -38,11 +38,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<p class="oss-footer__mission">
 							<?php
 							$mission = get_theme_mod( 'oss_mission_statement', '' );
-							echo esc_html( $mission ? $mission : __( 'Open Space Sanctuary creates a safe, natural environment where people of all backgrounds experience healing through connection with horses.', 'astra-child' ) );
+							echo esc_html( $mission ? $mission : __( 'Open Spaces Sanctuary creates a safe, natural environment where people of all backgrounds experience healing through connection with horses.', 'astra-child' ) );
 							?>
 						</p>
 
-						<p class="oss-footer__nonprofit"><?php echo esc_html( get_theme_mod( 'oss_nonprofit_info', __( 'Open Space Sanctuary is a 501(c)(3) nonprofit organization. EIN: 00-0000000. All donations are tax-deductible.', 'astra-child' ) ) ); ?></p>
+						<p class="oss-footer__nonprofit"><?php echo esc_html( get_theme_mod( 'oss_nonprofit_info', __( 'Open Spaces Sanctuary is a 501(c)(3) nonprofit organization. EIN: 00-0000000. All donations are tax-deductible.', 'astra-child' ) ) ); ?></p>
 					</div>
 
 					<div class="oss-footer__col">
