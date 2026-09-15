@@ -100,6 +100,12 @@ textarea:focus-visible,
 	padding-top: var(--oss-section-space);
 	padding-bottom: var(--oss-section-space);
 }
+/* For a heading+content pair split across two adjacent .oss-section
+   elements (so they can share one background), these remove the
+   redundant inner gap — this class's padding otherwise always wins
+   over Elementor's own per-section padding setting. */
+.oss-section--tight-bottom { padding-bottom: 0 !important; }
+.oss-section--tight-top { padding-top: 0 !important; }
 
 .oss-section--sage {
 	background-color: var(--oss-primary);

@@ -208,7 +208,9 @@ function oss_child_newsletter_signup_shortcode( $atts ) {
 		<input type="email" id="oss-newsletter-email" placeholder="<?php esc_attr_e( 'Email Address', 'astra-child' ); ?>" required>
 		<button type="submit" class="oss-btn oss-btn--on-sage oss-btn--sm"><?php echo esc_html( $atts['button'] ); ?></button>
 	</form>
-	<p class="oss-newsletter-form__note"><?php esc_html_e( 'Connect a mailing list plugin (Mailchimp for WP, Newsletter, etc.) to activate this form — no theme changes required.', 'astra-child' ); ?></p>
+	<?php if ( current_user_can( 'manage_options' ) ) : ?>
+		<p class="oss-newsletter-form__note"><?php esc_html_e( 'Admin note: connect a mailing list plugin (Mailchimp for WP, Newsletter, etc.) to activate this form — no theme changes required. Only visible to admins.', 'astra-child' ); ?></p>
+	<?php endif; ?>
 	<?php
 	return ob_get_clean();
 }

@@ -88,7 +88,9 @@
 	margin-bottom: 0.6rem;
 	font-size: clamp(2.75rem, 6vw, 4.75rem);
 }
-.oss-hero p { color: rgba(255,255,255,0.92); font-size: 1.15rem; width: 100%; max-width: none; }
+.oss-hero p { color: rgba(255,255,255,0.92); font-size: 1.15rem; width: 100%; max-width: 640px; }
+.oss-hero .elementor-widget-text-editor,
+.oss-hero .elementor-widget-text-editor p { font-weight: 400 !important; }
 .oss-hero__actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
 
 /* Hero copy paragraph sits exactly 15px above the button row (per
@@ -179,7 +181,7 @@
 
 .oss-card-grid {
 	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
 	gap: 2rem;
 }
 
@@ -189,23 +191,25 @@
 	flex-direction: column;
 	overflow: hidden;
 	border: 1px solid rgba(117,91,69,0.15);
+	transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
+.oss-card:hover { box-shadow: 0 16px 36px rgba(53,58,53,0.12); transform: translateY(-3px); }
 .oss-card__image {
 	aspect-ratio: 4 / 3;
 	overflow: hidden;
 	background-color: var(--oss-primary);
 }
-.oss-card__image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.oss-card__image img { width: 100% !important; height: 100% !important; object-fit: cover; display: block; transition: transform 0.5s ease; }
 .oss-card:hover .oss-card__image img { transform: scale(1.04); }
 .oss-card__body { padding: 1.75rem; flex: 1; display: flex; flex-direction: column; }
 .oss-card__meta { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--oss-brown); margin-bottom: 0.5rem; }
 .oss-card__title { font-size: 1.3rem; margin-bottom: 0.6rem; }
-.oss-card__title a { color: var(--oss-text); text-decoration: none; }
+.oss-card__title a { color: var(--oss-text); text-decoration: none !important; }
 .oss-card__title a:hover { color: var(--oss-primary); }
 .oss-card__excerpt { font-size: 0.95rem; opacity: 0.85; flex: 1; margin-bottom: 1rem; }
 .oss-card__link {
 	font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-	color: var(--oss-primary); text-decoration: none; border-bottom: 1px solid var(--oss-gold); align-self: flex-start;
+	color: var(--oss-primary); text-decoration: none !important; border-bottom: 1px solid var(--oss-gold); align-self: flex-start;
 }
 .oss-card__link:hover { color: var(--oss-gold); }
 
@@ -315,15 +319,57 @@
 }
 
 /* -------------------------------------------------------------------- */
+/* Who We Serve — two-column checklist                                   */
+/* -------------------------------------------------------------------- */
+
+.oss-who-grid {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(240px, 1fr));
+	gap: 0.85rem 2.5rem;
+	max-width: 780px;
+	margin: 1.75rem auto !important;
+	text-align: left;
+	padding: 0 !important;
+}
+.oss-who-grid li {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.65rem;
+	font-size: 0.98rem;
+	line-height: 1.4;
+}
+.oss-who-grid li::before {
+	content: '\2713';
+	color: var(--oss-gold);
+	font-weight: 700;
+	flex-shrink: 0;
+	margin-top: 0.15em;
+}
+
+/* -------------------------------------------------------------------- */
 /* Quote / pullout                                                       */
 /* -------------------------------------------------------------------- */
 
 .oss-quote {
+	display: flex !important;
+	flex-direction: column !important;
+	height: 100%;
 	text-align: center;
 	max-width: 780px;
 	margin: 0 auto;
 }
+.oss-quote::before {
+	content: '\201C';
+	display: block;
+	font-family: var(--oss-font-heading);
+	font-size: 3rem;
+	line-height: 1;
+	color: var(--oss-gold);
+	margin-bottom: 0.5rem;
+}
 .oss-quote blockquote {
+	flex: 1;
 	font-family: var(--oss-font-heading);
 	font-style: italic;
 	font-size: clamp(1.4rem, 2.6vw, 2rem);
@@ -337,6 +383,17 @@
 	text-transform: uppercase;
 	color: var(--oss-brown);
 }
+
+/* Testimonial grid: smaller quote mark + card feel per column */
+.oss-quote--card {
+	padding: 2rem 1.75rem;
+	background: rgba(245,240,230,0.06);
+	border: 1px solid rgba(245,240,230,0.16);
+}
+.oss-quote--card::before { font-size: 2.25rem; margin-bottom: 0.25rem; }
+.oss-quote--card blockquote { font-size: 1.05rem; line-height: 1.6; }
+
+.elementor-container:has(.oss-quote--card) { align-items: stretch; }
 
 /* -------------------------------------------------------------------- */
 /* CTA band                                                               */
