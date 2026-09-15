@@ -16,7 +16,7 @@
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	text-decoration: none !important;
-	padding: 0.95em 2.1em;
+	padding: 15px;
 	border-radius: var(--oss-radius);
 	border: 1px solid transparent;
 	cursor: pointer;
@@ -88,7 +88,7 @@
 	margin-bottom: 0.6rem;
 	font-size: clamp(2.75rem, 6vw, 4.75rem);
 }
-.oss-hero p { color: rgba(255,255,255,0.92); font-size: 1.15rem; max-width: 560px; }
+.oss-hero p { color: rgba(255,255,255,0.92); font-size: 1.15rem; width: 100%; max-width: none; }
 .oss-hero__actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
 
 /* Hero copy paragraph sits exactly 15px above the button row (per
@@ -100,13 +100,13 @@
 .oss-hero__btn-row {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 1rem;
+	gap: 15px;
 	margin-top: 15px;
 }
 
 .oss-hero__divider {
 	width: 48px;
-	height: 2px;
+	height: 3px;
 	background: var(--oss-gold);
 	margin: 0.9rem 0 1.5rem;
 }

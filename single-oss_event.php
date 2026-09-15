@@ -20,6 +20,7 @@ while ( have_posts() ) :
 	<header class="oss-hero oss-hero--page"<?php echo has_post_thumbnail() ? ' style="background-image:url(\'' . esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ) . '\');"' : ''; ?>>
 		<div class="oss-container oss-hero__inner">
 			<span class="oss-eyebrow oss-hero__eyebrow"><?php esc_html_e( 'Event', 'astra-child' ); ?></span>
+			<div class="oss-hero__divider"></div>
 			<h1><?php the_title(); ?></h1>
 		</div>
 	</header>

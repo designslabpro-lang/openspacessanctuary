@@ -16,7 +16,7 @@ while ( have_posts() ) :
 
 	<header class="oss-hero oss-hero--page"<?php echo has_post_thumbnail() ? ' style="background-image:url(\'' . esc_url( get_the_post_thumbnail_url( get_the_ID(), 'full' ) ) . '\');"' : ''; ?>>
 		<div class="oss-container oss-hero__inner">
-			<?php if ( $audience ) : ?><span class="oss-eyebrow oss-hero__eyebrow"><?php echo esc_html( $audience ); ?></span><?php endif; ?>
+			<?php if ( $audience ) : ?><span class="oss-eyebrow oss-hero__eyebrow"><?php echo esc_html( $audience ); ?></span><div class="oss-hero__divider"></div><?php endif; ?>
 			<h1><?php the_title(); ?></h1>
 		</div>
 	</header>
