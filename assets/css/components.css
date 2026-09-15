@@ -83,7 +83,11 @@
 .oss-hero__eyebrow {
 	color: var(--oss-gold) !important;
 }
-.oss-hero h1 { color: var(--oss-white); margin-bottom: 0.6rem; }
+.oss-hero h1 {
+	color: var(--oss-white);
+	margin-bottom: 0.6rem;
+	font-size: clamp(2.75rem, 6vw, 4.75rem);
+}
 .oss-hero p { color: rgba(255,255,255,0.92); font-size: 1.15rem; max-width: 560px; }
 .oss-hero__actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
 
