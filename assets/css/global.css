@@ -142,6 +142,21 @@ textarea:focus-visible,
 
 img { height: auto; }
 
+/* Let Elementor sections span true 100% width — Astra's own container
+   would otherwise cap everything at its customizer "Container Width". */
+.ast-container {
+	max-width: 100% !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	width: 100% !important;
+}
+#primary,
+.ast-container .site-content,
+.ast-container #primary {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
 .screen-reader-text {
 	border: 0; clip: rect(1px,1px,1px,1px); clip-path: inset(50%);
 	height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute;

@@ -28,11 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="page" class="hfeed site">
 
-	<?php
-	$oss_is_front = is_front_page();
-	$oss_header_class = 'oss-header' . ( $oss_is_front ? ' is-transparent' : '' );
-	?>
-	<header id="masthead" class="<?php echo esc_attr( $oss_header_class ); ?>" role="banner">
+	<header id="masthead" class="oss-header" role="banner">
 		<div class="oss-container oss-header__inner">
 			<div class="oss-header__brand">
 				<?php if ( has_custom_logo() ) : ?>
