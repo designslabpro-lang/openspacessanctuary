@@ -43,6 +43,18 @@ function oss_child_default_menu_fallback() {
 }
 
 /**
+ * Whether at least one social network URL is configured, so callers can
+ * skip rendering an empty "Social Media" heading.
+ */
+function oss_has_social_links() {
+	$networks = array_filter( array(
+		get_theme_mod( 'oss_facebook', '' ),
+		get_theme_mod( 'oss_instagram', '' ),
+	) );
+	return ! empty( $networks );
+}
+
+/**
  * Social links list, reused in header (if desired) and footer.
  */
 function oss_social_links() {

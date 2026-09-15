@@ -14,11 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="oss-footer__newsletter">
 				<div class="oss-container oss-footer__newsletter-inner">
-					<div>
+					<div class="oss-footer__newsletter-copy">
 						<h3><?php esc_html_e( 'Newsletter Signup', 'astra-child' ); ?></h3>
 						<p><?php esc_html_e( 'Stories, events, and updates from the sanctuary — no more than once a month.', 'astra-child' ); ?></p>
 					</div>
-					<?php echo do_shortcode( '[oss_newsletter_signup]' ); ?>
+					<div class="oss-footer__newsletter-form">
+						<?php echo do_shortcode( '[oss_newsletter_signup]' ); ?>
+					</div>
 				</div>
 			</div>
 
@@ -63,8 +65,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<li><a href="<?php echo esc_url( get_theme_mod( 'oss_volunteer_url', home_url( '/contact/' ) ) ); ?>"><?php esc_html_e( 'Volunteer', 'astra-child' ); ?></a></li>
 						</ul>
 
-						<h3 style="margin-top:2rem;"><?php esc_html_e( 'Social Media', 'astra-child' ); ?></h3>
-						<?php oss_social_links(); ?>
+						<?php if ( oss_has_social_links() ) : ?>
+							<h3 style="margin-top:2rem;"><?php esc_html_e( 'Social Media', 'astra-child' ); ?></h3>
+							<?php oss_social_links(); ?>
+						<?php endif; ?>
 					</div>
 
 					<div class="oss-footer__col">
