@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Open Space Sanctuary — Header
+   ========================================================================== */
+
+.oss-header {
+	position: sticky;
+	top: 0;
+	z-index: 999;
+	background-color: var(--oss-bg);
+	border-bottom: 1px solid rgba(117,91,69,0.15);
+	transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.oss-header.is-transparent {
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	background-color: transparent;
+	border-bottom-color: transparent;
+}
+.oss-header.is-transparent .oss-header__nav a,
+.oss-header.is-transparent .site-title,
+.oss-header.is-transparent .site-title a { color: var(--oss-white); }
+
+.oss-header.is-scrolled {
+	background-color: var(--oss-bg);
+	box-shadow: 0 2px 18px rgba(53,58,53,0.08);
+	border-bottom-color: rgba(117,91,69,0.15);
+}
+.oss-header.is-scrolled .oss-header__nav a,
+.oss-header.is-scrolled .site-title,
+.oss-header.is-scrolled .site-title a { color: var(--oss-text); }
+
+.oss-header__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 2rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+
+.oss-header__brand { display: flex; align-items: center; }
+.oss-header__brand img { max-height: 64px; width: auto; display: block; }
+.oss-header__brand .site-title {
+	font-family: var(--oss-font-heading);
+	font-size: 1.4rem;
+	margin: 0;
+	line-height: 1.1;
+}
+.oss-header__brand .site-title a { text-decoration: none; color: var(--oss-text); }
+.oss-header__brand .site-description {
+	display: block;
+	font-family: var(--oss-font-body);
+	font-size: 0.65rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--oss-brown);
+	margin-top: 2px;
+}
+
+.oss-header__nav { display: flex; align-items: center; gap: 2.25rem; }
+.oss-header__nav ul {
+	display: flex;
+	align-items: center;
+	gap: 2.1rem;
+	list-style: none;
+	margin: 0; padding: 0;
+}
+.oss-header__nav a {
+	font-family: var(--oss-font-body);
+	font-size: 0.82rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: var(--oss-text);
+	transition: color 0.25s ease;
+}
+.oss-header__nav a:hover { color: var(--oss-gold); }
+.oss-header__nav .current-menu-item > a { color: var(--oss-primary); }
+.oss-header.is-transparent .oss-header__nav .current-menu-item > a { color: var(--oss-gold); }
+
+.oss-header__actions { display: flex; align-items: center; gap: 1.25rem; }
+
+/* Mobile toggle */
+.oss-menu-toggle {
+	display: none;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.5rem;
+	width: 44px; height: 44px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+}
+.oss-menu-toggle span {
+	display: block; width: 24px; height: 2px;
+	background-color: currentColor;
+	transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.oss-header.is-transparent .oss-menu-toggle { color: var(--oss-white); }
+.oss-header.is-scrolled .oss-menu-toggle,
+.oss-header:not(.is-transparent) .oss-menu-toggle { color: var(--oss-text); }
+
+.oss-mobile-panel {
+	display: none;
+	position: fixed;
+	top: 0; right: 0; bottom: 0;
+	width: min(320px, 86vw);
+	background: var(--oss-bg);
+	box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+	padding: 2rem 1.75rem;
+	transform: translateX(100%);
+	transition: transform 0.3s ease;
+	z-index: 1001;
+	overflow-y: auto;
+}
+.oss-mobile-panel.is-open { transform: translateX(0); }
+.oss-mobile-panel ul { list-style: none; margin: 2.5rem 0 0; padding: 0; }
+.oss-mobile-panel li { border-bottom: 1px solid rgba(117,91,69,0.15); }
+.oss-mobile-panel a {
+	display: block; padding: 0.9rem 0;
+	font-family: var(--oss-font-body); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+	font-size: 0.95rem; color: var(--oss-text); text-decoration: none;
+}
+.oss-mobile-panel__close {
+	background: none; border: none; cursor: pointer; color: var(--oss-text);
+	font-size: 1.6rem; line-height: 1; padding: 0.25rem;
+}
+.oss-mobile-overlay {
+	display: none;
+	position: fixed; inset: 0; background: rgba(53,58,53,0.5);
+	z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
+}
+.oss-mobile-overlay.is-open { opacity: 1; }

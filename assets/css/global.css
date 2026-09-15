@@ -1,0 +1,149 @@
+/* ==========================================================================
+   Open Space Sanctuary — Design Tokens & Base Styles
+   ========================================================================== */
+
+:root {
+	--oss-bg: #F5F0E6;
+	--oss-primary: #596B58;
+	--oss-primary-dark: #46543F;
+	--oss-brown: #755B45;
+	--oss-gold: #B49A68;
+	--oss-text: #353A35;
+	--oss-white: #FFFFFF;
+
+	--oss-font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+	--oss-font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+	--oss-section-space: clamp(3.5rem, 6vw, 7rem);
+	--oss-container-max: 1280px;
+	--oss-radius: 2px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Base                                                                  */
+/* -------------------------------------------------------------------- */
+
+body {
+	background-color: var(--oss-bg);
+	color: var(--oss-text);
+	font-family: var(--oss-font-body);
+	font-weight: 400;
+	line-height: 1.7;
+	-webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6,
+.oss-heading {
+	font-family: var(--oss-font-heading);
+	color: var(--oss-text);
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: 0.01em;
+}
+
+h1 { font-size: clamp(2.25rem, 4vw, 3.5rem); }
+h2 { font-size: clamp(1.85rem, 3vw, 2.75rem); }
+h3 { font-size: clamp(1.4rem, 2vw, 1.85rem); }
+
+p { margin: 0 0 1.25em; }
+
+a {
+	color: var(--oss-primary);
+	transition: color 0.25s ease;
+}
+a:hover,
+a:focus { color: var(--oss-gold); }
+
+::selection { background: var(--oss-gold); color: var(--oss-white); }
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.oss-btn:focus-visible {
+	outline: 2px solid var(--oss-gold);
+	outline-offset: 3px;
+}
+
+/* -------------------------------------------------------------------- */
+/* Eyebrow / label style                                                 */
+/* -------------------------------------------------------------------- */
+
+.oss-eyebrow {
+	display: inline-block;
+	font-family: var(--oss-font-body);
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--oss-brown);
+	margin-bottom: 0.85rem;
+}
+
+/* -------------------------------------------------------------------- */
+/* Gold divider                                                          */
+/* -------------------------------------------------------------------- */
+
+.oss-divider {
+	width: 64px;
+	height: 2px;
+	background: var(--oss-gold);
+	margin: 1.25rem 0 1.75rem;
+}
+.oss-divider--center { margin-left: auto; margin-right: auto; }
+
+/* -------------------------------------------------------------------- */
+/* Sections                                                               */
+/* -------------------------------------------------------------------- */
+
+.oss-section {
+	padding-top: var(--oss-section-space);
+	padding-bottom: var(--oss-section-space);
+}
+
+.oss-section--sage {
+	background-color: var(--oss-primary);
+	color: var(--oss-bg);
+}
+.oss-section--sage h1,
+.oss-section--sage h2,
+.oss-section--sage h3,
+.oss-section--sage p { color: var(--oss-bg); }
+
+.oss-section--cream { background-color: var(--oss-bg); }
+
+.oss-section--white { background-color: var(--oss-white); }
+
+.oss-container {
+	max-width: var(--oss-container-max);
+	margin: 0 auto;
+	padding-left: clamp(1.25rem, 4vw, 2.5rem);
+	padding-right: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.oss-section-heading {
+	max-width: 720px;
+	margin-bottom: 2.5rem;
+}
+.oss-section-heading--center {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+/* -------------------------------------------------------------------- */
+/* Utility                                                                */
+/* -------------------------------------------------------------------- */
+
+.oss-text-gold { color: var(--oss-gold) !important; }
+.oss-text-brown { color: var(--oss-brown) !important; }
+.oss-text-sage { color: var(--oss-primary) !important; }
+.oss-uppercase { text-transform: uppercase; letter-spacing: 0.12em; }
+
+img { height: auto; }
+
+.screen-reader-text {
+	border: 0; clip: rect(1px,1px,1px,1px); clip-path: inset(50%);
+	height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute;
+	width: 1px; word-wrap: normal !important;
+}

@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Open Space Sanctuary — Footer
+   ========================================================================== */
+
+.oss-footer {
+	background-color: var(--oss-primary);
+	color: var(--oss-bg);
+	padding-top: clamp(3rem, 6vw, 5rem);
+}
+
+.oss-footer a { color: var(--oss-bg); }
+.oss-footer a:hover { color: var(--oss-gold); }
+
+.oss-footer__grid {
+	display: grid;
+	grid-template-columns: 1.3fr 1fr 1fr 1fr;
+	gap: 2.5rem;
+	padding-bottom: 3rem;
+	border-bottom: 1px solid rgba(245,240,230,0.18);
+}
+
+.oss-footer__brand img { max-height: 56px; margin-bottom: 1rem; }
+.oss-footer__brand .oss-footer__site-name {
+	font-family: var(--oss-font-heading);
+	font-size: 1.3rem;
+	margin: 0 0 0.35rem;
+	color: var(--oss-bg);
+}
+.oss-footer__tagline {
+	font-size: 0.78rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--oss-gold);
+}
+
+.oss-footer-widget-title,
+.oss-footer h3 {
+	font-family: var(--oss-font-body);
+	font-size: 0.85rem;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--oss-gold);
+	margin: 0 0 1.1rem;
+}
+
+.oss-footer ul { list-style: none; margin: 0; padding: 0; }
+.oss-footer ul li { margin-bottom: 0.6rem; font-size: 0.92rem; }
+.oss-footer ul li a { text-decoration: none; }
+
+.oss-social-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+.oss-social-links li { margin-bottom: 0; }
+.oss-social-links a {
+	font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+	text-decoration: none; border-bottom: 1px solid var(--oss-gold); padding-bottom: 2px;
+}
+
+.oss-footer__bottom {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+	padding: 1.75rem 0;
+	font-size: 0.8rem;
+	color: rgba(245,240,230,0.75);
+}
+.oss-footer__bottom-links { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+.oss-footer__bottom-links a { text-decoration: none; color: rgba(245,240,230,0.75); }
+.oss-footer__bottom-links a:hover { color: var(--oss-gold); }
