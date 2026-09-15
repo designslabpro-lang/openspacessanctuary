@@ -280,6 +280,7 @@
 
 .oss-power__quote {
 	display: flex;
+	align-items: stretch;
 	gap: 1.25rem;
 	margin-top: 2rem;
 	padding-top: 1.75rem;
@@ -291,6 +292,11 @@
 	line-height: 1;
 	color: var(--oss-gold);
 	flex-shrink: 0;
+}
+.oss-power__quote-divider {
+	width: 1px;
+	flex-shrink: 0;
+	background: rgba(53,58,53,0.18);
 }
 .oss-power__quote blockquote {
 	font-family: var(--oss-font-heading);
