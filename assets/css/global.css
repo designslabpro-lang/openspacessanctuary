@@ -157,6 +157,13 @@ img { height: auto; }
 	padding: 0 !important;
 }
 
+/* Elementor's own .elementor-container has no explicit width, so a single
+   narrower child (e.g. our .oss-hero__inner max-width) can shrink-wrap the
+   whole row instead of staying centered at the section's content_width. */
+.elementor-section .elementor-container {
+	width: 100%;
+}
+
 .screen-reader-text {
 	border: 0; clip: rect(1px,1px,1px,1px); clip-path: inset(50%);
 	height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute;

@@ -166,15 +166,20 @@
 /* Image + text split                                                    */
 /* -------------------------------------------------------------------- */
 
-.oss-split {
+/* Elementor's own 50/50 column row provides the side-by-side layout;
+   these classes only handle presentational tweaks (order, image fit). */
+.oss-split > .elementor-container { align-items: center; }
+.oss-split--reverse .oss-split__media { order: 2; }
+.oss-split__media img { width: 100%; display: block; }
+.oss-split__content h2 { margin-bottom: 1rem; }
+
+/* Non-Elementor usage (plain markup) still gets the grid behavior. */
+.oss-split:not(.elementor-section) {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: clamp(2rem, 5vw, 5rem);
 	align-items: center;
 }
-.oss-split--reverse .oss-split__media { order: 2; }
-.oss-split__media img { width: 100%; display: block; }
-.oss-split__content h2 { margin-bottom: 1rem; }
 
 /* -------------------------------------------------------------------- */
 /* Quote / pullout                                                       */
