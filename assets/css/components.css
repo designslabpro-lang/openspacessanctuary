@@ -283,8 +283,6 @@
 	align-items: stretch;
 	gap: 1.25rem;
 	margin-top: 2rem;
-	padding-top: 1.75rem;
-	border-top: 1px solid rgba(117,91,69,0.18);
 }
 .oss-power__quote-mark {
 	font-family: var(--oss-font-heading);
