@@ -215,3 +215,91 @@ function oss_child_newsletter_signup_shortcode( $atts ) {
 	return ob_get_clean();
 }
 add_shortcode( 'oss_newsletter_signup', 'oss_child_newsletter_signup_shortcode' );
+
+/**
+ * Who We Serve — icon card grid. Content is fixed (per the source brief,
+ * this list must not be edited/invented), but rendered as real markup
+ * instead of a plain text blob so it can carry a distinct icon per
+ * audience and a richer card treatment.
+ */
+function oss_child_who_we_serve_shortcode() {
+	$icons = array(
+		'shield'  => '<path d="M12 3l7 3v6c0 4.5-3 8-7 9-4-1-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>',
+		'star'    => '<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6-4.5-4.2 6.1-.7z"/>',
+		'heart'   => '<path d="M12 20s-7-4.4-9.5-8.8C.8 8 2 4.5 5.5 4c2-.3 3.7.8 4.5 2.3C10.8 4.8 12.5 3.7 14.5 4 18 4.5 19.2 8 17.5 11.2 15 15.6 12 20 12 20z"/>',
+		'hands'   => '<path d="M8 13V6a1.5 1.5 0 0 1 3 0v5"/><path d="M11 11V4.5a1.5 1.5 0 0 1 3 0V11"/><path d="M14 11.5V6a1.5 1.5 0 0 1 3 0v8c0 3.3-2.7 6-6 6h-1c-2 0-3.3-.7-4.5-2L4 15.5c-.8-.8-.8-2 0-2.7.7-.7 1.8-.7 2.5 0L8 14"/>',
+		'ribbon'  => '<circle cx="12" cy="7" r="4"/><path d="M9.5 10.5L6 21l6-3 6 3-3.5-10.5"/>',
+		'bloom'   => '<path d="M12 12c0-3 1.5-5 4-6-1 2.5-1 4.5 0 6-1.5 1-3.5 1-4 0z"/><path d="M12 12c0-3-1.5-5-4-6 1 2.5 1 4.5 0 6 1.5 1 3.5 1 4 0z"/><path d="M12 12c2.5 1.2 4 3 4 5.5-2.5-.3-4-1.5-4-3.5"/><path d="M12 12c-2.5 1.2-4 3-4 5.5 2.5-.3 4-1.5 4-3.5"/><circle cx="12" cy="12" r="1.4"/><path d="M12 17.5V21"/>',
+		'compass' => '<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-5 2 2-5z"/>',
+	);
+
+	$items = array(
+		array( 'icon' => 'shield', 'label' => __( 'Veterans and Military Families', 'astra-child' ) ),
+		array( 'icon' => 'star', 'label' => __( 'First Responders', 'astra-child' ) ),
+		array( 'icon' => 'heart', 'label' => __( 'Survivors of Trauma', 'astra-child' ) ),
+		array( 'icon' => 'hands', 'label' => __( 'Caregivers', 'astra-child' ) ),
+		array( 'icon' => 'ribbon', 'label' => __( 'Cancer Patients and Individuals Facing Health Challenges', 'astra-child' ) ),
+		array( 'icon' => 'bloom', 'label' => __( 'Women Seeking Empowerment', 'astra-child' ) ),
+		array( 'icon' => 'compass', 'label' => __( 'Individuals, Families, and Professionals looking to grow, heal, and reconnect', 'astra-child' ) ),
+	);
+
+	ob_start();
+	?>
+	<div class="oss-who-grid">
+		<?php foreach ( $items as $item ) : ?>
+			<div class="oss-who-card">
+				<span class="oss-who-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><?php echo $icons[ $item['icon'] ]; // phpcs:ignore -- static, trusted inline SVG paths defined above. ?></svg></span>
+				<span class="oss-who-card__label"><?php echo esc_html( $item['label'] ); ?></span>
+			</div>
+		<?php endforeach; ?>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+add_shortcode( 'oss_who_we_serve', 'oss_child_who_we_serve_shortcode' );
+
+/**
+ * Stories of Hope — testimonial carousel. Wording is fixed (per source
+ * brief); this only changes presentation from a static 3-column row to
+ * a swipeable/clickable carousel with dot navigation. Degrades to a
+ * horizontally scrollable row if JavaScript is unavailable.
+ */
+function oss_child_testimonials_shortcode() {
+	$testimonials = array(
+		array(
+			'quote' => __( "Coming to the ranch was truly a game changer for me... After transitioning out of the military, I've often felt disconnected. Today I left with a sense of lightness and hope.", 'astra-child' ),
+			'name'  => __( 'Doug B.', 'astra-child' ),
+		),
+		array(
+			'quote' => __( "Donna truly 'gets it.' Every lesson leaves me feeling seen and heard. She has helped me better understand myself while creating a safe, supportive environment for healing.", 'astra-child' ),
+			'name'  => __( 'Linda H.', 'astra-child' ),
+		),
+		array(
+			'quote' => __( 'Today I realized I need to accept my mom where she is each day rather than holding onto expectations. That breakthrough changed everything for me.', 'astra-child' ),
+			'name'  => __( 'Alex R.', 'astra-child' ),
+		),
+	);
+
+	ob_start();
+	?>
+	<div class="oss-testimonial-carousel" data-oss-carousel>
+		<div class="oss-testimonial-carousel__track">
+			<?php foreach ( $testimonials as $t ) : ?>
+				<div class="oss-testimonial-carousel__slide">
+					<div class="oss-quote oss-on-dark oss-quote--card">
+						<blockquote><?php echo esc_html( $t['quote'] ); ?></blockquote>
+						<cite>&mdash; <?php echo esc_html( $t['name'] ); ?></cite>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<div class="oss-testimonial-carousel__controls">
+			<button type="button" class="oss-testimonial-carousel__arrow" data-oss-carousel-prev aria-label="<?php esc_attr_e( 'Previous story', 'astra-child' ); ?>">&larr;</button>
+			<div class="oss-testimonial-carousel__dots" data-oss-carousel-dots></div>
+			<button type="button" class="oss-testimonial-carousel__arrow" data-oss-carousel-next aria-label="<?php esc_attr_e( 'Next story', 'astra-child' ); ?>">&rarr;</button>
+		</div>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+add_shortcode( 'oss_testimonials', 'oss_child_testimonials_shortcode' );

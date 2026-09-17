@@ -10,12 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?><!DOCTYPE html>
 <?php astra_html_before(); ?>
-<html <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?> class="no-js">
 <head>
 <?php astra_head_top(); ?>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="profile" href="https://gmpg.org/xfn/11">
+<script>document.documentElement.classList.replace('no-js','js');</script>
 <?php wp_head(); ?>
 <?php astra_head_bottom(); ?>
 </head>
