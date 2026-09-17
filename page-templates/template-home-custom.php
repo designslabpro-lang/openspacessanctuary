@@ -36,6 +36,10 @@ $icons = oss_home_icon_library();
 			<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 		</div>
 	</div>
+	<div class="oss-hero__badge">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+		<span><?php esc_html_e( 'Ocala, Florida', 'astra-child' ); ?></span>
+	</div>
 	<div class="oss-hero__scroll">
 		<span class="oss-hero__scroll-text"><?php esc_html_e( 'Scroll', 'astra-child' ); ?></span>
 		<span class="oss-hero__scroll-visual"><span class="oss-hero__scroll-line"></span><span class="oss-hero__scroll-circle">&darr;</span></span>
@@ -78,6 +82,7 @@ $icons = oss_home_icon_library();
 
 <section class="oss-section oss-section--sage" style="text-align:center;">
 	<div class="oss-container">
+		<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">03</span><span class="oss-kicker__line"></span></div>
 		<h2><?php echo esc_html( oss_home_get( 'serve_heading' ) ); ?></h2>
 		<p style="max-width:640px;margin-left:auto;margin-right:auto;"><?php echo esc_html( oss_home_get( 'serve_intro' ) ); ?></p>
 		<div class="oss-who-grid">
@@ -92,9 +97,10 @@ $icons = oss_home_icon_library();
 	</div>
 </section>
 
-<section class="oss-section oss-section--white">
+<section class="oss-section oss-section--white oss-programs-section">
 	<div class="oss-container">
 		<div class="oss-section-heading oss-section-heading--center">
+			<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">04</span><span class="oss-kicker__line"></span></div>
 			<h2><?php echo esc_html( oss_home_get( 'programs_heading' ) ); ?></h2>
 			<p><?php echo esc_html( oss_home_get( 'programs_intro' ) ); ?></p>
 		</div>
@@ -107,9 +113,15 @@ $icons = oss_home_icon_library();
 	<div class="oss-container">
 		<div class="oss-split oss-split--reverse">
 			<div class="oss-split__media">
-				<?php echo oss_home_image( 'horses_image_id', 'large', esc_attr__( 'A horse at Open Spaces Sanctuary', 'astra-child' ) ); ?>
+				<div class="oss-horses-media">
+					<div class="oss-horses-media__frame"></div>
+					<div class="oss-horses-media__photo">
+						<?php echo oss_home_image( 'horses_image_id', 'large', esc_attr__( 'A horse at Open Spaces Sanctuary', 'astra-child' ) ); ?>
+					</div>
+				</div>
 			</div>
 			<div class="oss-split__content" style="text-align:center;">
+				<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">05</span><span class="oss-kicker__line"></span></div>
 				<h2><?php echo esc_html( oss_home_get( 'horses_heading' ) ); ?></h2>
 				<?php foreach ( explode( "\n", oss_home_get( 'horses_body' ) ) as $para ) : ?>
 					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
@@ -120,18 +132,21 @@ $icons = oss_home_icon_library();
 	</div>
 </section>
 
-<section class="oss-section oss-section--white">
+<section class="oss-section oss-section--white oss-founder">
+	<span class="oss-founder__mark" aria-hidden="true">&ldquo;</span>
 	<div class="oss-container">
 		<div class="oss-split">
 			<div class="oss-split__media">
 				<?php echo oss_home_image( 'founder_image_id', 'large', esc_attr( oss_home_get( 'founder_name' ) ) ); ?>
 			</div>
 			<div class="oss-split__content">
+				<div class="oss-kicker"><span class="oss-kicker__num">06</span><span class="oss-kicker__line"></span></div>
 				<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'founder_heading' ) ); ?></span>
 				<h2><?php echo esc_html( oss_home_get( 'founder_name' ) ); ?></h2>
 				<?php foreach ( explode( "\n", oss_home_get( 'founder_body' ) ) as $para ) : ?>
 					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
 				<?php endforeach; ?>
+				<p class="oss-founder__signature"><?php echo esc_html( oss_home_get( 'founder_name' ) ); ?></p>
 				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php echo esc_html( oss_home_get( 'founder_btn' ) ); ?></a>
 			</div>
 		</div>
@@ -140,6 +155,7 @@ $icons = oss_home_icon_library();
 
 <section class="oss-section oss-section--sage" style="text-align:center;">
 	<div class="oss-container">
+		<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">07</span><span class="oss-kicker__line"></span></div>
 		<h2><?php echo esc_html( oss_home_get( 'stories_heading' ) ); ?></h2>
 		<?php echo do_shortcode( '[oss_testimonials]' ); ?>
 	</div>
@@ -147,6 +163,7 @@ $icons = oss_home_icon_library();
 
 <section class="oss-section oss-cta" style="background:var(--oss-primary-dark);color:var(--oss-bg);<?php $donate_bg = (int) oss_home_get( 'donate_image_id' ); if ( $donate_bg ) { echo 'background-image:linear-gradient(rgba(30,34,28,.72),rgba(30,34,28,.72)),url(' . esc_url( wp_get_attachment_image_url( $donate_bg, 'full' ) ) . ');background-size:cover;background-position:center;'; } ?>">
 	<div class="oss-container oss-on-dark">
+		<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">08</span><span class="oss-kicker__line"></span></div>
 		<h2><?php echo esc_html( oss_home_get( 'donate_heading' ) ); ?></h2>
 		<?php foreach ( explode( "\n", oss_home_get( 'donate_body' ) ) as $para ) : ?>
 			<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
@@ -159,6 +176,7 @@ $icons = oss_home_icon_library();
 
 <section class="oss-section oss-section--sage" style="text-align:center;">
 	<div class="oss-container">
+		<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">09</span><span class="oss-kicker__line"></span></div>
 		<h2><?php echo esc_html( oss_home_get( 'connect_heading' ) ); ?></h2>
 		<p style="max-width:560px;margin:0 auto 1.5rem;"><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
 		<?php echo do_shortcode( '[oss_newsletter_signup show_name="1"]' ); ?>
@@ -167,6 +185,7 @@ $icons = oss_home_icon_library();
 
 <section class="oss-section oss-section--cream oss-cta">
 	<div class="oss-container">
+		<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">10</span><span class="oss-kicker__line"></span></div>
 		<h2><?php echo esc_html( oss_home_get( 'final_heading' ) ); ?></h2>
 		<?php foreach ( explode( "\n", oss_home_get( 'final_body' ) ) as $para ) : ?>
 			<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
