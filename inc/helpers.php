@@ -16,7 +16,7 @@ function oss_gold_divider( $align = 'center' ) {
  * Render the branded header CTA button (Customizer-controlled).
  */
 function oss_header_cta() {
-	$text = get_theme_mod( 'oss_header_cta_text', 'Learn More' );
+	$text = get_theme_mod( 'oss_header_cta_text', 'Donate' );
 	$url  = get_theme_mod( 'oss_header_cta_url', '/contact' );
 	if ( empty( $text ) ) {
 		return;
