@@ -3,11 +3,11 @@
    ========================================================================== */
 
 .oss-footer {
-	background-color: var(--oss-primary);
-	color: var(--oss-bg);
+	background: linear-gradient(180deg, var(--oss-bg) 0%, var(--oss-white) 100%);
+	color: var(--oss-text);
 }
 
-.oss-footer a { color: var(--oss-bg); }
+.oss-footer a { color: var(--oss-text); }
 .oss-footer a:hover { color: var(--oss-gold); }
 
 /* -------------------------------------------------------------------- */
@@ -15,8 +15,11 @@
 /* -------------------------------------------------------------------- */
 
 .oss-footer__newsletter {
-	background-color: var(--oss-primary-dark);
+	background-color: var(--oss-primary);
 }
+.oss-footer__newsletter,
+.oss-footer__newsletter a { color: var(--oss-bg); }
+.oss-footer__newsletter a:hover { color: var(--oss-gold-light); }
 .oss-footer__newsletter-inner {
 	display: flex;
 	align-items: center;
@@ -82,7 +85,7 @@
 	opacity: 0.65;
 	margin-top: 1.25rem;
 	padding-top: 1.25rem;
-	border-top: 1px solid rgba(245,240,230,0.18);
+	border-top: 1px solid rgba(117,91,69,0.18);
 }
 
 .oss-footer__grid {
@@ -90,7 +93,7 @@
 	grid-template-columns: 1.3fr 1fr 1fr 1fr;
 	gap: 2.5rem;
 	padding-bottom: 3rem;
-	border-bottom: 1px solid rgba(245,240,230,0.18);
+	border-bottom: 1px solid rgba(117,91,69,0.18);
 }
 
 .oss-footer__brand img {
@@ -102,7 +105,7 @@
 	font-family: var(--oss-font-heading);
 	font-size: 1.3rem;
 	margin: 0 0 0.35rem;
-	color: var(--oss-bg);
+	color: var(--oss-text);
 }
 .oss-footer__tagline {
 	font-size: 0.78rem;
@@ -140,8 +143,8 @@
 	gap: 1rem;
 	padding: 1.75rem 0;
 	font-size: 0.8rem;
-	color: rgba(245,240,230,0.75);
+	color: rgba(53,58,53,0.65);
 }
 .oss-footer__bottom-links { display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
-.oss-footer__bottom-links a { text-decoration: none; color: rgba(245,240,230,0.75); }
+.oss-footer__bottom-links a { text-decoration: none; color: rgba(53,58,53,0.65); }
 .oss-footer__bottom-links a:hover { color: var(--oss-gold); }
