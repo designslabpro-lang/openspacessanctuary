@@ -282,6 +282,11 @@
 .oss-power__eyebrow-row .oss-eyebrow { margin-bottom: 0; white-space: nowrap; }
 .oss-power__eyebrow-line { flex: 1 1 auto; max-width: 140px; height: 1px; background: var(--oss-gold); }
 
+/* The two body paragraphs are separate Elementor text widgets, so the
+   column's own widget gap already spaces them — the paragraph's own
+   bottom margin on top of that doubled the gap. Kill it here only. */
+.oss-power .elementor-widget-text-editor p { margin-bottom: 0; }
+
 .oss-power__quote {
 	display: flex;
 	align-items: stretch;
@@ -296,9 +301,7 @@
 	flex-shrink: 0;
 }
 .oss-power__quote-divider {
-	width: 1px;
-	flex-shrink: 0;
-	background: rgba(53,58,53,0.18);
+	display: none;
 }
 .oss-power__quote blockquote {
 	font-family: var(--oss-font-heading);
@@ -307,8 +310,10 @@
 	line-height: 1.55;
 	margin: 0 0 0.85rem;
 	color: var(--oss-text);
+	border-left: none;
+	padding: 0;
 }
-.oss-power__quote-rule { width: 40px; height: 1px; background: var(--oss-gold); margin-bottom: 0.6rem; }
+.oss-power__quote-rule { display: none; }
 .oss-power__quote cite {
 	font-style: normal;
 	font-size: 0.72rem;
@@ -326,25 +331,41 @@
 	list-style: none;
 	display: grid;
 	grid-template-columns: repeat(2, minmax(240px, 1fr));
-	gap: 0.85rem 2.5rem;
-	max-width: 780px;
-	margin: 1.75rem auto !important;
+	gap: 1rem 1.5rem;
+	max-width: 860px;
+	margin: 2rem auto !important;
 	text-align: left;
 	padding: 0 !important;
 }
 .oss-who-grid li {
 	display: flex;
-	align-items: flex-start;
-	gap: 0.65rem;
+	align-items: center;
+	gap: 1rem;
 	font-size: 0.98rem;
-	line-height: 1.4;
+	line-height: 1.35;
+	padding: 1rem 1.15rem;
+	background: rgba(245,240,230,0.06);
+	border: 1px solid rgba(245,240,230,0.16);
+	border-radius: var(--oss-radius);
+	transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+.oss-who-grid li:hover {
+	background: rgba(245,240,230,0.12);
+	border-color: rgba(180,154,104,0.5);
 }
 .oss-who-grid li::before {
 	content: '\2713';
-	color: var(--oss-gold);
-	font-weight: 700;
 	flex-shrink: 0;
-	margin-top: 0.15em;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: var(--oss-gold);
+	color: var(--oss-primary-dark);
+	font-weight: 700;
+	font-size: 0.85rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* -------------------------------------------------------------------- */
@@ -375,6 +396,8 @@
 	font-size: clamp(1.4rem, 2.6vw, 2rem);
 	line-height: 1.5;
 	margin: 0 0 1rem;
+	border-left: none;
+	padding: 0;
 }
 .oss-quote cite {
 	font-style: normal;
@@ -389,6 +412,17 @@
 	padding: 2rem 1.75rem;
 	background: rgba(245,240,230,0.06);
 	border: 1px solid rgba(245,240,230,0.16);
+}
+
+/* The "Stories of Hope" row is split 33/33/34 in Elementor, but 34 isn't
+   one of Elementor's actual preset column widths — that column has no
+   matching CSS rule and falls back to flex auto-sizing, rendering nearly
+   double the width of its siblings. Force all three testimonial columns
+   to the same third. */
+.elementor-element-c35d5d9,
+.elementor-element-29b0ee9,
+.elementor-element-8dedf4f {
+	width: 33.333% !important;
 }
 .oss-quote--card::before { font-size: 2.25rem; margin-bottom: 0.25rem; }
 .oss-quote--card blockquote { font-size: 1.05rem; line-height: 1.6; }
