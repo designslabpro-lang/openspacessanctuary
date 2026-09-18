@@ -63,40 +63,6 @@
 	color: rgba(245,240,230,0.6);
 }
 
-.oss2-hero__foot {
-	display: flex;
-	align-items: center;
-	gap: 1rem;
-	margin-top: clamp(1.5rem, 4vw, 2.5rem);
-	padding-top: clamp(1.25rem, 3vw, 1.75rem);
-	border-top: 1px solid rgba(245,240,230,0.18);
-}
-.oss2-hero__thumb {
-	width: 64px;
-	height: 64px;
-	border-radius: var(--oss-radius);
-	overflow: hidden;
-	flex-shrink: 0;
-	box-shadow: var(--oss-shadow-sm);
-}
-.oss2-hero__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.oss2-hero__scroll {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.6rem;
-	font-size: 0.72rem;
-	font-weight: 600;
-	letter-spacing: 0.14em;
-	text-transform: uppercase;
-	color: rgba(245,240,230,0.75);
-}
-.oss2-hero__scroll::after {
-	content: "";
-	width: 28px;
-	height: 1px;
-	background: var(--oss-gold-light);
-}
-
 .oss2-hero__photo {
 	position: relative;
 	overflow: hidden;
@@ -218,37 +184,55 @@
 }
 
 /* -------------------------------------------------------------------- */
-/* Who We Serve — numbered pill cards.                                   */
+/* Who We Serve — icon cards on a tinted section for stronger contrast.  */
 /* -------------------------------------------------------------------- */
+
+.oss2-serve-section { background-color: var(--oss-bg); }
 
 .oss2-serve-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-	gap: 1.25rem;
-	margin: 2.5rem 0;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1.5rem;
+	margin: 2.75rem 0;
 }
 .oss2-serve-card {
 	background: var(--oss-white);
 	border-radius: var(--oss-radius-lg);
-	padding: 1.75rem 1.5rem;
-	box-shadow: var(--oss-shadow-sm);
+	padding: 2rem 1.75rem;
+	box-shadow: var(--oss-shadow-md);
+	border-top: 3px solid var(--oss-gold);
 	transition: transform 0.3s var(--oss-ease), box-shadow 0.3s var(--oss-ease);
 	position: relative;
+	text-align: left;
 }
-.oss2-serve-card:hover { transform: translateY(-4px); box-shadow: var(--oss-shadow-md); }
+.oss2-serve-card:hover { transform: translateY(-6px); box-shadow: var(--oss-shadow-lg); }
+.oss2-serve-card__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	background: var(--oss-bg);
+	color: var(--oss-primary);
+	margin-bottom: 1rem;
+}
+.oss2-serve-card__icon svg { width: 24px; height: 24px; }
 .oss2-serve-card__num {
 	font-family: var(--oss-font-heading);
 	font-size: 0.85rem;
 	color: var(--oss-gold);
 	font-weight: 600;
 	letter-spacing: 0.08em;
+	display: block;
+	margin-bottom: 0.4rem;
 }
 .oss2-serve-card__label {
 	display: block;
-	margin-top: 0.6rem;
-	font-weight: 500;
+	font-weight: 600;
 	color: var(--oss-text);
 	line-height: 1.4;
+	font-size: 1.05rem;
 }
 
 /* -------------------------------------------------------------------- */

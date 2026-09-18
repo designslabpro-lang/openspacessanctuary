@@ -16,9 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-$icons           = oss_home_icon_library();
-$hero_slide_ids  = array_values( array_filter( array_map( 'intval', oss_home_get( 'hero_slide_ids' ) ) ) );
-$hero_thumb_id   = isset( $hero_slide_ids[1] ) ? $hero_slide_ids[1] : ( isset( $hero_slide_ids[0] ) ? $hero_slide_ids[0] : 0 );
+$icons          = oss_home_icon_library();
+$hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get( 'hero_slide_ids' ) ) ) );
 ?>
 
 <header class="oss2-hero">
@@ -36,12 +35,6 @@ $hero_thumb_id   = isset( $hero_slide_ids[1] ) ? $hero_slide_ids[1] : ( isset( $
 				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 			</div>
 			<p class="oss2-hero__trust"><?php esc_html_e( 'A 501(c)(3) nonprofit organization', 'astra-child' ); ?></p>
-			<div class="oss2-hero__foot">
-				<?php if ( $hero_thumb_id && wp_get_attachment_image_src( $hero_thumb_id, 'thumbnail' ) ) : ?>
-					<div class="oss2-hero__thumb"><?php echo wp_get_attachment_image( $hero_thumb_id, 'thumbnail', false, array( 'alt' => '' ) ); ?></div>
-				<?php endif; ?>
-				<span class="oss2-hero__scroll"><?php esc_html_e( 'Scroll', 'astra-child' ); ?></span>
-			</div>
 		</div>
 		<div class="oss2-hero__photo">
 			<div class="oss-hero__slides" data-oss-hero-slides data-oss-autoplay="6500">
@@ -90,7 +83,7 @@ $hero_thumb_id   = isset( $hero_slide_ids[1] ) ? $hero_slide_ids[1] : ( isset( $
 	</div>
 </section>
 
-<section class="oss-section oss-section--white" style="text-align:center;">
+<section class="oss-section oss2-serve-section" style="text-align:center;">
 	<div class="oss-container">
 		<div class="oss-section-heading oss-section-heading--center">
 			<span class="oss-eyebrow"><?php esc_html_e( 'Who We Serve', 'astra-child' ); ?></span>
@@ -100,6 +93,9 @@ $hero_thumb_id   = isset( $hero_slide_ids[1] ) ? $hero_slide_ids[1] : ( isset( $
 		<div class="oss2-serve-grid">
 			<?php foreach ( oss_home_get( 'serve_items' ) as $i => $item ) : ?>
 				<div class="oss2-serve-card">
+					<span class="oss2-serve-card__icon">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><?php echo isset( $icons[ $item['icon'] ] ) ? $icons[ $item['icon'] ] : $icons['compass']; // phpcs:ignore -- trusted static SVG path library. ?></svg>
+					</span>
 					<span class="oss2-serve-card__num"><?php echo esc_html( sprintf( '%02d', $i + 1 ) ); ?></span>
 					<span class="oss2-serve-card__label"><?php echo esc_html( $item['label'] ); ?></span>
 				</div>
