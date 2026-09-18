@@ -204,8 +204,8 @@
 }
 .oss2-feature__quote {
 	position: absolute;
-	left: -1.5rem;
-	bottom: -1.5rem;
+	left: 1.5rem;
+	bottom: 1.5rem;
 	max-width: 300px;
 	background: var(--oss-white);
 	border-radius: var(--oss-radius);
@@ -215,7 +215,8 @@
 	font-style: italic;
 	font-size: 1.05rem;
 	color: var(--oss-text);
-	border-left: 4px solid var(--oss-gold);
+	margin: 0;
+	border: 0; /* the element-level blockquote rule adds a left border otherwise */
 }
 @media (max-width: 900px) {
 	.oss2-feature { grid-template-columns: 1fr; }
