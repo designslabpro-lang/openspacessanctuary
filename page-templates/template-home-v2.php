@@ -1,0 +1,181 @@
+<?php
+/**
+ * Template Name: Homepage V2 (Custom)
+ *
+ * A ground-up homepage rebuild — new layout, new CSS (assets/css/home-v2.css),
+ * zero Elementor, and it does not reuse or modify the previous Elementor
+ * front page or the earlier "Home (Custom)" template. It reads the same
+ * admin-editable content store (inc/homepage-content.php) so the existing
+ * approved copy carries over and stays editable at
+ * Appearance → Homepage Content — only the visual design is new.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+get_header();
+
+$icons          = oss_home_icon_library();
+$hero_photo_url = wp_get_attachment_image_url( (int) oss_home_get( 'hero_image_id' ), 'full' );
+?>
+
+<header class="oss2-hero">
+	<div class="oss2-hero__panel">
+		<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
+		<div class="oss-divider"></div>
+		<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
+		<div class="oss2-hero__body">
+			<?php foreach ( explode( "\n", oss_home_get( 'hero_body' ) ) as $para ) : ?>
+				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+		<div class="oss2-hero__actions">
+			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
+			<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
+		</div>
+	</div>
+	<div class="oss2-hero__photo">
+		<?php if ( $hero_photo_url ) : ?>
+			<img src="<?php echo esc_url( $hero_photo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+		<?php endif; ?>
+		<span class="oss2-hero__badge">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+			<?php esc_html_e( 'Ocala, Florida', 'astra-child' ); ?>
+		</span>
+	</div>
+</header>
+
+<section class="oss-section oss-section--cream">
+	<div class="oss-container">
+		<div class="oss2-feature">
+			<div class="oss2-feature__media">
+				<?php echo oss_home_image( 'power_image_id', 'large', 'Open Spaces Sanctuary' ); ?>
+				<blockquote class="oss2-feature__quote">&ldquo;<?php echo esc_html( oss_home_get( 'power_quote' ) ); ?>&rdquo;</blockquote>
+			</div>
+			<div>
+				<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'power_eyebrow' ) ); ?></span>
+				<h2><?php echo esc_html( oss_home_get( 'power_heading' ) ); ?></h2>
+				<p><?php echo esc_html( oss_home_get( 'power_body1' ) ); ?></p>
+				<p><?php echo esc_html( oss_home_get( 'power_body2' ) ); ?></p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="oss-section oss-section--white" style="text-align:center;">
+	<div class="oss-container">
+		<div class="oss-section-heading oss-section-heading--center">
+			<span class="oss-eyebrow"><?php esc_html_e( 'Who We Serve', 'astra-child' ); ?></span>
+			<h2><?php echo esc_html( oss_home_get( 'serve_heading' ) ); ?></h2>
+			<p><?php echo esc_html( oss_home_get( 'serve_intro' ) ); ?></p>
+		</div>
+		<div class="oss2-serve-grid">
+			<?php foreach ( oss_home_get( 'serve_items' ) as $i => $item ) : ?>
+				<div class="oss2-serve-card">
+					<span class="oss2-serve-card__num"><?php echo esc_html( sprintf( '%02d', $i + 1 ) ); ?></span>
+					<span class="oss2-serve-card__label"><?php echo esc_html( $item['label'] ); ?></span>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<p style="max-width:640px;margin:0 auto;"><?php echo esc_html( oss_home_get( 'serve_closing' ) ); ?></p>
+	</div>
+</section>
+
+<section class="oss-section oss-section--cream">
+	<div class="oss-container">
+		<div class="oss-section-heading oss-section-heading--center" style="text-align:center;margin-left:auto;margin-right:auto;">
+			<span class="oss-eyebrow"><?php esc_html_e( 'What We Offer', 'astra-child' ); ?></span>
+			<h2><?php echo esc_html( oss_home_get( 'programs_heading' ) ); ?></h2>
+			<p><?php echo esc_html( oss_home_get( 'programs_intro' ) ); ?></p>
+		</div>
+		<?php echo do_shortcode( '[oss_programs_grid limit="4"]' ); ?>
+		<p style="text-align:center;margin-top:2.5rem;"><a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'View All Programs', 'astra-child' ); ?></a></p>
+	</div>
+</section>
+
+<section class="oss2-band" style="<?php $horses_bg = (int) oss_home_get( 'horses_image_id' ); if ( $horses_bg ) { echo 'background-image:url(' . esc_url( wp_get_attachment_image_url( $horses_bg, 'full' ) ) . ');'; } ?>">
+	<div class="oss-container">
+		<div class="oss2-band__inner">
+			<span class="oss-eyebrow"><?php esc_html_e( 'The Herd', 'astra-child' ); ?></span>
+			<h2><?php echo esc_html( oss_home_get( 'horses_heading' ) ); ?></h2>
+			<?php foreach ( explode( "\n", oss_home_get( 'horses_body' ) ) as $para ) : ?>
+				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+			<?php endforeach; ?>
+			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( home_url( '/meet-the-herd/' ) ); ?>"><?php echo esc_html( oss_home_get( 'horses_sub' ) ); ?></a>
+		</div>
+	</div>
+</section>
+
+<section class="oss-section oss-section--white">
+	<div class="oss-container">
+		<div class="oss2-founder">
+			<div class="oss2-founder__media">
+				<?php echo oss_home_image( 'founder_image_id', 'large', esc_attr( oss_home_get( 'founder_name' ) ) ); ?>
+			</div>
+			<div>
+				<span class="oss2-founder__mark" aria-hidden="true">&ldquo;</span>
+				<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'founder_heading' ) ); ?></span>
+				<h2><?php echo esc_html( oss_home_get( 'founder_name' ) ); ?></h2>
+				<?php foreach ( explode( "\n", oss_home_get( 'founder_body' ) ) as $para ) : ?>
+					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+				<?php endforeach; ?>
+				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php echo esc_html( oss_home_get( 'founder_btn' ) ); ?></a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="oss-section oss-section--sage" style="text-align:center;">
+	<div class="oss-container">
+		<span class="oss-eyebrow"><?php esc_html_e( 'Stories of Hope', 'astra-child' ); ?></span>
+		<h2><?php echo esc_html( oss_home_get( 'stories_heading' ) ); ?></h2>
+		<?php echo do_shortcode( '[oss_testimonials]' ); ?>
+	</div>
+</section>
+
+<section class="oss-section oss-cta" style="background:var(--oss-primary-dark);color:var(--oss-bg);<?php $donate_bg = (int) oss_home_get( 'donate_image_id' ); if ( $donate_bg ) { echo 'background-image:linear-gradient(rgba(30,34,28,.75),rgba(30,34,28,.75)),url(' . esc_url( wp_get_attachment_image_url( $donate_bg, 'full' ) ) . ');background-size:cover;background-position:center;'; } ?>" >
+	<div class="oss-container oss-on-dark" style="text-align:center;">
+		<span class="oss-eyebrow" style="color:var(--oss-gold-light);"><?php esc_html_e( 'Support the Sanctuary', 'astra-child' ); ?></span>
+		<h2><?php echo esc_html( oss_home_get( 'donate_heading' ) ); ?></h2>
+		<?php foreach ( explode( "\n", oss_home_get( 'donate_body' ) ) as $para ) : ?>
+			<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+		<?php endforeach; ?>
+		<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'donate_btn_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'donate_btn' ) ); ?></a>
+	</div>
+</section>
+
+<section class="oss-section oss-section--cream">
+	<div class="oss-container">
+		<div class="oss2-connect">
+			<div>
+				<span class="oss-eyebrow"><?php esc_html_e( 'Newsletter', 'astra-child' ); ?></span>
+				<h2><?php echo esc_html( oss_home_get( 'connect_heading' ) ); ?></h2>
+				<p style="max-width:480px;margin:0;"><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
+			</div>
+			<div>
+				<?php echo do_shortcode( '[oss_newsletter_signup show_name="1"]' ); ?>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="oss-section oss-section--white">
+	<div class="oss-container">
+		<div class="oss2-close">
+			<div>
+				<h2><?php echo esc_html( oss_home_get( 'final_heading' ) ); ?></h2>
+				<?php foreach ( explode( "\n", oss_home_get( 'final_body' ) ) as $para ) : ?>
+					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+				<?php endforeach; ?>
+				<p style="font-style:italic;color:var(--oss-brown);"><?php echo esc_html( oss_home_get( 'final_sub' ) ); ?></p>
+			</div>
+			<div class="oss2-close__actions">
+				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'final_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'final_btn1_text' ) ); ?></a>
+				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'final_btn2_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'final_btn2_text' ) ); ?></a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<?php get_footer(); ?>

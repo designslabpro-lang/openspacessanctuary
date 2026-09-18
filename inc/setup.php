@@ -35,7 +35,7 @@ add_action( 'after_setup_theme', 'oss_child_setup' );
  * top clearance without affecting solid-header pages/banners.
  */
 function oss_child_body_class( $classes ) {
-	if ( is_front_page() ) {
+	if ( is_front_page() && ! is_page_template( 'page-templates/template-home-v2.php' ) ) {
 		$classes[] = 'oss-transparent-header';
 	}
 	return $classes;

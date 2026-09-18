@@ -28,6 +28,10 @@ function oss_child_enqueue_assets() {
 	wp_enqueue_style( 'astra-child-style', get_stylesheet_uri(), array( 'oss-responsive' ), OSS_CHILD_VERSION );
 
 	wp_enqueue_script( 'oss-main', OSS_CHILD_URI . '/assets/js/main.js', array(), OSS_CHILD_VERSION, true );
+
+	if ( is_page_template( 'page-templates/template-home-v2.php' ) ) {
+		wp_enqueue_style( 'oss-home-v2', OSS_CHILD_URI . '/assets/css/home-v2.css', array( 'astra-child-style' ), OSS_CHILD_VERSION );
+	}
 }
 add_action( 'wp_enqueue_scripts', 'oss_child_enqueue_assets' );
 

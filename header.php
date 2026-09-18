@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="page" class="hfeed site">
 
-	<?php $oss_is_home_hero = is_front_page() || is_page_template( 'page-templates/template-home-custom.php' ); ?>
+	<?php $oss_is_home_hero = ( is_front_page() && ! is_page_template( 'page-templates/template-home-v2.php' ) ) || is_page_template( 'page-templates/template-home-custom.php' ); ?>
 	<header id="masthead" class="oss-header<?php echo $oss_is_home_hero ? ' is-transparent' : ''; ?>" role="banner">
 		<div class="oss-container oss-header__inner">
 			<div class="oss-header__brand">
