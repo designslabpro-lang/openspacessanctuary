@@ -457,17 +457,53 @@
 /* Newsletter bar.                                                       */
 /* -------------------------------------------------------------------- */
 
+/* Stay Connected — a rounded dark-green panel on the cream section, in
+   the same visual language as the hero panel (gradient + two faint
+   rings), with the cream signup row popping off it. */
 .oss2-connect {
-	display: flex;
-	flex-wrap: wrap;
+	position: relative;
+	overflow: hidden;
+	display: grid;
+	grid-template-columns: 1.1fr 0.9fr;
 	align-items: center;
-	justify-content: space-between;
-	gap: 1.5rem;
+	gap: clamp(2rem, 5vw, 4rem);
+	padding: clamp(2.25rem, 5vw, 3.5rem) clamp(1.75rem, 5vw, 3.5rem);
+	border-radius: 26px;
+	background: linear-gradient(165deg, var(--oss-primary-dark) 0%, #2a3126 100%);
+	box-shadow: var(--oss-shadow-lg);
 	text-align: left;
 }
-.oss2-connect h2 { margin-bottom: 0.35rem; }
-@media (max-width: 700px) {
-	.oss2-connect { text-align: center; justify-content: center; }
+.oss2-connect::before,
+.oss2-connect::after {
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	border: 1px solid rgba(212,190,147,0.18);
+	pointer-events: none;
+	z-index: 0;
+}
+.oss2-connect::before { width: 360px; height: 360px; top: -150px; right: -120px; }
+.oss2-connect::after { width: 180px; height: 180px; bottom: -80px; left: -60px; }
+.oss2-connect__text,
+.oss2-connect__form { position: relative; z-index: 1; }
+.oss2-connect .oss-eyebrow { color: var(--oss-gold-light); }
+.oss2-connect h2 { color: var(--oss-white); margin-bottom: 0.5rem; }
+.oss2-connect p { color: rgba(245,240,230,0.85); margin: 0; }
+.oss2-connect .oss-newsletter-form {
+	flex-wrap: wrap;
+	border-radius: var(--oss-radius);
+	box-shadow: 0 14px 34px rgba(0,0,0,0.25);
+}
+.oss2-connect .oss-newsletter-form button.oss-btn { flex-shrink: 0; }
+.oss2-connect .oss-newsletter-form__note { color: rgba(245,240,230,0.7); opacity: 1; }
+
+@media (max-width: 900px) {
+	.oss2-connect { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+	.oss2-connect .oss-newsletter-form input[type="text"],
+	.oss2-connect .oss-newsletter-form input[type="email"] { flex: 1 1 100%; border-right: 0; border-bottom: 1px solid rgba(53,58,53,0.12); }
+	.oss2-connect .oss-newsletter-form button.oss-btn { flex: 1 1 100%; justify-content: center; }
 }
 
 /* -------------------------------------------------------------------- */

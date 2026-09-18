@@ -183,12 +183,12 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 <section class="oss-section oss-section--cream">
 	<div class="oss-container">
 		<div class="oss2-connect">
-			<div>
+			<div class="oss2-connect__text">
 				<span class="oss-eyebrow"><?php esc_html_e( 'Newsletter', 'astra-child' ); ?></span>
 				<h2><?php echo esc_html( oss_home_get( 'connect_heading' ) ); ?></h2>
-				<p style="max-width:480px;margin:0;"><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
+				<p><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
 			</div>
-			<div>
+			<div class="oss2-connect__form">
 				<?php echo do_shortcode( '[oss_newsletter_signup show_name="1"]' ); ?>
 			</div>
 		</div>
