@@ -402,10 +402,21 @@
 	position: relative;
 	z-index: 1;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	grid-template-columns: repeat(3, 1fr); /* fixed 3 per row; extra stories wrap */
 	gap: 1.5rem;
 	margin-top: 2.5rem;
 	text-align: left;
+}
+@media (max-width: 900px) { .oss2-stories__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .oss2-stories__grid { grid-template-columns: 1fr; } }
+.oss2-stories__who { display: flex; align-items: center; gap: 0.75rem; }
+.oss2-stories__avatar {
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	object-fit: cover;
+	flex-shrink: 0;
+	box-shadow: var(--oss-shadow-sm);
 }
 .oss2-stories__card {
 	background: var(--oss-white);

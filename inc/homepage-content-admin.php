@@ -77,13 +77,19 @@ function oss_home_content_sanitize( $input ) {
 			$rows = array();
 			if ( isset( $input['testimonials'] ) && is_array( $input['testimonials'] ) ) {
 				foreach ( $input['testimonials'] as $row ) {
+					$quote = isset( $row['quote'] ) ? sanitize_textarea_field( wp_unslash( $row['quote'] ) ) : '';
+					$name  = isset( $row['name'] ) ? sanitize_text_field( wp_unslash( $row['name'] ) ) : '';
+					if ( '' === $quote && '' === $name ) {
+						continue;
+					}
 					$rows[] = array(
-						'quote' => isset( $row['quote'] ) ? sanitize_textarea_field( $row['quote'] ) : '',
-						'name'  => isset( $row['name'] ) ? sanitize_text_field( $row['name'] ) : '',
+						'quote'    => $quote,
+						'name'     => $name,
+						'image_id' => isset( $row['image_id'] ) ? absint( $row['image_id'] ) : 0,
 					);
 				}
 			}
-			$clean['testimonials'] = $rows ? $rows : $default;
+			$clean['testimonials'] = $rows ? array_values( $rows ) : $default;
 			continue;
 		}
 
@@ -159,6 +165,32 @@ function oss_home_content_slide_row( $index, $label ) {
 	echo '<p><button type="button" class="button oss-image-field__select">' . esc_html__( 'Select Image', 'astra-child' ) . '</button> ';
 	echo '<button type="button" class="button oss-image-field__remove"' . ( $src ? '' : ' style="display:none;"' ) . '>' . esc_html__( 'Remove', 'astra-child' ) . '</button></p>';
 	echo '</div></td></tr>';
+}
+
+/**
+ * One testimonial row (quote, name, optional photo) with Duplicate/Remove.
+ * $i is the array index ("__i__" for the JS template).
+ */
+function oss_home_content_story_row( $i, $row ) {
+	$row = wp_parse_args( $row, array( 'quote' => '', 'name' => '', 'image_id' => 0 ) );
+	$n   = OSS_HOME_OPTION . '[testimonials][' . $i . ']';
+	$id  = (int) $row['image_id'];
+	$src = $id ? wp_get_attachment_image_url( $id, 'thumbnail' ) : '';
+	?>
+	<div class="oss-story-row" style="border:1px solid #ccd0d4;background:#fff;padding:12px 16px;margin-bottom:12px;max-width:760px;">
+		<p><label><strong><?php esc_html_e( 'Quote', 'astra-child' ); ?></strong><br><textarea class="large-text" rows="3" name="<?php echo esc_attr( $n ); ?>[quote]"><?php echo esc_textarea( $row['quote'] ); ?></textarea></label></p>
+		<p><label><strong><?php esc_html_e( 'Name', 'astra-child' ); ?></strong><br><input type="text" class="regular-text" name="<?php echo esc_attr( $n ); ?>[name]" value="<?php echo esc_attr( $row['name'] ); ?>"></label></p>
+		<div class="oss-image-field">
+			<strong><?php esc_html_e( 'Photo (optional)', 'astra-child' ); ?></strong><br>
+			<img src="<?php echo esc_url( $src ); ?>" style="width:72px;height:72px;object-fit:cover;border-radius:50%;display:<?php echo $src ? 'block' : 'none'; ?>;margin:6px 0;border:1px solid #ddd;">
+			<input type="hidden" name="<?php echo esc_attr( $n ); ?>[image_id]" class="oss-image-field__id" value="<?php echo esc_attr( $id ); ?>">
+			<p><button type="button" class="button oss-image-field__select"><?php esc_html_e( 'Select Image', 'astra-child' ); ?></button>
+			<button type="button" class="button oss-image-field__remove"<?php echo $src ? '' : ' style="display:none;"'; ?>><?php esc_html_e( 'Remove', 'astra-child' ); ?></button></p>
+		</div>
+		<p style="margin:0;"><button type="button" class="button oss-story-row__duplicate"><?php esc_html_e( 'Duplicate', 'astra-child' ); ?></button>
+		<button type="button" class="button-link-delete oss-story-row__remove" style="margin-left:10px;"><?php esc_html_e( 'Remove this story', 'astra-child' ); ?></button></p>
+	</div>
+	<?php
 }
 
 function oss_home_content_page() {
@@ -275,17 +307,12 @@ function oss_home_content_page() {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Testimonials', 'astra-child' ); ?></th>
 					<td>
-						<table class="widefat" style="max-width:700px;">
-							<thead><tr><th><?php esc_html_e( 'Quote', 'astra-child' ); ?></th><th style="width:160px;"><?php esc_html_e( 'Name', 'astra-child' ); ?></th></tr></thead>
-							<tbody>
-							<?php foreach ( $stories as $i => $row ) : ?>
-								<tr>
-									<td><textarea class="large-text" rows="3" name="<?php echo esc_attr( OSS_HOME_OPTION . '[testimonials][' . $i . '][quote]' ); ?>"><?php echo esc_textarea( $row['quote'] ); ?></textarea></td>
-									<td><input type="text" class="regular-text" name="<?php echo esc_attr( OSS_HOME_OPTION . '[testimonials][' . $i . '][name]' ); ?>" value="<?php echo esc_attr( $row['name'] ); ?>"></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody>
-						</table>
+						<p class="description" style="margin-bottom:10px;"><?php esc_html_e( 'Three stories per row on desktop; extra stories wrap to the next row. Duplicate a story to start from a copy. Rows with no quote and no name are dropped on save.', 'astra-child' ); ?></p>
+						<div id="oss-story-rows">
+							<?php foreach ( array_values( $stories ) as $i => $row ) { oss_home_content_story_row( $i, $row ); } ?>
+						</div>
+						<p><button type="button" class="button button-secondary" id="oss-story-add"><?php esc_html_e( '+ Add Story', 'astra-child' ); ?></button></p>
+						<template id="oss-story-row-template"><?php oss_home_content_story_row( '__i__', array() ); ?></template>
 					</td>
 				</tr>
 			</table>
@@ -337,7 +364,30 @@ function oss_home_content_admin_assets( $hook ) {
 	wp_enqueue_media();
 	wp_add_inline_script( 'jquery-core', "
 		jQuery(function($){
-			$('.oss-image-field__select').on('click', function(e){
+			// Give a (new or cloned) story row a unique index so its fields
+			// don't collide with an existing row's on save.
+			function reindex($row){
+				var k = 'n' + Date.now() + Math.floor(Math.random() * 1000);
+				$row.find('[name]').each(function(){
+					this.name = this.name.replace(/\\[testimonials\\]\\[[^\\]]+\\]/, '[testimonials][' + k + ']');
+				});
+			}
+			$('#oss-story-add').on('click', function(){
+				var $r = $($('#oss-story-row-template').html());
+				reindex($r);
+				$('#oss-story-rows').append($r);
+			});
+			$(document).on('click', '.oss-story-row__duplicate', function(){
+				var $src = $(this).closest('.oss-story-row');
+				var $c = $src.clone();
+				$c.find('textarea').val($src.find('textarea').val());
+				$c.find('input[type=\"text\"]').val($src.find('input[type=\"text\"]').val());
+				$c.find('.oss-image-field__id').val($src.find('.oss-image-field__id').val());
+				reindex($c);
+				$src.after($c);
+			});
+			$(document).on('click', '.oss-story-row__remove', function(){ $(this).closest('.oss-story-row').remove(); });
+			$(document).on('click', '.oss-image-field__select', function(e){
 				e.preventDefault();
 				var wrap = $(this).closest('.oss-image-field');
 				var frame = wp.media({ title: 'Select Image', multiple: false });
@@ -349,7 +399,7 @@ function oss_home_content_admin_assets( $hook ) {
 				});
 				frame.open();
 			});
-			$('.oss-image-field__remove').on('click', function(e){
+			$(document).on('click', '.oss-image-field__remove', function(e){
 				e.preventDefault();
 				var wrap = $(this).closest('.oss-image-field');
 				wrap.find('.oss-image-field__id').val('');

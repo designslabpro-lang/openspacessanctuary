@@ -162,7 +162,15 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 			<?php foreach ( oss_home_get( 'testimonials' ) as $story ) : ?>
 				<div class="oss2-stories__card">
 					<p class="oss2-stories__quote">&ldquo;<?php echo esc_html( $story['quote'] ); ?>&rdquo;</p>
-					<p class="oss2-stories__name">&mdash; <?php echo esc_html( $story['name'] ); ?></p>
+					<div class="oss2-stories__who">
+						<?php
+						$story_img = ! empty( $story['image_id'] ) ? (int) $story['image_id'] : 0;
+						if ( $story_img && wp_get_attachment_image_src( $story_img, 'thumbnail' ) ) {
+							echo wp_get_attachment_image( $story_img, 'thumbnail', false, array( 'class' => 'oss2-stories__avatar', 'alt' => esc_attr( $story['name'] ) ) );
+						}
+						?>
+						<p class="oss2-stories__name">&mdash; <?php echo esc_html( $story['name'] ); ?></p>
+					</div>
 				</div>
 			<?php endforeach; ?>
 		</div>
