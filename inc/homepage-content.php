@@ -26,6 +26,7 @@ function oss_home_content_defaults() {
 		'hero_btn2_text'  => 'Donate Now',
 		'hero_btn2_url'   => '/contact/',
 		'hero_image_id'   => 52,
+		'hero_slide_ids'  => array( 52, 110, 87 ),
 
 		'power_eyebrow'   => 'Healing Begins Here',
 		'power_heading'   => 'The Healing Power of Horses',

@@ -17,13 +17,18 @@ $icons = oss_home_icon_library();
 ?>
 
 <header class="oss-hero" style="background-color:var(--oss-primary);">
-	<?php
-	$hero_img_id = (int) oss_home_get( 'hero_image_id' );
-	$hero_img    = $hero_img_id ? wp_get_attachment_image_url( $hero_img_id, 'full' ) : '';
-	if ( $hero_img ) {
-		echo '<style>.oss-hero{background-image:url(\'' . esc_url( $hero_img ) . '\');}</style>';
-	}
-	?>
+	<div class="oss-hero__slides" data-oss-hero-slides data-oss-autoplay="6500">
+		<?php
+		$hero_slide_ids = array_filter( array_map( 'intval', oss_home_get( 'hero_slide_ids' ) ) );
+		foreach ( $hero_slide_ids as $i => $slide_id ) :
+			$slide_url = wp_get_attachment_image_url( $slide_id, 'full' );
+			if ( ! $slide_url ) {
+				continue;
+			}
+			?>
+			<div class="oss-hero__slide<?php echo 0 === $i ? ' is-active' : ''; ?>" style="background-image:url('<?php echo esc_url( $slide_url ); ?>');"></div>
+		<?php endforeach; ?>
+	</div>
 	<div class="oss-container oss-hero__inner">
 		<span class="oss-eyebrow oss-hero__eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
 		<div class="oss-hero__divider"></div>
@@ -40,10 +45,18 @@ $icons = oss_home_icon_library();
 		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
 		<span><?php esc_html_e( 'Ocala, Florida', 'astra-child' ); ?></span>
 	</div>
-	<div class="oss-hero__scroll">
-		<span class="oss-hero__scroll-text"><?php esc_html_e( 'Scroll', 'astra-child' ); ?></span>
-		<span class="oss-hero__scroll-visual"><span class="oss-hero__scroll-line"></span><span class="oss-hero__scroll-circle">&darr;</span></span>
-	</div>
+	<?php if ( count( $hero_slide_ids ) > 1 ) : ?>
+		<div class="oss-hero__slide-nav">
+			<span class="oss-hero__slide-count"><span data-oss-carousel-current>01</span>/<?php echo esc_html( sprintf( '%02d', count( $hero_slide_ids ) ) ); ?></span>
+			<button type="button" class="oss-hero__slide-arrow" data-oss-carousel-prev aria-label="<?php esc_attr_e( 'Previous photo', 'astra-child' ); ?>">&larr;</button>
+			<button type="button" class="oss-hero__slide-arrow" data-oss-carousel-next aria-label="<?php esc_attr_e( 'Next photo', 'astra-child' ); ?>">&rarr;</button>
+		</div>
+	<?php else : ?>
+		<div class="oss-hero__scroll">
+			<span class="oss-hero__scroll-text"><?php esc_html_e( 'Scroll', 'astra-child' ); ?></span>
+			<span class="oss-hero__scroll-visual"><span class="oss-hero__scroll-line"></span><span class="oss-hero__scroll-circle">&darr;</span></span>
+		</div>
+	<?php endif; ?>
 </header>
 
 <section class="oss-section oss-section--cream oss-power">

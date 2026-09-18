@@ -36,6 +36,7 @@
 
 .oss-hero__badge {
 	position: absolute;
+	z-index: 2;
 	right: clamp(1.25rem, 4vw, 3rem);
 	bottom: clamp(1.5rem, 4vw, 2.75rem);
 	display: flex;
@@ -192,24 +193,57 @@
 .oss-hero::before {
 	content: '';
 	position: absolute; inset: 0;
+	z-index: 1;
 	background: linear-gradient(90deg, rgba(30,34,28,0.72) 0%, rgba(30,34,28,0.45) 35%, rgba(30,34,28,0.12) 62%, rgba(30,34,28,0) 80%);
 }
-/* Editorial vertical bars breaking across the photo — 3 fixed stripes,
-   positioned over the undimmed right portion of the hero image. */
-.oss-hero::after {
-	content: '';
+
+/* -------------------------------------------------------------------- */
+/* Hero background slideshow                                             */
+/* -------------------------------------------------------------------- */
+
+.oss-hero__slides {
 	position: absolute; inset: 0;
-	pointer-events: none;
-	background-image:
-		linear-gradient(rgba(245,240,230,0.16), rgba(245,240,230,0.16)),
-		linear-gradient(rgba(245,240,230,0.16), rgba(245,240,230,0.16)),
-		linear-gradient(rgba(245,240,230,0.16), rgba(245,240,230,0.16));
-	background-repeat: no-repeat;
-	background-position: 60% 0, 74% 0, 88% 0;
-	background-size: 6.5% 100%, 6.5% 100%, 6.5% 100%;
+	z-index: 0;
 }
-@media (max-width: 900px) {
-	.oss-hero::after { display: none; }
+.oss-hero__slide {
+	position: absolute; inset: 0;
+	background-size: cover;
+	background-position: center;
+	opacity: 0;
+	transition: opacity 1.4s ease;
+}
+.oss-hero__slide.is-active { opacity: 1; }
+
+.oss-hero__slide-nav {
+	position: absolute;
+	left: clamp(1.25rem, 4vw, 2.5rem);
+	bottom: clamp(1.5rem, 4vw, 2.75rem);
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+.oss-hero__slide-count {
+	font-family: var(--oss-font-body);
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	color: rgba(245,240,230,0.85);
+}
+.oss-hero__slide-arrow {
+	width: 38px; height: 38px;
+	border-radius: 50%;
+	border: 1px solid rgba(245,240,230,0.4);
+	background: rgba(30,34,28,0.3);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	color: var(--oss-bg);
+	cursor: pointer;
+	transition: background-color 0.25s var(--oss-ease), border-color 0.25s var(--oss-ease);
+}
+.oss-hero__slide-arrow:hover { background: var(--oss-gold); border-color: var(--oss-gold); }
+@media (max-width: 600px) {
+	.oss-hero__slide-nav { display: none; }
 }
 .oss-hero__inner {
 	position: relative;
@@ -224,7 +258,7 @@
 	margin-bottom: 0.6rem;
 	font-size: clamp(2.75rem, 6vw, 4.75rem);
 }
-.oss-hero p { color: rgba(255,255,255,0.92); font-size: 1.15rem; width: 100%; max-width: 640px; }
+.oss-hero p { color: rgba(255,255,255,0.92); font-size: 16px; width: 100%; max-width: 640px; }
 .oss-hero .elementor-widget-text-editor,
 .oss-hero .elementor-widget-text-editor p { font-weight: 400 !important; }
 .oss-hero__actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
@@ -251,6 +285,7 @@
 
 .oss-hero__scroll {
 	position: absolute;
+	z-index: 2;
 	left: clamp(1.25rem, 4vw, 2.5rem);
 	bottom: clamp(1.5rem, 4vw, 2.75rem);
 	display: flex;
