@@ -119,7 +119,11 @@
 .oss-mobile-panel.is-open { transform: translateX(0); }
 .oss-mobile-panel ul { list-style: none; margin: 2.5rem 0 0; padding: 0; }
 .oss-mobile-panel li { border-bottom: 1px solid rgba(117,91,69,0.15); }
-.oss-mobile-panel a {
+/* :not(.oss-btn) so the CTA button below the nav links keeps its own
+   .oss-btn--primary color (light text on a solid fill) instead of being
+   overridden by this generic nav-link color — same specificity fight
+   that was making it render near-invisible. */
+.oss-mobile-panel a:not(.oss-btn) {
 	display: block; padding: 0.9rem 0;
 	font-family: var(--oss-font-body); font-weight: 600; letter-spacing: 0.06em;
 	font-size: 0.95rem; color: var(--oss-text); text-decoration: none;
