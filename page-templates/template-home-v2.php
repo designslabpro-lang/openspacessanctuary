@@ -202,16 +202,18 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 	</div>
 </section>
 
-<section class="oss-section oss-section--white">
+<section class="oss-section oss2-close-section">
+	<span class="oss2-close__circles oss2-close__circles--tl" aria-hidden="true"><span></span><span></span><span></span></span>
+	<span class="oss2-close__circles oss2-close__circles--br" aria-hidden="true"><span></span><span></span><span></span></span>
 	<div class="oss-container">
 		<div class="oss2-close">
-			<div>
-				<h2><?php echo esc_html( oss_home_get( 'final_heading' ) ); ?></h2>
-				<?php foreach ( explode( "\n", oss_home_get( 'final_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
-				<p style="font-style:italic;color:var(--oss-brown);"><?php echo esc_html( oss_home_get( 'final_sub' ) ); ?></p>
-			</div>
+			<span class="oss-eyebrow"><?php esc_html_e( 'Welcome', 'astra-child' ); ?></span>
+			<h2><?php echo esc_html( oss_home_get( 'final_heading' ) ); ?></h2>
+			<div class="oss-divider oss-divider--center"></div>
+			<?php foreach ( explode( "\n", oss_home_get( 'final_body' ) ) as $para ) : ?>
+				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+			<?php endforeach; ?>
+			<p class="oss2-close__sub"><?php echo esc_html( oss_home_get( 'final_sub' ) ); ?></p>
 			<div class="oss2-close__actions">
 				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'final_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'final_btn1_text' ) ); ?></a>
 				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'final_btn2_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'final_btn2_text' ) ); ?></a>

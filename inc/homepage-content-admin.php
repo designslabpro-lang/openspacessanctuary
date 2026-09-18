@@ -50,7 +50,9 @@ function oss_home_content_register() {
 		),
 	) );
 }
-add_action( 'admin_init', 'oss_home_content_register' );
+// On init (not admin_init) so the show_in_rest registration also runs
+// during REST requests — otherwise /wp/v2/settings never sees the option.
+add_action( 'init', 'oss_home_content_register' );
 
 function oss_home_content_sanitize( $input ) {
 	$defaults = oss_home_content_defaults();
