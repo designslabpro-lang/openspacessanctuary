@@ -1,0 +1,73 @@
+/* ==========================================================================
+   Live Page Builder — canvas overlay (inside the iframe).
+   Loaded only in ?live-builder-canvas mode for a permitted editor. Adds the
+   hover outline, the selected state, and the little element toolbar.
+   ========================================================================== */
+
+.oss-lpb-canvas-mode [data-live-element],
+.oss-lpb-canvas-mode [data-live-section] {
+	position: relative;
+	cursor: pointer;
+	outline: 1px dashed transparent;
+	outline-offset: 2px;
+	transition: outline-color 0.12s ease;
+}
+.oss-lpb-canvas-mode [data-live-element].oss-lpb-hover,
+.oss-lpb-canvas-mode [data-live-section].oss-lpb-hover {
+	outline-color: rgba(89,107,88,0.6);
+}
+.oss-lpb-canvas-mode [data-live-element].oss-lpb-selected {
+	outline: 2px solid #596b58;
+	outline-offset: 2px;
+}
+.oss-lpb-canvas-mode [data-live-section].oss-lpb-selected {
+	outline: 2px solid #b49a68;
+	outline-offset: -2px;
+}
+
+/* Floating label + toolbar pinned to the selected node. */
+.oss-lpb-tag {
+	position: absolute;
+	z-index: 2147483000;
+	background: #596b58;
+	color: #fff;
+	font: 600 11px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	padding: 3px 8px;
+	border-radius: 5px 5px 0 0;
+	pointer-events: none;
+	white-space: nowrap;
+	transform: translateY(-100%);
+}
+.oss-lpb-tag--section { background: #b49a68; }
+
+.oss-lpb-toolbar {
+	position: absolute;
+	z-index: 2147483000;
+	display: flex;
+	gap: 2px;
+	background: #1e2329;
+	border-radius: 6px;
+	padding: 3px;
+	transform: translateY(-100%);
+	box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+.oss-lpb-toolbar button {
+	appearance: none;
+	border: 0;
+	background: transparent;
+	color: #fff;
+	font: 500 12px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	padding: 6px 9px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+.oss-lpb-toolbar button:hover { background: rgba(255,255,255,0.14); }
+.oss-lpb-toolbar button[disabled] { opacity: 0.4; cursor: default; }
+
+/* Inline text editing (Phase 1) — visible affordance when contenteditable. */
+.oss-lpb-canvas-mode [contenteditable="true"] {
+	outline: 2px solid #596b58 !important;
+	background: rgba(89,107,88,0.06);
+}

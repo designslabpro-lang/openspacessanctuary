@@ -1,0 +1,51 @@
+/* ==========================================================================
+   Live Page Builder — front-end render styles.
+   Small, always-loaded on builder pages (like any component CSS). Gives the
+   generic .oss-lpb-* nodes the theme's baseline look; per-element overrides
+   come from the scoped <style> block the renderer emits.
+   ========================================================================== */
+
+.oss-lpb-section { padding: var(--oss-section-space, 4rem) 0; position: relative; }
+.oss-lpb-section__inner { position: relative; }
+.oss-lpb-el { margin: 0 0 1.1rem; }
+.oss-lpb-el:last-child { margin-bottom: 0; }
+
+.oss-lpb-el--heading h1,
+.oss-lpb-el--heading h2,
+.oss-lpb-el--heading h3,
+.oss-lpb-el--heading h4,
+.oss-lpb-el--heading h5,
+.oss-lpb-el--heading h6 { margin: 0; }
+
+.oss-lpb-el--paragraph p { margin: 0; }
+
+.oss-lpb-list { margin: 0; padding-left: 1.2rem; }
+.oss-lpb-list--none { list-style: none; padding-left: 0; }
+.oss-lpb-list--check { list-style: none; padding-left: 0; }
+.oss-lpb-list--check li { position: relative; padding-left: 1.6rem; margin-bottom: 0.4rem; }
+.oss-lpb-list--check li::before { content: "\2713"; position: absolute; left: 0; color: var(--oss-gold); font-weight: 700; }
+
+.oss-lpb-el--image img { max-width: 100%; height: auto; display: block; }
+
+.oss-lpb-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 15px 26px;
+	background: var(--oss-primary);
+	color: var(--oss-bg);
+	border-radius: var(--oss-radius, 6px);
+	font-family: var(--oss-font-body);
+	font-size: 0.85rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: transform 0.25s ease, background-color 0.25s ease;
+}
+.oss-lpb-btn:hover { transform: translateY(-2px); }
+
+/* Alignment helpers driven by the element's [text-align]. */
+.oss-lpb-el { }
+.oss-lpb-el--button[style*="center"] .oss-lpb-btn,
+.oss-lpb-el--image { }

@@ -1,0 +1,19 @@
+/* ==========================================================================
+   Live Page Builder — editor shell responsive tweaks.
+   (Device-frame widths for the canvas live in live-editor.css; this file
+   keeps the shell usable on smaller admin screens. Per-element responsive
+   VALUES are authored in the sidebar and emitted by the renderer.)
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+	:root { --lpb-side: 280px; }
+}
+
+@media (max-width: 782px) {
+	/* WP switches admin to mobile chrome; keep our app full-bleed. */
+	.oss-lpb-app { z-index: 99999; }
+	.oss-lpb-page { display: none; }
+	.oss-lpb-body { flex-direction: column; }
+	.oss-lpb-sidebar { flex-basis: 40vh; width: 100%; border-right: 0; border-bottom: 1px solid var(--lpb-line); }
+	.oss-lpb-canvas-wrap { padding: 10px; }
+}
