@@ -104,6 +104,28 @@
 			hero.addEventListener( 'mouseenter', function () { if ( autoplay ) clearInterval( autoplay ); } );
 		} );
 
+		/* Type filters (Events timeline): buttons with data-oss-filter inside a
+		   [data-oss-filter-bar="<list id>"] show/hide the list's [data-oss-type]
+		   items; "all" shows everything. */
+		document.querySelectorAll( '[data-oss-filter-bar]' ).forEach( function ( bar ) {
+			var list = document.getElementById( bar.getAttribute( 'data-oss-filter-bar' ) );
+			if ( ! list ) return;
+			var empty = list.parentNode.querySelector( '.oss2-timeline__empty' );
+			bar.addEventListener( 'click', function ( e ) {
+				var btn = e.target.closest( '[data-oss-filter]' );
+				if ( ! btn ) return;
+				var value = btn.getAttribute( 'data-oss-filter' );
+				bar.querySelectorAll( '[data-oss-filter]' ).forEach( function ( b ) { b.classList.toggle( 'is-active', b === btn ); } );
+				var shown = 0;
+				list.querySelectorAll( '[data-oss-type]' ).forEach( function ( item ) {
+					var match = value === 'all' || item.getAttribute( 'data-oss-type' ) === value;
+					item.hidden = ! match;
+					if ( match ) shown++;
+				} );
+				if ( empty ) empty.hidden = shown > 0;
+			} );
+		} );
+
 		/* Testimonial carousel */
 		document.querySelectorAll( '[data-oss-carousel]' ).forEach( function ( carousel ) {
 			var track = carousel.querySelector( '.oss-testimonial-carousel__track' );
