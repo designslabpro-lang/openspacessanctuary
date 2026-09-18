@@ -26,15 +26,18 @@ $hero_photo_url = wp_get_attachment_image_url( (int) oss_home_get( 'hero_image_i
 			<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
 			<div class="oss-divider"></div>
 			<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
-			<div class="oss2-hero__body">
-				<?php foreach ( explode( "\n", oss_home_get( 'hero_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
-			</div>
+			<?php
+			$oss_hero_paras = array_values( array_filter( array_map( 'trim', explode( "\n", oss_home_get( 'hero_body' ) ) ) ) );
+			$oss_hero_lead  = isset( $oss_hero_paras[0] ) ? $oss_hero_paras[0] : '';
+			?>
+			<?php if ( $oss_hero_lead ) : ?>
+				<div class="oss2-hero__body"><p><?php echo esc_html( $oss_hero_lead ); ?></p></div>
+			<?php endif; ?>
 			<div class="oss2-hero__actions">
 				<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
 				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 			</div>
+			<p class="oss2-hero__trust"><?php esc_html_e( 'A 501(c)(3) nonprofit organization', 'astra-child' ); ?></p>
 		</div>
 		<div class="oss2-hero__photo">
 			<?php if ( $hero_photo_url ) : ?>

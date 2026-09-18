@@ -16,14 +16,30 @@
 /* -------------------------------------------------------------------- */
 
 .oss2-hero {
-	background: var(--oss-primary-dark);
+	background: var(--oss-bg);
+	padding: clamp(1.25rem, 3vw, 2.25rem) 0;
 }
 .oss2-hero .oss-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	align-items: stretch;
-	gap: clamp(1.5rem, 4vw, 3rem);
-	min-height: 82vh;
+	gap: 0;
+	min-height: min(76vh, 600px);
+	background: linear-gradient(160deg, var(--oss-primary-dark) 0%, #313a2c 100%);
+	border-radius: var(--oss-radius-lg);
+	overflow: hidden;
+	box-shadow: var(--oss-shadow-lg);
+	position: relative;
+	padding-left: 0;
+	padding-right: 0;
+}
+.oss2-hero .oss-container::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	height: 4px;
+	background: linear-gradient(90deg, var(--oss-gold) 0%, var(--oss-gold-light) 100%);
+	z-index: 2;
 }
 
 .oss2-hero__panel {
@@ -31,16 +47,16 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	padding: clamp(2rem, 5vw, 4rem) 0;
+	padding: clamp(2rem, 5vw, 3.5rem) clamp(1.75rem, 5vw, 4rem);
 	position: relative;
 	z-index: 1;
 }
 .oss2-hero__panel .oss-eyebrow { color: var(--oss-gold-light); }
 .oss2-hero__panel h1,
 .oss2-hero__panel p { color: var(--oss-bg); }
-.oss2-hero__panel h1 { font-size: clamp(2.1rem, 2.9vw, 3rem); line-height: 1.15; }
+.oss2-hero__panel h1 { font-size: clamp(2rem, 2.7vw, 2.85rem); line-height: 1.15; margin-bottom: 0.85rem; }
 
-.oss2-hero__body p { max-width: 46ch; color: rgba(245,240,230,0.88); }
+.oss2-hero__body p { max-width: 46ch; color: rgba(245,240,230,0.88); margin-bottom: 0; }
 
 .oss2-hero__actions {
 	display: flex;
@@ -49,12 +65,18 @@
 	margin-top: 1.5rem;
 }
 
+.oss2-hero__trust {
+	margin: 1.1rem 0 0;
+	font-size: 0.78rem;
+	letter-spacing: 0.04em;
+	color: rgba(245,240,230,0.6);
+}
+
 .oss2-hero__photo {
 	position: relative;
 	overflow: hidden;
 	background-color: var(--oss-primary);
-	border-radius: var(--oss-radius-lg);
-	margin: clamp(1.5rem, 4vw, 2.5rem) 0;
+	height: 100%;
 }
 .oss2-hero__photo img {
 	width: 100%;
@@ -81,9 +103,9 @@
 }
 
 @media (max-width: 900px) {
-	.oss2-hero .oss-container { grid-template-columns: 1fr; min-height: 0; gap: 0; }
-	.oss2-hero__photo { height: 46vh; }
-	.oss2-hero__panel { padding: clamp(2rem, 8vw, 3rem) 0; }
+	.oss2-hero .oss-container { grid-template-columns: 1fr; min-height: 0; }
+	.oss2-hero__photo { height: 42vh; }
+	.oss2-hero__panel { padding: clamp(2rem, 8vw, 3rem) clamp(1.5rem, 6vw, 2rem); }
 }
 
 /* -------------------------------------------------------------------- */
