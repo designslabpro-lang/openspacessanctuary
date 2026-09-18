@@ -42,7 +42,32 @@
 	padding: clamp(2rem, 5vw, 3.5rem) clamp(1.75rem, 5vw, 4rem);
 	position: relative;
 	z-index: 1;
+	overflow: hidden;
 }
+/* Two faint circular rings — decorative only, kept quiet so they read
+   as texture rather than competing with the text. */
+.oss2-hero__panel::before,
+.oss2-hero__panel::after {
+	content: "";
+	position: absolute;
+	border-radius: 50%;
+	border: 1px solid rgba(212,190,147,0.18);
+	pointer-events: none;
+	z-index: 0;
+}
+.oss2-hero__panel::before {
+	width: 460px;
+	height: 460px;
+	top: -160px;
+	right: -160px;
+}
+.oss2-hero__panel::after {
+	width: 220px;
+	height: 220px;
+	bottom: -90px;
+	left: -70px;
+}
+.oss2-hero__panel-inner { position: relative; z-index: 1; }
 .oss2-hero__panel-inner {
 	width: 100%;
 }
