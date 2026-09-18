@@ -112,7 +112,9 @@ function oss_contact_content_page() {
 				<?php
 				oss_contact_content_field_row( 'info_heading', __( 'Info Panel Heading', 'astra-child' ) );
 				oss_contact_content_field_row( 'form_heading', __( 'Form Panel Heading', 'astra-child' ) );
+				oss_contact_content_field_row( 'form_shortcode', __( 'Form Shortcode', 'astra-child' ) );
 				?>
+				<tr><th></th><td><p class="description"><?php esc_html_e( 'The form plugin shortcode to render, e.g. [gravityform id="1" title="false"]. Leave empty to show the built-in placeholder.', 'astra-child' ); ?></p></td></tr>
 			</table>
 
 			<h2><?php esc_html_e( 'Final CTA', 'astra-child' ); ?></h2>

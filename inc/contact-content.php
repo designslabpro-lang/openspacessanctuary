@@ -24,8 +24,9 @@ function oss_contact_content_defaults() {
 		'hero_body'    => 'Questions about our programs, upcoming events, or how to get involved? We would love to hear from you.',
 		'hero_image_id' => 0,
 
-		'info_heading' => 'Get In Touch',
-		'form_heading' => 'Send a Message',
+		'info_heading'   => 'Get In Touch',
+		'form_heading'   => 'Send a Message',
+		'form_shortcode' => '[gravityform id="1" title="false"]',
 
 		'cta_heading' => 'Ready to Begin?',
 		'cta_body'    => 'Explore how Open Spaces Sanctuary can help create meaningful connection and healing.',

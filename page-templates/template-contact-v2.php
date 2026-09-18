@@ -41,7 +41,17 @@ oss2_page_hero( array(
 			</div>
 			<div class="oss2-contact__card">
 				<h3><?php echo esc_html( oss_contact_get( 'form_heading' ) ); ?></h3>
-				<?php echo do_shortcode( '[oss_contact_form]' ); ?>
+				<?php
+				// Render the configured form plugin shortcode only when that
+				// plugin is active; otherwise fall back to the placeholder.
+				$oss_form_sc  = trim( (string) oss_contact_get( 'form_shortcode' ) );
+				$oss_form_tag = preg_match( '/^\[(\w+)/', $oss_form_sc, $m ) ? $m[1] : '';
+				if ( $oss_form_tag && shortcode_exists( $oss_form_tag ) ) {
+					echo do_shortcode( $oss_form_sc );
+				} else {
+					echo do_shortcode( '[oss_contact_form]' );
+				}
+				?>
 			</div>
 		</div>
 	</div>
