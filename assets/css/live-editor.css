@@ -128,7 +128,8 @@ html.wp-toolbar { padding-top: 0 !important; }
 /* Field controls (Phase 1) */
 .oss-lpb-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
 .oss-lpb-field { display: flex; flex-direction: column; gap: 5px; }
-.oss-lpb-field__label { font-size: 12px; font-weight: 600; color: #4b5158; }
+.oss-lpb-field__label { font-size: 12px; font-weight: 600; color: #4b5158; display: flex; align-items: center; gap: 6px; }
+.oss-lpb-devbadge { font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lpb-accent); background: rgba(89,107,88,0.1); border-radius: 4px; padding: 1px 6px; }
 .oss-lpb-field input[type="text"],
 .oss-lpb-field input[type="url"],
 .oss-lpb-field select,

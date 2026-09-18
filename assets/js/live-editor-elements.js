@@ -36,22 +36,49 @@
 	function isResponsive( type, key ) {
 		try {
 			var spec = OSS_LPB.schema[ type ] && OSS_LPB.schema[ type ][ key ];
-			return typeof spec === 'string' && spec.slice( -11 ) === '_responsive';
+			return !! ( spec && typeof spec === 'object' && ! Array.isArray( spec ) && spec.responsive );
 		} catch ( e ) { return false; }
+	}
+
+	/** A responsive setting's own value at one breakpoint (no inheritance). */
+	function responsiveVal( settings, key, device ) {
+		if ( ! settings || ! ( key in settings ) ) { return ''; }
+		var v = settings[ key ];
+		if ( v && typeof v === 'object' && ! Array.isArray( v ) ) { return device in v ? v[ device ] : ''; }
+		return 'desktop' === device ? v : ''; // legacy scalar counts as desktop
+	}
+
+	/** The value that actually applies at a breakpoint (mobile←tablet←desktop). */
+	function inheritedVal( settings, key, device ) {
+		if ( ! settings || ! ( key in settings ) ) { return ''; }
+		var v = settings[ key ];
+		if ( ! v || typeof v !== 'object' || Array.isArray( v ) ) { return v || ''; }
+		var chain = { desktop: [ 'desktop' ], tablet: [ 'tablet', 'desktop' ], mobile: [ 'mobile', 'tablet', 'desktop' ] }[ device ] || [ 'desktop' ];
+		for ( var i = 0; i < chain.length; i++ ) { if ( v[ chain[ i ] ] ) { return v[ chain[ i ] ]; } }
+		return '';
+	}
+
+	/** Write a per-breakpoint value into a responsive setting. */
+	function writeResponsive( node, key, device, value ) {
+		node.settings = node.settings || {};
+		var cur = node.settings[ key ];
+		if ( ! cur || typeof cur !== 'object' || Array.isArray( cur ) ) {
+			cur = cur ? { desktop: cur } : {};
+		}
+		if ( value === '' || value == null ) { delete cur[ device ]; }
+		else { cur[ device ] = value; }
+		if ( Object.keys( cur ).length ) { node.settings[ key ] = cur; }
+		else { delete node.settings[ key ]; }
 	}
 
 	function writeSetting( node, type, key, value, opts ) {
 		opts = opts || {};
 		node.settings = node.settings || {};
 		var empty = value === '' || value == null || ( Array.isArray( value ) && ! value.length );
+		if ( opts.device && isResponsive( type, key ) ) { writeResponsive( node, key, opts.device, value ); return; }
 		if ( empty && ! opts.keepEmpty ) { delete node.settings[ key ]; return; }
 		if ( opts.raw || Array.isArray( value ) ) { node.settings[ key ] = value; return; }
-		if ( isResponsive( type, key ) ) {
-			var cur = node.settings[ key ];
-			if ( cur && typeof cur === 'object' && ! Array.isArray( cur ) ) { cur.desktop = value; node.settings[ key ] = cur; }
-			else { node.settings[ key ] = { desktop: value }; }
-			return;
-		}
+		if ( isResponsive( type, key ) ) { writeResponsive( node, key, 'desktop', value ); return; }
 		node.settings[ key ] = value;
 	}
 
@@ -107,6 +134,7 @@
 
 	window.OSSLPBElements = {
 		label: label, find: find, baseVal: baseVal, writeSetting: writeSetting, isResponsive: isResponsive,
+		responsiveVal: responsiveVal, inheritedVal: inheritedVal, writeResponsive: writeResponsive,
 		makeId: makeId, reId: reId, deepClone: deepClone, starterSection: starterSection, starterElement: starterElement, sectionLabel: sectionLabel
 	};
 } )();

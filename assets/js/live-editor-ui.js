@@ -21,7 +21,7 @@
 	 * Inspector for a selected node.
 	 * handlers = { onChange, onAction, onAddElement }
 	 */
-	function showInspector( selection, node, handlers ) {
+	function showInspector( selection, node, handlers, device ) {
 		if ( ! selection || ! node ) { hint( 'Click an element on the page to select it. Double-click text to edit it inline.' ); return; }
 		var p = panel();
 		p.innerHTML = '';
@@ -36,7 +36,7 @@
 		var fields = document.createElement( 'div' );
 		fields.className = 'oss-lpb-fields';
 		p.appendChild( fields );
-		Fields.render( fields, node, function ( key, value, opts ) { handlers.onChange( key, value, opts || {} ); } );
+		Fields.render( fields, node, function ( key, value, opts ) { handlers.onChange( key, value, opts || {} ); }, device );
 
 		// Structural actions for this node.
 		var bar = document.createElement( 'div' );

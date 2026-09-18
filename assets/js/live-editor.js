@@ -23,6 +23,7 @@
 	var doc = [];
 	var selection = null;
 	var activeTab = 'inspector';
+	var device = 'desktop';
 	var dirty = false;
 	var histTimer = null;
 	var pendingSelect = null;
@@ -109,7 +110,7 @@
 		return hit ? hit.node : null;
 	}
 
-	function refreshInspector() { UI.showInspector( selection, currentNode(), inspectorHandlers() ); }
+	function refreshInspector() { UI.showInspector( selection, currentNode(), inspectorHandlers(), device ); }
 	function refreshActiveTab() {
 		if ( 'inspector' === activeTab ) { refreshInspector(); }
 		else if ( 'sections' === activeTab ) { UI.showSections( doc, sectionHandlers() ); }
@@ -262,7 +263,10 @@
 		btn.addEventListener( 'click', function () {
 			document.querySelectorAll( '.oss-lpb-device' ).forEach( function ( b ) { b.classList.remove( 'is-active' ); } );
 			btn.classList.add( 'is-active' );
-			document.querySelector( '.oss-lpb-canvas' ).setAttribute( 'data-device', btn.getAttribute( 'data-device' ) );
+			device = btn.getAttribute( 'data-device' );
+			document.querySelector( '.oss-lpb-canvas' ).setAttribute( 'data-device', device );
+			// Responsive fields now edit this breakpoint.
+			if ( 'inspector' === activeTab ) { refreshInspector(); }
 			setTimeout( function () { toCanvas( { type: 'reposition' } ); }, 320 );
 		} );
 	} );

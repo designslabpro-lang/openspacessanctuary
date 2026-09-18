@@ -33,9 +33,17 @@ function oss_lpb_user_can( $post_id ) {
 }
 
 /**
+ * Wrap a base sanitizer spec so a setting accepts a per-breakpoint
+ * { desktop, tablet, mobile } value.
+ */
+function oss_lpb_resp( $of ) {
+	return array( 'responsive' => true, 'of' => $of );
+}
+
+/**
  * Element schema: type => ( setting => sanitizer spec ).
- * A sanitizer spec is one of: a keyword string, or an array (=> allow-list),
- * or "<keyword>_responsive" for a per-breakpoint {desktop,tablet,mobile} value.
+ * A sanitizer spec is one of: a keyword string, an array (=> allow-list),
+ * or oss_lpb_resp(<spec>) for a per-breakpoint {desktop,tablet,mobile} value.
  */
 function oss_lpb_schema() {
 	static $schema = null;
@@ -46,8 +54,8 @@ function oss_lpb_schema() {
 		'section'   => array(
 			'background_color' => 'color',
 			'background_image' => 'int',
-			'padding'          => 'unit_responsive',
-			'min_height'       => 'unit_responsive',
+			'padding'          => oss_lpb_resp( 'unit' ),
+			'min_height'       => oss_lpb_resp( 'unit' ),
 			'max_width'        => 'unit',
 			'content_align'    => array( 'left', 'center', 'right' ),
 			'hidden'           => 'bool',
@@ -57,9 +65,9 @@ function oss_lpb_schema() {
 			'level'          => array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ),
 			'color'          => 'color',
 			'font_family'    => 'text',
-			'font_size'      => 'unit_responsive',
+			'font_size'      => oss_lpb_resp( 'unit' ),
 			'font_weight'    => 'text',
-			'line_height'    => 'text_responsive',
+			'line_height'    => oss_lpb_resp( 'unit' ),
 			'letter_spacing' => 'unit',
 			'align'          => array( 'left', 'center', 'right' ),
 			'text_transform' => array( 'none', 'uppercase', 'capitalize', 'lowercase' ),
@@ -68,9 +76,9 @@ function oss_lpb_schema() {
 			'text'        => 'textarea',
 			'color'       => 'color',
 			'font_family' => 'text',
-			'font_size'   => 'unit_responsive',
+			'font_size'   => oss_lpb_resp( 'unit' ),
 			'font_weight' => 'text',
-			'line_height' => 'text_responsive',
+			'line_height' => oss_lpb_resp( 'unit' ),
 			'align'       => array( 'left', 'center', 'right' ),
 		),
 		'richtext'  => array(
@@ -87,8 +95,8 @@ function oss_lpb_schema() {
 			'id'           => 'int',
 			'url'          => 'url',
 			'alt'          => 'text',
-			'width'        => 'unit',
-			'height'       => 'unit',
+			'width'        => oss_lpb_resp( 'unit' ),
+			'height'       => oss_lpb_resp( 'unit' ),
 			'object_fit'   => array( 'cover', 'contain', 'fill', 'none' ),
 			'radius'       => 'unit',
 			'shadow'       => array( 'none', 'sm', 'md', 'lg' ),
@@ -105,8 +113,8 @@ function oss_lpb_schema() {
 			'hover_bg'      => 'color',
 			'hover_color'   => 'color',
 			'border_radius' => 'unit',
-			'padding'       => 'unit',
-			'font_size'     => 'unit',
+			'padding'       => oss_lpb_resp( 'unit' ),
+			'font_size'     => oss_lpb_resp( 'unit' ),
 			'font_weight'   => 'text',
 			'icon'          => 'text',
 			'icon_position' => array( 'left', 'right' ),
@@ -134,23 +142,25 @@ function oss_lpb_container_types() {
  * Sanitize one raw value against a sanitizer spec.
  */
 function oss_lpb_sanitize_value( $spec, $value ) {
+	// Responsive: apply the base spec to each breakpoint (check before the
+	// allow-list branch — an allow-list is a numeric array, this is assoc).
+	if ( is_array( $spec ) && ! empty( $spec['responsive'] ) ) {
+		$of    = $spec['of'];
+		$out   = array();
+		$value = is_array( $value ) ? $value : array( 'desktop' => $value );
+		foreach ( array( 'desktop', 'tablet', 'mobile' ) as $bp ) {
+			if ( isset( $value[ $bp ] ) && '' !== $value[ $bp ] ) {
+				$v = oss_lpb_sanitize_value( $of, $value[ $bp ] );
+				if ( '' !== $v && array() !== $v ) { $out[ $bp ] = $v; }
+			}
+		}
+		return $out;
+	}
+
 	// Allow-list array.
 	if ( is_array( $spec ) ) {
 		$value = is_scalar( $value ) ? (string) $value : '';
 		return in_array( $value, $spec, true ) ? $value : ( isset( $spec[0] ) ? $spec[0] : '' );
-	}
-
-	// Responsive: apply the base keyword to each breakpoint.
-	if ( is_string( $spec ) && substr( $spec, -11 ) === '_responsive' ) {
-		$base = substr( $spec, 0, -11 );
-		$out  = array();
-		$value = is_array( $value ) ? $value : array( 'desktop' => $value );
-		foreach ( array( 'desktop', 'tablet', 'mobile' ) as $bp ) {
-			if ( isset( $value[ $bp ] ) && '' !== $value[ $bp ] ) {
-				$out[ $bp ] = oss_lpb_sanitize_value( $base, $value[ $bp ] );
-			}
-		}
-		return $out;
 	}
 
 	switch ( $spec ) {

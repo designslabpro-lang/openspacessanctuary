@@ -98,15 +98,18 @@
 		} );
 	}
 
+	var DEVLABEL = { desktop: 'Desktop', tablet: 'Tablet', mobile: 'Mobile' };
+
 	/**
 	 * Render controls for a node into `container`.
-	 * node = { type, settings }; onChange(key, value, opts) called on edits.
+	 * node = { type, settings }; onChange(key, value, opts); device = active bp.
 	 */
-	function render( container, node, onChange ) {
+	function render( container, node, onChange, device ) {
+		device = device || 'desktop';
 		var defs = FIELDS[ node.type ] || [];
 		container.innerHTML = '';
 		defs.forEach( function ( def ) {
-			container.appendChild( control( def, node, onChange ) );
+			container.appendChild( control( def, node, onChange, device ) );
 		} );
 	}
 
@@ -114,10 +117,15 @@
 		return El.baseVal( node.settings, key, '' );
 	}
 
-	function control( def, node, onChange ) {
+	function control( def, node, onChange, device ) {
 		var wrap = document.createElement( 'label' );
 		wrap.className = 'oss-lpb-field oss-lpb-field--' + def.c;
-		var current = val( node, def.k );
+		var responsive = El.isResponsive( node.type, def.k );
+		// Responsive fields edit the active breakpoint; others read the base.
+		var current = responsive ? El.responsiveVal( node.settings, def.k, device ) : val( node, def.k );
+		var inherited = responsive ? El.inheritedVal( node.settings, def.k, device ) : '';
+		var placeholder = def.ph;
+		if ( responsive && '' === current && inherited ) { placeholder = inherited + ' (inherited)'; }
 
 		if ( 'bool' === def.c ) {
 			wrap.classList.add( 'oss-lpb-field--inline' );
@@ -130,7 +138,14 @@
 			return wrap;
 		}
 
-		wrap.appendChild( span( def.l ) );
+		var lbl = span( def.l );
+		if ( responsive ) {
+			var badge = document.createElement( 'span' );
+			badge.className = 'oss-lpb-devbadge';
+			badge.textContent = DEVLABEL[ device ];
+			lbl.appendChild( badge );
+		}
+		wrap.appendChild( lbl );
 
 		if ( 'select' === def.c ) {
 			var sel = document.createElement( 'select' );
@@ -221,8 +236,8 @@
 		var inp = document.createElement( 'input' );
 		inp.type = ( 'url' === def.c ) ? 'url' : 'text';
 		inp.value = current;
-		if ( def.ph ) { inp.placeholder = def.ph; }
-		inp.addEventListener( 'input', function () { onChange( def.k, inp.value, { live: true } ); } );
+		if ( placeholder ) { inp.placeholder = placeholder; }
+		inp.addEventListener( 'input', function () { onChange( def.k, inp.value, { live: true, device: responsive ? device : undefined } ); } );
 		wrap.appendChild( inp );
 		return wrap;
 	}

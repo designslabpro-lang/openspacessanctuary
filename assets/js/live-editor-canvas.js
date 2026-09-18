@@ -172,37 +172,57 @@
 		return v;
 	}
 
+	/* Emit a value (scalar or responsive {desktop,tablet,mobile}) into the
+	   base / tablet / mobile buckets — mirrors the PHP renderer. */
+	function emit( b, sel, prop, val ) {
+		if ( val == null || val === '' ) { return; }
+		if ( typeof val === 'object' && ! Array.isArray( val ) ) {
+			[ 'desktop', 'tablet', 'mobile' ].forEach( function ( bp ) {
+				if ( val[ bp ] != null && val[ bp ] !== '' ) {
+					b[ 'desktop' === bp ? 'base' : bp ] += sel + '{' + prop + ':' + val[ bp ] + '}';
+				}
+			} );
+		} else {
+			b.base += sel + '{' + prop + ':' + val + '}';
+		}
+	}
+	function wrapMedia( b ) {
+		var out = b.base;
+		if ( b.tablet ) { out += '@media(max-width:900px){' + b.tablet + '}'; }
+		if ( b.mobile ) { out += '@media(max-width:600px){' + b.mobile + '}'; }
+		return out;
+	}
+
 	function cssForElement( id, type, s ) {
 		var e = '[data-live-element="' + css( id ) + '"]';
-		var out = '';
-		var add = function ( sel, prop, val ) { if ( val !== '' && val != null ) { out += sel + '{' + prop + ':' + val + '}'; } };
-		add( e + ' *,' + e, 'color', baseVal( s, 'color' ) );
-		add( e + ' *', 'font-family', baseVal( s, 'font_family' ) );
-		add( e + ' >*', 'font-size', baseVal( s, 'font_size' ) );
-		add( e + ' >*', 'font-weight', baseVal( s, 'font_weight' ) );
-		add( e + ' >*', 'line-height', baseVal( s, 'line_height' ) );
-		add( e + ' >*', 'letter-spacing', baseVal( s, 'letter_spacing' ) );
-		add( e, 'text-align', baseVal( s, 'align' ) );
-		add( e + ' >*', 'text-transform', baseVal( s, 'text_transform' ) );
+		var b = { base: '', tablet: '', mobile: '' };
+		emit( b, e + ' *,' + e, 'color', s.color );
+		emit( b, e + ' *', 'font-family', s.font_family );
+		emit( b, e + ' >*', 'font-size', s.font_size );
+		emit( b, e + ' >*', 'font-weight', s.font_weight );
+		emit( b, e + ' >*', 'line-height', s.line_height );
+		emit( b, e + ' >*', 'letter-spacing', s.letter_spacing );
+		emit( b, e, 'text-align', s.align );
+		emit( b, e + ' >*', 'text-transform', s.text_transform );
 		if ( 'image' === type ) {
-			add( e + ' img', 'width', baseVal( s, 'width' ) );
-			add( e + ' img', 'height', baseVal( s, 'height' ) );
-			add( e + ' img', 'object-fit', baseVal( s, 'object_fit' ) );
-			add( e + ' img', 'border-radius', baseVal( s, 'radius' ) );
+			emit( b, e + ' img', 'width', s.width );
+			emit( b, e + ' img', 'height', s.height );
+			emit( b, e + ' img', 'object-fit', s.object_fit );
+			emit( b, e + ' img', 'border-radius', s.radius );
 		}
 		if ( 'button' === type ) {
-			add( e + ' .oss-lpb-btn', 'background', baseVal( s, 'bg' ) );
-			add( e + ' .oss-lpb-btn', 'color', baseVal( s, 'color' ) );
-			add( e + ' .oss-lpb-btn', 'border-radius', baseVal( s, 'border_radius' ) );
-			add( e + ' .oss-lpb-btn', 'padding', baseVal( s, 'padding' ) );
-			add( e + ' .oss-lpb-btn', 'font-size', baseVal( s, 'font_size' ) );
-			add( e + ' .oss-lpb-btn', 'font-weight', baseVal( s, 'font_weight' ) );
+			emit( b, e + ' .oss-lpb-btn', 'background', s.bg );
+			emit( b, e + ' .oss-lpb-btn', 'color', s.color );
+			emit( b, e + ' .oss-lpb-btn', 'border-radius', s.border_radius );
+			emit( b, e + ' .oss-lpb-btn', 'padding', s.padding );
+			emit( b, e + ' .oss-lpb-btn', 'font-size', s.font_size );
+			emit( b, e + ' .oss-lpb-btn', 'font-weight', s.font_weight );
 		}
 		if ( 'icon' === type ) {
-			add( e + ' .oss-lpb-icon', 'font-size', baseVal( s, 'size' ) );
-			add( e + ' .oss-lpb-icon', 'color', baseVal( s, 'color' ) );
+			emit( b, e + ' .oss-lpb-icon', 'font-size', s.size );
+			emit( b, e + ' .oss-lpb-icon', 'color', s.color );
 		}
-		return out;
+		return wrapMedia( b );
 	}
 
 	function esc( str ) { return String( str ).replace( /[&<>]/g, function ( c ) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ c ]; } ); }
@@ -301,10 +321,10 @@
 		}
 		sec.style.display = s.hidden ? 'none' : '';
 		var sel = '[data-live-section="' + css( id ) + '"]';
-		var out = '';
-		var pad = baseVal( s, 'padding' ); if ( pad ) { out += sel + '{padding:' + pad + '}'; }
-		var mh = baseVal( s, 'min_height' ); if ( mh ) { out += sel + '{min-height:' + mh + '}'; }
-		liveRules[ id ] = out;
+		var b = { base: '', tablet: '', mobile: '' };
+		emit( b, sel, 'padding', s.padding );
+		emit( b, sel, 'min-height', s.min_height );
+		liveRules[ id ] = wrapMedia( b );
 		renderLive();
 		positionChrome();
 	}
