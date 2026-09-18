@@ -190,6 +190,13 @@
 	color: var(--oss-white);
 	overflow: hidden;
 }
+/* The header overlays the hero via position:absolute (no document-flow
+   height of its own), so without this the hero's own top content sits
+   directly under the logo/nav. Push it down by the header's real height. */
+body.oss-transparent-header .oss-hero { padding-top: 110px; }
+@media (max-width: 900px) {
+	body.oss-transparent-header .oss-hero { padding-top: 90px; }
+}
 .oss-hero::before {
 	content: '';
 	position: absolute; inset: 0;

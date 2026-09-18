@@ -30,6 +30,19 @@ function oss_child_setup() {
 add_action( 'after_setup_theme', 'oss_child_setup' );
 
 /**
+ * Body class for whichever page currently has the transparent,
+ * overlaid-on-photo header — lets CSS give that page's hero enough
+ * top clearance without affecting solid-header pages/banners.
+ */
+function oss_child_body_class( $classes ) {
+	if ( is_front_page() ) {
+		$classes[] = 'oss-transparent-header';
+	}
+	return $classes;
+}
+add_filter( 'body_class', 'oss_child_body_class' );
+
+/**
  * Footer widget areas (4 columns), editable via Appearance → Widgets.
  */
 function oss_child_widgets_init() {
