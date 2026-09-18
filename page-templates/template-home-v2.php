@@ -32,8 +32,8 @@ $hero_thumb_id   = isset( $hero_slide_ids[1] ) ? $hero_slide_ids[1] : ( isset( $
 				<?php endforeach; ?>
 			</div>
 			<div class="oss2-hero__actions">
-				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
-				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
+				<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
+				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 			</div>
 			<p class="oss2-hero__trust"><?php esc_html_e( 'A 501(c)(3) nonprofit organization', 'astra-child' ); ?></p>
 			<div class="oss2-hero__foot">

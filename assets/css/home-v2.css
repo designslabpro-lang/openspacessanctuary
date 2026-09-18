@@ -16,7 +16,7 @@
 /* -------------------------------------------------------------------- */
 
 .oss2-hero {
-	background: var(--oss-white);
+	background: var(--oss-primary-dark);
 	padding: 0;
 }
 .oss2-hero .oss-container {
@@ -26,23 +26,15 @@
 	gap: 0;
 	min-height: calc(100vh - 94px);
 	max-width: none;
-	background: var(--oss-white);
+	background: linear-gradient(165deg, var(--oss-primary-dark) 0%, #2a3126 100%);
 	overflow: hidden;
 	position: relative;
 	padding-left: 0;
 	padding-right: 0;
 }
-.oss2-hero .oss-container::before {
-	content: "";
-	position: absolute;
-	top: 0; left: 0; right: 0;
-	height: 4px;
-	background: linear-gradient(90deg, var(--oss-gold) 0%, var(--oss-gold-light) 100%);
-	z-index: 2;
-}
 
 .oss2-hero__panel {
-	color: var(--oss-text);
+	color: var(--oss-bg);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -50,10 +42,11 @@
 	position: relative;
 	z-index: 1;
 }
+.oss2-hero__panel .oss-eyebrow { color: var(--oss-gold-light); }
 .oss2-hero__eyebrow::before { content: "\2014\00a0"; }
-.oss2-hero__panel h1 { font-size: clamp(2.1rem, 2.9vw, 3rem); line-height: 1.15; margin-bottom: 0.85rem; }
+.oss2-hero__panel h1 { font-size: clamp(2.1rem, 2.9vw, 3rem); line-height: 1.15; margin-bottom: 0.85rem; color: var(--oss-bg); }
 
-.oss2-hero__body p { max-width: 50ch; color: var(--oss-brown); margin-bottom: 1em; }
+.oss2-hero__body p { color: rgba(245,240,230,0.88); margin-bottom: 1em; }
 .oss2-hero__body p:last-child { margin-bottom: 0; }
 
 .oss2-hero__actions {
@@ -67,8 +60,7 @@
 	margin: 1.1rem 0 0;
 	font-size: 0.78rem;
 	letter-spacing: 0.04em;
-	color: var(--oss-brown);
-	opacity: 0.75;
+	color: rgba(245,240,230,0.6);
 }
 
 .oss2-hero__foot {
@@ -77,7 +69,7 @@
 	gap: 1rem;
 	margin-top: clamp(1.5rem, 4vw, 2.5rem);
 	padding-top: clamp(1.25rem, 3vw, 1.75rem);
-	border-top: 1px solid rgba(117,91,69,0.15);
+	border-top: 1px solid rgba(245,240,230,0.18);
 }
 .oss2-hero__thumb {
 	width: 64px;
@@ -96,13 +88,13 @@
 	font-weight: 600;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: var(--oss-brown);
+	color: rgba(245,240,230,0.75);
 }
 .oss2-hero__scroll::after {
 	content: "";
 	width: 28px;
 	height: 1px;
-	background: var(--oss-gold);
+	background: var(--oss-gold-light);
 }
 
 .oss2-hero__photo {
