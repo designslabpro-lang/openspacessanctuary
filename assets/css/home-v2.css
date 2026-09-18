@@ -16,18 +16,22 @@
 /* -------------------------------------------------------------------- */
 
 .oss2-hero {
+	background: var(--oss-primary-dark);
+}
+.oss2-hero .oss-container {
 	display: grid;
-	grid-template-columns: minmax(360px, 42%) 1fr;
-	min-height: 92vh;
+	grid-template-columns: 1fr 1fr;
+	align-items: stretch;
+	gap: clamp(1.5rem, 4vw, 3rem);
+	min-height: 82vh;
 }
 
 .oss2-hero__panel {
-	background: var(--oss-primary-dark);
 	color: var(--oss-bg);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	padding: clamp(2rem, 5vw, 5rem);
+	padding: clamp(2rem, 5vw, 4rem) 0;
 	position: relative;
 	z-index: 1;
 }
@@ -49,6 +53,8 @@
 	position: relative;
 	overflow: hidden;
 	background-color: var(--oss-primary);
+	border-radius: var(--oss-radius-lg);
+	margin: clamp(1.5rem, 4vw, 2.5rem) 0;
 }
 .oss2-hero__photo img {
 	width: 100%;
@@ -75,9 +81,9 @@
 }
 
 @media (max-width: 900px) {
-	.oss2-hero { grid-template-columns: 1fr; min-height: 0; }
+	.oss2-hero .oss-container { grid-template-columns: 1fr; min-height: 0; gap: 0; }
 	.oss2-hero__photo { height: 46vh; }
-	.oss2-hero__panel { padding: clamp(2rem, 8vw, 3rem) clamp(1.25rem, 6vw, 2rem); }
+	.oss2-hero__panel { padding: clamp(2rem, 8vw, 3rem) 0; }
 }
 
 /* -------------------------------------------------------------------- */

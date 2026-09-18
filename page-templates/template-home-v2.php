@@ -21,28 +21,30 @@ $hero_photo_url = wp_get_attachment_image_url( (int) oss_home_get( 'hero_image_i
 ?>
 
 <header class="oss2-hero">
-	<div class="oss2-hero__panel">
-		<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
-		<div class="oss-divider"></div>
-		<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
-		<div class="oss2-hero__body">
-			<?php foreach ( explode( "\n", oss_home_get( 'hero_body' ) ) as $para ) : ?>
-				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-			<?php endforeach; ?>
+	<div class="oss-container">
+		<div class="oss2-hero__panel">
+			<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
+			<div class="oss-divider"></div>
+			<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
+			<div class="oss2-hero__body">
+				<?php foreach ( explode( "\n", oss_home_get( 'hero_body' ) ) as $para ) : ?>
+					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+				<?php endforeach; ?>
+			</div>
+			<div class="oss2-hero__actions">
+				<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
+				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
+			</div>
 		</div>
-		<div class="oss2-hero__actions">
-			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
-			<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
+		<div class="oss2-hero__photo">
+			<?php if ( $hero_photo_url ) : ?>
+				<img src="<?php echo esc_url( $hero_photo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
+			<?php endif; ?>
+			<span class="oss2-hero__badge">
+				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+				<?php esc_html_e( 'Ocala, Florida', 'astra-child' ); ?>
+			</span>
 		</div>
-	</div>
-	<div class="oss2-hero__photo">
-		<?php if ( $hero_photo_url ) : ?>
-			<img src="<?php echo esc_url( $hero_photo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
-		<?php endif; ?>
-		<span class="oss2-hero__badge">
-			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-			<?php esc_html_e( 'Ocala, Florida', 'astra-child' ); ?>
-		</span>
 	</div>
 </header>
 
