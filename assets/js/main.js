@@ -126,6 +126,15 @@
 			} );
 		} );
 
+		/* Accordion (FAQ): only one <details> open at a time inside
+		   [data-oss-accordion]. 'toggle' doesn't bubble, so listen in capture. */
+		document.querySelectorAll( '[data-oss-accordion]' ).forEach( function ( acc ) {
+			acc.addEventListener( 'toggle', function ( e ) {
+				if ( ! e.target.open ) return;
+				acc.querySelectorAll( 'details[open]' ).forEach( function ( d ) { if ( d !== e.target ) d.open = false; } );
+			}, true );
+		} );
+
 		/* Testimonial carousel */
 		document.querySelectorAll( '[data-oss-carousel]' ).forEach( function ( carousel ) {
 			var track = carousel.querySelector( '.oss-testimonial-carousel__track' );

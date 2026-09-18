@@ -86,27 +86,60 @@
 	.oss2-contact { grid-template-columns: 1fr; }
 }
 
-/* FAQ — question cards (answers pending from the client). */
-.oss2-faq__grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-	gap: 1rem;
-	margin-top: 2rem;
-}
+/* FAQ — native <details> accordion. */
+.oss2-faq__list { max-width: 860px; margin: 2rem auto 0; text-align: left; }
 .oss2-faq__item {
-	display: flex;
-	gap: 0.75rem;
-	align-items: flex-start;
 	background: var(--oss-white);
 	border-radius: 5px;
-	padding: 1.25rem 1.5rem;
 	box-shadow: var(--oss-shadow-sm);
+	margin-bottom: 0.75rem;
+	overflow: hidden;
+}
+.oss2-faq__q {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 1.1rem 1.4rem;
+	cursor: pointer;
+	list-style: none;
 	font-family: var(--oss-font-heading);
 	font-size: 1.1rem;
+	font-weight: 600;
 	color: var(--oss-text);
-	text-align: left;
 }
-.oss2-faq__item::before { content: "?"; color: var(--oss-gold); font-weight: 700; }
+.oss2-faq__q::-webkit-details-marker { display: none; }
+.oss2-faq__q:hover { color: var(--oss-primary); }
+.oss2-faq__q:focus-visible { outline: 2px solid var(--oss-gold); outline-offset: -2px; }
+.oss2-faq__icon {
+	position: relative;
+	flex-shrink: 0;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: var(--oss-bg);
+}
+.oss2-faq__icon::before,
+.oss2-faq__icon::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 12px;
+	height: 2px;
+	background: var(--oss-gold);
+	transform: translate(-50%, -50%);
+	transition: transform 0.25s var(--oss-ease);
+}
+.oss2-faq__icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+.oss2-faq__item[open] .oss2-faq__icon { background: var(--oss-gold); }
+.oss2-faq__item[open] .oss2-faq__icon::before,
+.oss2-faq__item[open] .oss2-faq__icon::after { background: var(--oss-white); }
+.oss2-faq__item[open] .oss2-faq__icon::after { transform: translate(-50%, -50%) rotate(0deg); }
+.oss2-faq__a { padding: 0 1.4rem 1.25rem; color: var(--oss-brown); }
+.oss2-faq__a p:last-child { margin-bottom: 0; }
+.oss2-faq__ask { font-weight: 600; color: var(--oss-primary); text-decoration: none; border-bottom: 1px solid var(--oss-gold); }
+.oss2-faq__ask:hover { color: var(--oss-primary-dark); border-color: var(--oss-primary-dark); }
 
 /* Serve cards used as links (Get Involved). */
 a.oss2-serve-card { text-decoration: none; }
@@ -240,3 +273,96 @@ a.oss2-serve-card .oss2-serve-card__label::after { content: " \2192"; opacity: 0
 .oss2-filters__btn.is-active:hover,
 .oss2-filters__btn.is-active:focus { background: var(--oss-gold); border-color: var(--oss-gold); color: var(--oss-white); }
 .oss2-timeline__item[hidden] { display: none; }
+
+/* Gravity Forms inside the Contact card — brand fields and button.
+   GF's Orbital theme colors controls through these custom properties
+   (its own selectors outrank ours), so set the variables and also force
+   the submit button as a belt-and-braces measure. */
+.oss2-contact__card .gform_wrapper {
+	--gf-ctrl-btn-bg-color-primary: var(--oss-primary);
+	--gf-ctrl-btn-bg-color-hover-primary: var(--oss-primary-dark);
+	--gf-ctrl-btn-border-color-primary: var(--oss-primary);
+	--gf-ctrl-btn-border-color-hover-primary: var(--oss-primary-dark);
+	--gf-ctrl-btn-color-primary: var(--oss-bg);
+	--gf-ctrl-btn-color-hover-primary: var(--oss-bg);
+	--gf-ctrl-btn-radius: var(--oss-radius);
+	--gf-ctrl-btn-font-family: var(--oss-font-body);
+	--gf-ctrl-btn-font-size: 0.85rem;
+	--gf-ctrl-btn-font-weight: 600;
+	--gf-ctrl-btn-letter-spacing: 0.1em;
+	--gf-ctrl-bg-color: var(--oss-bg);
+	--gf-ctrl-border-color: rgba(117,91,69,0.25);
+	--gf-ctrl-border-color-focus: var(--oss-gold);
+	--gf-ctrl-radius: var(--oss-radius);
+	--gf-ctrl-color: var(--oss-text);
+	--gf-color-primary: var(--oss-primary);
+}
+.oss2-contact__card .gform_wrapper .gform_heading { display: none; }
+.oss2-contact__card .gform_wrapper .gform_fields { row-gap: 1.15rem; }
+.oss2-contact__card .gform_wrapper .gfield_label,
+.oss2-contact__card .gform_wrapper .ginput_complex label,
+.oss2-contact__card .gform_wrapper legend.gfield_label {
+	font-family: var(--oss-font-body);
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--oss-brown);
+	margin-bottom: 0.45rem;
+}
+.oss2-contact__card .gform_wrapper .gfield_required { color: var(--oss-gold); }
+.oss2-contact__card .gform_wrapper input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+.oss2-contact__card .gform_wrapper textarea,
+.oss2-contact__card .gform_wrapper select {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 0.85em 1em;
+	border: 1px solid rgba(117,91,69,0.25);
+	border-radius: var(--oss-radius);
+	background: var(--oss-bg);
+	color: var(--oss-text);
+	font-family: var(--oss-font-body);
+	font-size: 0.95rem;
+	line-height: 1.4;
+	transition: border-color 0.2s var(--oss-ease), background-color 0.2s var(--oss-ease);
+}
+.oss2-contact__card .gform_wrapper input:not([type="submit"]):focus,
+.oss2-contact__card .gform_wrapper textarea:focus,
+.oss2-contact__card .gform_wrapper select:focus {
+	outline: none;
+	border-color: var(--oss-gold);
+	background: var(--oss-white);
+	box-shadow: 0 0 0 3px rgba(180,154,104,0.18);
+}
+.oss2-contact__card .gform_wrapper textarea { min-height: 160px; resize: vertical; }
+.oss2-contact__card .gform_wrapper .gfield_description,
+.oss2-contact__card .gform_wrapper .validation_message { font-size: 0.85rem; color: var(--oss-brown); }
+.oss2-contact__card .gform_wrapper .gfield_error input,
+.oss2-contact__card .gform_wrapper .gfield_error textarea { border-color: #b3261e; }
+.oss2-contact__card .gform_wrapper .gform_footer { margin-top: 1rem; padding: 0; }
+.oss2-contact__card .gform_wrapper input[type="submit"],
+.oss2-contact__card .gform_wrapper button.gform_button {
+	appearance: none;
+	-webkit-appearance: none;
+	display: inline-flex;
+	align-items: center;
+	padding: 15px 28px !important;
+	background: var(--oss-primary) !important;
+	color: var(--oss-bg) !important;
+	border: 1px solid var(--oss-primary) !important;
+	border-radius: var(--oss-radius) !important;
+	font-family: var(--oss-font-body) !important;
+	font-size: 0.85rem !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.1em !important;
+	text-transform: uppercase !important;
+	cursor: pointer;
+	box-shadow: var(--oss-shadow-sm);
+	transition: background-color 0.3s var(--oss-ease), transform 0.3s var(--oss-ease);
+}
+.oss2-contact__card .gform_wrapper input[type="submit"]:hover,
+.oss2-contact__card .gform_wrapper button.gform_button:hover {
+	background: var(--oss-primary-dark) !important;
+	border-color: var(--oss-primary-dark) !important;
+	transform: translateY(-2px);
+}

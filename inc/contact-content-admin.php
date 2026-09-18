@@ -35,15 +35,42 @@ function oss_contact_content_menu() {
 add_action( 'admin_menu', 'oss_contact_content_menu' );
 
 function oss_contact_content_register() {
-	register_setting( 'oss_contact_content_group', OSS_CONTACT_OPTION, 'oss_contact_content_sanitize' );
+	register_setting( 'oss_contact_content_group', OSS_CONTACT_OPTION, array(
+		'type'              => 'object',
+		'sanitize_callback' => 'oss_contact_content_sanitize',
+		'show_in_rest'      => array(
+			'schema' => array(
+				'type'                 => 'object',
+				'additionalProperties' => true,
+			),
+		),
+	) );
 }
-add_action( 'admin_init', 'oss_contact_content_register' );
+add_action( 'init', 'oss_contact_content_register' );
 
 function oss_contact_content_sanitize( $input ) {
 	$defaults = oss_contact_content_defaults();
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
+		if ( 'faq' === $key ) {
+			$rows = array();
+			if ( isset( $input['faq'] ) && is_array( $input['faq'] ) ) {
+				foreach ( $input['faq'] as $row ) {
+					$q = isset( $row['q'] ) ? sanitize_text_field( wp_unslash( $row['q'] ) ) : '';
+					if ( '' === $q ) {
+						continue;
+					}
+					$rows[] = array(
+						'q' => $q,
+						'a' => isset( $row['a'] ) ? sanitize_textarea_field( wp_unslash( $row['a'] ) ) : '',
+					);
+				}
+			}
+			$clean['faq'] = $rows;
+			continue;
+		}
+
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 			continue;
@@ -89,6 +116,18 @@ function oss_contact_content_image_row( $key, $label ) {
 	echo '</div></td></tr>';
 }
 
+function oss_contact_content_faq_row( $i, $row ) {
+	$row = wp_parse_args( $row, array( 'q' => '', 'a' => '' ) );
+	$n   = OSS_CONTACT_OPTION . '[faq][' . $i . ']';
+	?>
+	<div class="oss-faq-row" style="border:1px solid #ccd0d4;background:#fff;padding:12px 16px;margin-bottom:12px;">
+		<p><label><strong><?php esc_html_e( 'Question', 'astra-child' ); ?></strong><br><input type="text" class="large-text" name="<?php echo esc_attr( $n ); ?>[q]" value="<?php echo esc_attr( $row['q'] ); ?>"></label></p>
+		<p><label><strong><?php esc_html_e( 'Answer', 'astra-child' ); ?></strong><br><textarea class="large-text" rows="3" name="<?php echo esc_attr( $n ); ?>[a]"><?php echo esc_textarea( $row['a'] ); ?></textarea></label></p>
+		<p style="margin:0;"><button type="button" class="button-link-delete oss-faq-row__remove"><?php esc_html_e( 'Remove this question', 'astra-child' ); ?></button></p>
+	</div>
+	<?php
+}
+
 function oss_contact_content_page() {
 	?>
 	<div class="wrap">
@@ -117,6 +156,14 @@ function oss_contact_content_page() {
 				<tr><th></th><td><p class="description"><?php esc_html_e( 'The form plugin shortcode to render, e.g. [gravityform id="1" title="false"]. Leave empty to show the built-in placeholder.', 'astra-child' ); ?></p></td></tr>
 			</table>
 
+			<h2><?php esc_html_e( 'FAQ', 'astra-child' ); ?></h2>
+			<p class="description"><?php esc_html_e( 'Shown as an accordion on the Contact page. A question with no answer yet opens to a "Request Information" link to the form. Rows without a question are dropped on save.', 'astra-child' ); ?></p>
+			<div id="oss-faq-rows">
+				<?php foreach ( array_values( (array) oss_contact_get( 'faq' ) ) as $i => $row ) { oss_contact_content_faq_row( $i, $row ); } ?>
+			</div>
+			<p><button type="button" class="button button-secondary" id="oss-faq-add"><?php esc_html_e( '+ Add Question', 'astra-child' ); ?></button></p>
+			<template id="oss-faq-row-template"><?php oss_contact_content_faq_row( '__i__', array() ); ?></template>
+
 			<h2><?php esc_html_e( 'Final CTA', 'astra-child' ); ?></h2>
 			<table class="form-table">
 				<?php
@@ -140,6 +187,10 @@ function oss_contact_content_admin_assets( $hook ) {
 	wp_enqueue_media();
 	wp_add_inline_script( 'jquery-core', "
 		jQuery(function($){
+			$('#oss-faq-add').on('click', function(){
+				$('#oss-faq-rows').append($('#oss-faq-row-template').html().replace(/__i__/g, 'n' + Date.now()));
+			});
+			$(document).on('click', '.oss-faq-row__remove', function(){ $(this).closest('.oss-faq-row').remove(); });
 			$('.oss-image-field__select').on('click', function(e){
 				e.preventDefault();
 				var wrap = $(this).closest('.oss-image-field');

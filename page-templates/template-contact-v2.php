@@ -14,15 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-$oss2_faq = array(
-	__( 'What is Equine Assisted Learning?', 'astra-child' ),
-	__( 'Do I ride the horses?', 'astra-child' ),
-	__( 'Is this therapy?', 'astra-child' ),
-	__( 'Who can participate?', 'astra-child' ),
-	__( 'What should I wear?', 'astra-child' ),
-	__( 'Can children attend?', 'astra-child' ),
-	__( 'How much does it cost?', 'astra-child' ),
-);
+$oss2_faq = (array) oss_contact_get( 'faq' );
 
 oss2_page_hero( array(
 	'eyebrow'  => oss_contact_get( 'hero_eyebrow' ),
@@ -63,9 +55,20 @@ oss2_page_hero( array(
 			<span class="oss-eyebrow"><?php esc_html_e( 'FAQ', 'astra-child' ); ?></span>
 			<h2><?php esc_html_e( 'Frequently Asked Questions', 'astra-child' ); ?></h2>
 		</div>
-		<div class="oss2-faq__grid">
-			<?php foreach ( $oss2_faq as $q ) : ?>
-				<div class="oss2-faq__item"><?php echo esc_html( $q ); ?></div>
+		<div class="oss2-faq__list" data-oss-accordion>
+			<?php foreach ( $oss2_faq as $item ) : if ( empty( $item['q'] ) ) { continue; } ?>
+				<details class="oss2-faq__item">
+					<summary class="oss2-faq__q"><span><?php echo esc_html( $item['q'] ); ?></span><span class="oss2-faq__icon" aria-hidden="true"></span></summary>
+					<div class="oss2-faq__a">
+						<?php if ( ! empty( $item['a'] ) ) : ?>
+							<?php foreach ( explode( "\n", $item['a'] ) as $para ) : ?>
+								<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+							<?php endforeach; ?>
+						<?php else : ?>
+							<p><a class="oss2-faq__ask" href="#contact"><?php esc_html_e( 'Request Information', 'astra-child' ); ?> &rarr;</a></p>
+						<?php endif; ?>
+					</div>
+				</details>
 			<?php endforeach; ?>
 		</div>
 		<p style="margin:2.25rem 0 0;"><a class="oss-btn oss-btn--primary" href="#contact"><?php esc_html_e( 'Request Information', 'astra-child' ); ?></a></p>

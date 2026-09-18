@@ -32,6 +32,18 @@ function oss_contact_content_defaults() {
 		'cta_body'    => 'Explore how Open Spaces Sanctuary can help create meaningful connection and healing.',
 		'cta_btn_text' => 'View Our Programs',
 		'cta_btn_url'  => '/programs/',
+
+		// Questions from the client's content document; answers to be
+		// supplied (editable at Appearance → Contact Page).
+		'faq' => array(
+			array( 'q' => 'What is Equine Assisted Learning?', 'a' => '' ),
+			array( 'q' => 'Do I ride the horses?', 'a' => '' ),
+			array( 'q' => 'Is this therapy?', 'a' => '' ),
+			array( 'q' => 'Who can participate?', 'a' => '' ),
+			array( 'q' => 'What should I wear?', 'a' => '' ),
+			array( 'q' => 'Can children attend?', 'a' => '' ),
+			array( 'q' => 'How much does it cost?', 'a' => '' ),
+		),
 	);
 }
 
