@@ -37,6 +37,14 @@
 	var history = new window.OSSLPBHistory();
 	history.onChange = syncHistoryButtons;
 
+	// Phase 5 — autosave + recovery state.
+	var savedDoc = [];          // last version committed to real meta (for discard/equality).
+	var autosaveTimer = null;   // debounce handle for content autosaves.
+	var autosaveActive = false; // an autosave request is in flight.
+	var autosaveQueued = false; // another edit landed while a request was in flight.
+	var lastAutosaved = '';     // serialized doc as last persisted to the draft.
+	var AUTOSAVE_DELAY = 1200;
+
 	/* ---- REST ---- */
 	function api( method, body ) {
 		return fetch( OSS_LPB.rest, {
@@ -51,9 +59,27 @@
 	}
 
 	function load() {
-		api( 'GET' ).then( function ( data ) { doc = data.document || []; history.reset( doc ); } )
-			.catch( function ( err ) { status( 'error', err.message ); } );
+		api( 'GET' ).then( function ( data ) {
+			var real = data.document || [];
+			savedDoc = clone( real );
+			// A leftover autosave draft that differs from the last save means the
+			// previous session ended with unsaved work. The canvas already renders
+			// that draft, so continue from it and offer a one-click revert.
+			if ( data.draft && ! sameDoc( data.draft, real ) ) {
+				doc = data.draft;
+				dirty = true;
+				lastAutosaved = JSON.stringify( doc ); // the draft is already persisted.
+				showRecovery( true );
+			} else {
+				doc = real;
+				lastAutosaved = JSON.stringify( doc );
+			}
+			history.reset( doc );
+		} ).catch( function ( err ) { status( 'error', err.message ); } );
 	}
+
+	function clone( o ) { return JSON.parse( JSON.stringify( o ) ); }
+	function sameDoc( a, b ) { return JSON.stringify( a ) === JSON.stringify( b ); }
 
 	function status( kind, text ) {
 		statusEl.className = 'oss-lpb-status' + ( kind ? ' is-' + kind : '' );
@@ -62,16 +88,22 @@
 
 	function save() {
 		if ( saveBtn.disabled ) { return; }
+		// A committed save supersedes any queued autosave.
+		clearTimeout( autosaveTimer );
+		autosaveQueued = false;
 		status( 'saving', 'Saving…' );
 		saveBtn.disabled = true;
 		var jobs = [ api( 'POST', { document: doc, autosave: false } ).then( function ( res ) {
 			doc = res.document || doc;
+			savedDoc = clone( doc );
+			lastAutosaved = JSON.stringify( doc );
 		} ) ];
 		if ( globalsDirty && globals && OSS_LPB.canGlobals ) {
 			jobs.push( saveGlobals() );
 		}
 		Promise.all( jobs ).then( function () {
 			dirty = false;
+			showRecovery( false ); // the draft is gone; hide any recovery bar.
 			status( 'saved', 'Saved ✓' );
 			setTimeout( function () { if ( ! dirty ) { status( '', '' ); } }, 2500 );
 		} ).catch( function ( err ) { status( 'error', err.message ); } )
@@ -114,15 +146,73 @@
 	   restored once the canvas signals ready. */
 	function rerender( selectAfter ) {
 		markSavable();
+		clearTimeout( autosaveTimer ); // this write supersedes any debounced one.
 		status( 'saving', 'Updating…' );
+		var snap = JSON.stringify( doc );
 		api( 'POST', { document: doc, autosave: true } ).then( function () {
+			lastAutosaved = snap;
 			pendingSelect = selectAfter || null;
-			frame.contentWindow.location.reload();
+			reloadCanvas();
 			status( '', '' );
 		} ).catch( function ( err ) { status( 'error', err.message ); } );
 	}
 
+	/* Reload the iframe without writing anything (used after a discard). */
+	function reloadCanvas() {
+		if ( frame && frame.contentWindow ) { frame.contentWindow.location.reload(); }
+	}
+
 	function markSavable() { dirty = true; }
+
+	/* ---- autosave engine (Phase 5) ----
+	   Content/field edits update the doc in memory and the canvas in place, so
+	   they don't need a canvas reload — but we still persist them to the autosave
+	   draft (debounced) so a crash or accidental close is recoverable. */
+	function scheduleAutosave() {
+		markSavable();
+		clearTimeout( autosaveTimer );
+		autosaveTimer = setTimeout( flushAutosave, AUTOSAVE_DELAY );
+	}
+	function flushAutosave() {
+		if ( ! dirty ) { return; }
+		var snap = JSON.stringify( doc );
+		if ( snap === lastAutosaved ) { return; } // nothing new since the last draft write.
+		if ( autosaveActive ) { autosaveQueued = true; return; }
+		autosaveActive = true;
+		if ( ! saveBtn.disabled ) { status( 'saving', 'Autosaving…' ); }
+		api( 'POST', { document: doc, autosave: true } ).then( function () {
+			lastAutosaved = snap;
+			if ( ! saveBtn.disabled && dirty ) {
+				status( 'saved', 'Autosaved ✓' );
+				setTimeout( function () { if ( statusEl.textContent === 'Autosaved ✓' ) { status( '', '' ); } }, 1800 );
+			}
+		} ).catch( function () { /* transient; the next edit or Save retries. */ } )
+			.finally( function () {
+				autosaveActive = false;
+				if ( autosaveQueued ) { autosaveQueued = false; flushAutosave(); }
+			} );
+	}
+
+	/* ---- draft recovery (Phase 5) ---- */
+	var recoverBar = document.getElementById( 'oss-lpb-recover' );
+	function showRecovery( on ) { if ( recoverBar ) { recoverBar.hidden = ! on; } }
+	function discardDraft() {
+		clearTimeout( autosaveTimer );
+		autosaveQueued = false;
+		doc = clone( savedDoc );
+		selection = null;
+		history.reset( doc );
+		dirty = false;
+		lastAutosaved = JSON.stringify( doc );
+		showRecovery( false );
+		status( 'saving', 'Reverting…' );
+		api( 'POST', { discard: true } ).then( function () {
+			pendingSelect = null;
+			reloadCanvas();
+			status( '', '' );
+			refreshActiveTab();
+		} ).catch( function ( err ) { status( 'error', err.message ); } );
+	}
 
 	/* ---- canvas bridge ---- */
 	function toCanvas( msg ) {
@@ -189,7 +279,7 @@
 			if ( hit ) {
 				El.writeSetting( hit.node, hit.node.type, 'text', m.text );
 				markSavable();
-				if ( 'text-commit' === m.type ) { pushHistorySoon(); refreshInspector(); }
+				if ( 'text-commit' === m.type ) { pushHistorySoon(); scheduleAutosave(); refreshInspector(); }
 			}
 		} else if ( 'action' === m.type ) {
 			onAction( m.act );
@@ -219,6 +309,7 @@
 		// Hiding a section can't be un-clicked in the canvas; refresh sections list too.
 		if ( 'hidden' === key && 'sections' === activeTab ) { refreshActiveTab(); }
 		pushHistorySoon();
+		scheduleAutosave();
 	}
 	function shallow( o ) { var c = {}; for ( var k in o ) { c[ k ] = o[ k ]; } return c; }
 
@@ -327,6 +418,15 @@
 	saveBtn.addEventListener( 'click', save );
 	undoBtn.addEventListener( 'click', function () { applySnapshot( history.undo() ); } );
 	redoBtn.addEventListener( 'click', function () { applySnapshot( history.redo() ); } );
+
+	var keepBtn = document.getElementById( 'oss-lpb-recover-keep' );
+	var discardBtn = document.getElementById( 'oss-lpb-recover-discard' );
+	if ( keepBtn ) { keepBtn.addEventListener( 'click', function () { showRecovery( false ); } ); }
+	if ( discardBtn ) { discardBtn.addEventListener( 'click', discardDraft ); }
+
+	// Safety net: flush any pending edit at most a few seconds after it lands,
+	// even if the user goes idle mid-debounce.
+	setInterval( function () { if ( dirty && ! autosaveActive ) { flushAutosave(); } }, 5000 );
 
 	document.addEventListener( 'keydown', function ( e ) {
 		var mod = e.ctrlKey || e.metaKey;

@@ -106,6 +106,13 @@ function oss_lpb_render_editor_shell() {
 				<?php if ( ! $is_builder ) : ?>
 					<div class="oss-lpb-notice"><?php esc_html_e( 'This page does not use the Live Builder template yet, so there are no builder elements to edit. Assign the "Live Builder" template to this page (Page → Attributes → Template) to build it here.', 'astra-child' ); ?></div>
 				<?php endif; ?>
+				<div class="oss-lpb-recover" id="oss-lpb-recover" hidden>
+					<span class="oss-lpb-recover__msg"><?php esc_html_e( 'Recovered unsaved changes from your last session.', 'astra-child' ); ?></span>
+					<span class="oss-lpb-recover__acts">
+						<button type="button" class="oss-lpb-btn-ghost" id="oss-lpb-recover-keep"><?php esc_html_e( 'Keep editing', 'astra-child' ); ?></button>
+						<button type="button" class="oss-lpb-btn-ghost is-danger" id="oss-lpb-recover-discard"><?php esc_html_e( 'Discard & revert to last saved', 'astra-child' ); ?></button>
+					</span>
+				</div>
 				<div class="oss-lpb-canvas" data-device="desktop">
 					<iframe id="oss-lpb-frame" class="oss-lpb-frame" src="<?php echo esc_url( $canvas_url ); ?>" title="<?php esc_attr_e( 'Live page canvas', 'astra-child' ); ?>"></iframe>
 				</div>

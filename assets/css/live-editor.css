@@ -205,3 +205,15 @@ html.wp-toolbar { padding-top: 0 !important; }
 	padding: 6px 7px; font-size: 12px; font-family: inherit; color: var(--lpb-ink); background: #fff; text-align: center;
 }
 .oss-lpb-tagrow__grid input:focus { outline: none; border-color: var(--lpb-accent); box-shadow: 0 0 0 3px rgba(89,107,88,0.12); }
+
+/* Draft recovery bar (Phase 5) */
+.oss-lpb-recover {
+	width: 100%; max-width: 900px; margin: 0 0 14px; padding: 10px 14px; box-sizing: border-box;
+	display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+	background: #fef6e7; border: 1px solid #f0d9a8; border-radius: 8px; font-size: 13px; color: #7a5b1e;
+}
+.oss-lpb-recover[hidden] { display: none; }
+.oss-lpb-recover__msg { font-weight: 600; }
+.oss-lpb-recover__acts { display: flex; gap: 8px; }
+.oss-lpb-btn-ghost.is-danger { color: #b3261e; border-color: #f0c4c0; }
+.oss-lpb-btn-ghost.is-danger:hover { background: #fdeceb; color: #b3261e; }

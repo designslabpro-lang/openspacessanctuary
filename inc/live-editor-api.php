@@ -59,16 +59,23 @@ function oss_lpb_rest_permission( WP_REST_Request $request ) {
 
 function oss_lpb_rest_get( WP_REST_Request $request ) {
 	$post_id = (int) $request['id'];
+	$draft   = get_post_meta( $post_id, OSS_LPB_AUTOSAVE_META, true );
 	return rest_ensure_response( array(
 		'id'       => $post_id,
 		'document' => oss_lpb_get_document( $post_id ),
-		'autosave' => (bool) get_post_meta( $post_id, OSS_LPB_AUTOSAVE_META, true ),
+		'draft'    => ( is_array( $draft ) && $draft ) ? $draft : null,
 	) );
 }
 
 function oss_lpb_rest_save( WP_REST_Request $request ) {
 	$post_id = (int) $request['id'];
 	$body    = $request->get_json_params();
+
+	// Discard a pending autosave draft without committing anything.
+	if ( is_array( $body ) && ! empty( $body['discard'] ) ) {
+		delete_post_meta( $post_id, OSS_LPB_AUTOSAVE_META );
+		return rest_ensure_response( array( 'discarded' => true ) );
+	}
 
 	if ( ! is_array( $body ) || ! isset( $body['document'] ) || ! is_array( $body['document'] ) ) {
 		return new WP_Error( 'oss_lpb_bad_body', __( 'Malformed document.', 'astra-child' ), array( 'status' => 400 ) );
