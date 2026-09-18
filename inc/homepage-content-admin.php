@@ -7,6 +7,23 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * "Edit Page" admin bar shortcut — jumps straight to the Homepage
+ * Content editor when viewing the front page, the same way Elementor
+ * shows "Edit with Elementor" on its own pages.
+ */
+function oss_home_content_admin_bar( $wp_admin_bar ) {
+	if ( ! is_front_page() || ! current_user_can( 'edit_theme_options' ) ) {
+		return;
+	}
+	$wp_admin_bar->add_node( array(
+		'id'    => 'oss-edit-homepage',
+		'title' => __( '✎ Edit Page Content', 'astra-child' ),
+		'href'  => admin_url( 'themes.php?page=oss-home-content' ),
+	) );
+}
+add_action( 'admin_bar_menu', 'oss_home_content_admin_bar', 81 );
+
 function oss_home_content_menu() {
 	add_theme_page(
 		__( 'Homepage Content', 'astra-child' ),

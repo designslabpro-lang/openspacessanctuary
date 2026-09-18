@@ -172,7 +172,7 @@ function oss_child_contact_form_shortcode() {
 	?>
 	<div class="oss-contact-form-panel__placeholder">
 		<p><strong><?php esc_html_e( 'Contact form goes here.', 'astra-child' ); ?></strong></p>
-		<p><?php esc_html_e( 'Edit this page with Elementor and replace this Shortcode widget with an Elementor Form widget, or install Contact Form 7 / WPForms / Gravity Forms and drop in their shortcode. No theme code changes needed.', 'astra-child' ); ?></p>
+		<p><?php esc_html_e( 'Install Contact Form 7, WPForms, or Gravity Forms and this space fills in automatically — no page builder or theme code changes needed.', 'astra-child' ); ?></p>
 	</div>
 	<?php
 	return ob_get_clean();
