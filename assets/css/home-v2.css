@@ -38,9 +38,14 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	align-items: flex-end;
 	padding: clamp(2rem, 5vw, 3.5rem) clamp(1.75rem, 5vw, 4rem);
 	position: relative;
 	z-index: 1;
+}
+.oss2-hero__panel-inner {
+	max-width: 600px;
+	width: 100%;
 }
 .oss2-hero__panel .oss-eyebrow { color: var(--oss-gold-light); }
 .oss2-hero__eyebrow::before { content: "\2014\00a0"; }
@@ -136,7 +141,8 @@
 @media (max-width: 900px) {
 	.oss2-hero .oss-container { grid-template-columns: 1fr; min-height: 0; }
 	.oss2-hero__photo { height: 42vh; }
-	.oss2-hero__panel { padding: clamp(2rem, 8vw, 3rem) clamp(1.5rem, 6vw, 2rem); }
+	.oss2-hero__panel { padding: clamp(2rem, 8vw, 3rem) clamp(1.5rem, 6vw, 2rem); align-items: stretch; }
+	.oss2-hero__panel-inner { max-width: none; }
 	.oss2-hero__dots { right: 1rem; }
 }
 

@@ -23,6 +23,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 <header class="oss2-hero">
 	<div class="oss-container">
 		<div class="oss2-hero__panel">
+			<div class="oss2-hero__panel-inner">
 			<span class="oss-eyebrow oss2-hero__eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
 			<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
 			<div class="oss2-hero__body">
@@ -35,6 +36,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 			</div>
 			<p class="oss2-hero__trust"><?php esc_html_e( 'A 501(c)(3) nonprofit organization', 'astra-child' ); ?></p>
+			</div>
 		</div>
 		<div class="oss2-hero__photo">
 			<div class="oss-hero__slides" data-oss-hero-slides data-oss-autoplay="6500">
