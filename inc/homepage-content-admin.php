@@ -73,6 +73,20 @@ function oss_home_content_sanitize( $input ) {
 			continue;
 		}
 
+		if ( 'hero_slide_ids' === $key ) {
+			$ids = array();
+			if ( isset( $input['hero_slide_ids'] ) && is_array( $input['hero_slide_ids'] ) ) {
+				foreach ( $input['hero_slide_ids'] as $id ) {
+					$id = absint( $id );
+					if ( $id ) {
+						$ids[] = $id;
+					}
+				}
+			}
+			$clean['hero_slide_ids'] = $ids ? array_values( $ids ) : $default;
+			continue;
+		}
+
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 			continue;
@@ -119,6 +133,20 @@ function oss_home_content_image_row( $key, $label ) {
 	echo '</div></td></tr>';
 }
 
+function oss_home_content_slide_row( $index, $label ) {
+	$ids = oss_home_get( 'hero_slide_ids' );
+	$id  = isset( $ids[ $index ] ) ? (int) $ids[ $index ] : 0;
+	$src = $id ? wp_get_attachment_image_url( $id, 'medium' ) : '';
+	$name = OSS_HOME_OPTION . '[hero_slide_ids][' . $index . ']';
+	echo '<tr><th scope="row">' . esc_html( $label ) . '</th><td>';
+	echo '<div class="oss-image-field" data-key="hero_slide_' . esc_attr( $index ) . '">';
+	echo '<img src="' . esc_url( $src ) . '" style="max-width:180px;height:auto;display:' . ( $src ? 'block' : 'none' ) . ';margin-bottom:8px;border:1px solid #ddd;">';
+	echo '<input type="hidden" name="' . esc_attr( $name ) . '" class="oss-image-field__id" value="' . esc_attr( $id ) . '">';
+	echo '<p><button type="button" class="button oss-image-field__select">' . esc_html__( 'Select Image', 'astra-child' ) . '</button> ';
+	echo '<button type="button" class="button oss-image-field__remove"' . ( $src ? '' : ' style="display:none;"' ) . '>' . esc_html__( 'Remove', 'astra-child' ) . '</button></p>';
+	echo '</div></td></tr>';
+}
+
 function oss_home_content_page() {
 	$icons   = oss_home_icon_library();
 	$items   = oss_home_get( 'serve_items' );
@@ -141,8 +169,12 @@ function oss_home_content_page() {
 				oss_home_content_field_row( 'hero_btn2_text', __( 'Button 2 Text', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_btn2_url', __( 'Button 2 Link', 'astra-child' ) );
 				oss_home_content_image_row( 'hero_image_id', __( 'Background Image', 'astra-child' ) );
+				oss_home_content_slide_row( 0, __( 'Slideshow Photo 1', 'astra-child' ) );
+				oss_home_content_slide_row( 1, __( 'Slideshow Photo 2', 'astra-child' ) );
+				oss_home_content_slide_row( 2, __( 'Slideshow Photo 3 (optional)', 'astra-child' ) );
 				?>
 			</table>
+			<p class="description"><?php esc_html_e( 'The V2 homepage preview shows these as a rotating slideshow. Leave Photo 3 empty to show just two.', 'astra-child' ); ?></p>
 
 			<h2><?php esc_html_e( 'The Healing Power of Horses', 'astra-child' ); ?></h2>
 			<table class="form-table">
