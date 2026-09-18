@@ -94,7 +94,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 		</div>
 		<div class="oss2-serve-grid">
 			<?php foreach ( oss_home_get( 'serve_items' ) as $i => $item ) : ?>
-				<div class="oss2-serve-card">
+				<div class="oss2-serve-card oss2-serve-card--c<?php echo esc_attr( ( $i % 5 ) + 1 ); ?>">
 					<span class="oss2-serve-card__icon">
 						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><?php echo isset( $icons[ $item['icon'] ] ) ? $icons[ $item['icon'] ] : $icons['compass']; // phpcs:ignore -- trusted static SVG path library. ?></svg>
 					</span>
