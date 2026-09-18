@@ -320,6 +320,7 @@ function oss_home_content_page() {
 				oss_home_content_field_row( 'final_btn1_url', __( 'Button 1 Link', 'astra-child' ) );
 				oss_home_content_field_row( 'final_btn2_text', __( 'Button 2 Text', 'astra-child' ) );
 				oss_home_content_field_row( 'final_btn2_url', __( 'Button 2 Link', 'astra-child' ) );
+				oss_home_content_image_row( 'final_image_id', __( 'Photo', 'astra-child' ) );
 				?>
 			</table>
 

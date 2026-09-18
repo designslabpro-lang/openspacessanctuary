@@ -576,11 +576,22 @@
 .oss2-close {
 	position: relative;
 	z-index: 1;
-	max-width: 780px;
-	margin: 0 auto;
-	text-align: center;
+	display: grid;
+	grid-template-columns: 0.95fr 1.05fr;
+	gap: clamp(2rem, 5vw, 4.5rem);
+	align-items: center;
+	text-align: left;
 }
-.oss2-close h2 { font-size: clamp(2.2rem, 3.6vw, 3.4rem); margin-bottom: 0.25rem; }
+.oss2-close__media img,
+.oss2-close__media .oss-image-placeholder {
+	width: 100%;
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+	display: block;
+	border-radius: 22px;
+	box-shadow: var(--oss-shadow-lg);
+}
+.oss2-close h2 { font-size: clamp(2.2rem, 3.4vw, 3.2rem); margin-bottom: 0.25rem; }
 .oss2-close p { color: var(--oss-brown); font-size: 1.05rem; }
 .oss2-close__sub {
 	font-family: var(--oss-font-heading);
@@ -589,4 +600,7 @@
 	color: var(--oss-gold);
 	margin: 0.25rem 0 1.75rem;
 }
-.oss2-close__actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+.oss2-close__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+@media (max-width: 900px) {
+	.oss2-close { grid-template-columns: 1fr; }
+}

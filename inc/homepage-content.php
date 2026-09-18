@@ -86,6 +86,7 @@ function oss_home_content_defaults() {
 		'final_btn1_url'  => '/about/',
 		'final_btn2_text' => 'Donate Now',
 		'final_btn2_url'  => '/contact/',
+		'final_image_id'  => 110,
 	);
 }
 
