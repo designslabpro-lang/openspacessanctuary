@@ -6,7 +6,7 @@
 	position: sticky;
 	top: 0;
 	z-index: 999;
-	background-color: var(--oss-bg);
+	background-color: var(--oss-white);
 	border-bottom: 1px solid rgba(117,91,69,0.15);
 	transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -22,7 +22,7 @@
 .oss-header.is-transparent .site-title a { color: var(--oss-white); }
 
 .oss-header.is-scrolled {
-	background-color: var(--oss-bg);
+	background-color: var(--oss-white);
 	box-shadow: 0 2px 18px rgba(53,58,53,0.08);
 	border-bottom-color: rgba(117,91,69,0.15);
 }
