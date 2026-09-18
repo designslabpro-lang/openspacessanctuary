@@ -1,40 +1,27 @@
 /**
  * Live Page Builder — element helpers (shell side).
  *
- * Document traversal utilities shared by the UI/core: find a node by id,
- * describe an element type, and (later phases) build/duplicate nodes. Phase 0
- * exposes lookup + labels; mutation helpers are stubbed for later wiring.
+ * Document traversal + setting writes shared by the core/UI. Knows which
+ * settings are responsive (from the localized schema) so a written value is
+ * stored as a {desktop:…} triple where appropriate and a scalar otherwise.
  */
 ( function () {
 	'use strict';
 
 	var LABELS = {
-		section: 'Section',
-		heading: 'Heading',
-		paragraph: 'Paragraph',
-		richtext: 'Rich Text',
-		list: 'List',
-		image: 'Image',
-		button: 'Button',
-		icon: 'Icon'
+		section: 'Section', heading: 'Heading', paragraph: 'Paragraph',
+		richtext: 'Rich Text', list: 'List', image: 'Image', button: 'Button', icon: 'Icon'
 	};
 
 	function label( type ) { return LABELS[ type ] || type; }
 
-	/**
-	 * Locate a node (section or element) by id. Returns
-	 * { node, parent, index, scope } or null.
-	 */
+	/** Locate a node by id → { node, parent, index, scope } or null. */
 	function find( doc, id ) {
 		for ( var s = 0; s < doc.length; s++ ) {
-			if ( doc[ s ].id === id ) {
-				return { node: doc[ s ], parent: doc, index: s, scope: 'section' };
-			}
+			if ( doc[ s ].id === id ) { return { node: doc[ s ], parent: doc, index: s, scope: 'section' }; }
 			var els = doc[ s ].elements || [];
 			for ( var e = 0; e < els.length; e++ ) {
-				if ( els[ e ].id === id ) {
-					return { node: els[ e ], parent: els, index: e, scope: 'element' };
-				}
+				if ( els[ e ].id === id ) { return { node: els[ e ], parent: els, index: e, scope: 'element' }; }
 			}
 		}
 		return null;
@@ -48,9 +35,31 @@
 		return v;
 	}
 
-	window.OSSLPBElements = {
-		label: label,
-		find: find,
-		baseVal: baseVal
-	};
+	function isResponsive( type, key ) {
+		try {
+			var spec = OSS_LPB.schema[ type ] && OSS_LPB.schema[ type ][ key ];
+			return typeof spec === 'string' && spec.slice( -11 ) === '_responsive';
+		} catch ( e ) { return false; }
+	}
+
+	/**
+	 * Write a setting into a node's settings, honouring responsive keys and
+	 * clearing empties. `raw` keeps arrays (e.g. list items) as-is.
+	 */
+	function writeSetting( node, type, key, value, opts ) {
+		opts = opts || {};
+		node.settings = node.settings || {};
+		var empty = value === '' || value == null || ( Array.isArray( value ) && ! value.length );
+		if ( empty && ! opts.keepEmpty ) { delete node.settings[ key ]; return; }
+		if ( opts.raw || Array.isArray( value ) ) { node.settings[ key ] = value; return; }
+		if ( isResponsive( type, key ) ) {
+			var cur = node.settings[ key ];
+			if ( cur && typeof cur === 'object' && ! Array.isArray( cur ) ) { cur.desktop = value; node.settings[ key ] = cur; }
+			else { node.settings[ key ] = { desktop: value }; }
+			return;
+		}
+		node.settings[ key ] = value;
+	}
+
+	window.OSSLPBElements = { label: label, find: find, baseVal: baseVal, writeSetting: writeSetting, isResponsive: isResponsive };
 } )();

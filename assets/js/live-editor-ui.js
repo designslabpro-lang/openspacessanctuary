@@ -1,14 +1,15 @@
 /**
  * Live Page Builder — sidebar UI (shell side).
  *
- * Renders the left-panel contents for the current selection. Phase 0 shows the
- * selected element's type, id, and its toolbar (the same actions as the canvas
- * toolbar). Field controls for each element type land in Phase 1.
+ * Phase 1: renders the field controls (via OSSLPBFields) for the selected
+ * node so its text, style, image, and button properties are editable, plus a
+ * small action toolbar. Phase 0's placeholder inspector is replaced here.
  */
 ( function () {
 	'use strict';
 
 	var El = window.OSSLPBElements;
+	var Fields = window.OSSLPBFields;
 
 	function panel() { return document.getElementById( 'oss-lpb-panel' ); }
 
@@ -17,35 +18,43 @@
 	}
 
 	/**
-	 * Show the inspector for a selected node.
-	 * selection = { scope, id, elType }; handlers = { onAction(act) }.
+	 * selection = { scope, id, elType }
+	 * node      = the live document node (with .settings) or null
+	 * handlers  = { onChange(key,value,opts), onAction(act) }
 	 */
-	function showInspector( selection, handlers ) {
-		if ( ! selection ) { hint( 'Click an element on the page to select it.' ); return; }
+	function showInspector( selection, node, handlers ) {
+		if ( ! selection || ! node ) { hint( 'Click an element on the page to select it. Double-click text to edit it inline.' ); return; }
 		var p = panel();
-		var html = '';
-		html += '<div class="oss-lpb-selected">';
-		html += '<div class="oss-lpb-selected__type">' + escapeHtml( El.label( selection.elType ) ) + '</div>';
-		html += '<div class="oss-lpb-selected__id">' + escapeHtml( selection.id ) + '</div>';
-		html += '</div>';
-		html += '<p class="oss-lpb-hint">Editing controls for this element arrive in the next phase. For now you can duplicate, move, hide, or delete it.</p>';
-		html += '<div class="oss-lpb-eltoolbar">';
-		html += '<button data-act="duplicate">Duplicate</button>';
-		html += '<button data-act="move-up">Move up</button>';
-		html += '<button data-act="move-down">Move down</button>';
-		if ( 'section' === selection.scope ) { html += '<button data-act="toggle-hide">Hide / Show</button>'; }
-		html += '<button data-act="delete">Delete</button>';
-		html += '</div>';
-		p.innerHTML = html;
+		p.innerHTML = '';
 
-		p.querySelectorAll( '.oss-lpb-eltoolbar button' ).forEach( function ( b ) {
-			b.addEventListener( 'click', function () {
-				if ( handlers && handlers.onAction ) { handlers.onAction( b.getAttribute( 'data-act' ) ); }
-			} );
-			// Phase 0: actions are placeholders until Phase 2 wires mutations.
-			b.disabled = true;
-			b.title = 'Available in a later phase';
+		var head = document.createElement( 'div' );
+		head.className = 'oss-lpb-selected';
+		head.innerHTML =
+			'<div class="oss-lpb-selected__type">' + escapeHtml( El.label( selection.elType ) ) + '</div>' +
+			'<div class="oss-lpb-selected__id">' + escapeHtml( selection.id ) + '</div>';
+		p.appendChild( head );
+
+		var fields = document.createElement( 'div' );
+		fields.className = 'oss-lpb-fields';
+		p.appendChild( fields );
+		Fields.render( fields, node, function ( key, value, opts ) {
+			handlers.onChange( key, value, opts || {} );
 		} );
+
+		var bar = document.createElement( 'div' );
+		bar.className = 'oss-lpb-eltoolbar';
+		var acts = [ [ 'duplicate', 'Duplicate' ], [ 'move-up', 'Move up' ], [ 'move-down', 'Move down' ] ];
+		if ( 'section' === selection.scope ) { acts.push( [ 'toggle-hide', 'Hide / Show' ] ); }
+		acts.push( [ 'delete', 'Delete' ] );
+		acts.forEach( function ( a ) {
+			var b = document.createElement( 'button' );
+			b.textContent = a[ 1 ];
+			b.disabled = true; // Section actions are wired in Phase 2.
+			b.title = 'Available in the next phase';
+			b.addEventListener( 'click', function () { handlers.onAction( a[ 0 ] ); } );
+			bar.appendChild( b );
+		} );
+		p.appendChild( bar );
 	}
 
 	function setActiveTab( name ) {
@@ -60,9 +69,5 @@
 		} );
 	}
 
-	window.OSSLPBUI = {
-		hint: hint,
-		showInspector: showInspector,
-		setActiveTab: setActiveTab
-	};
+	window.OSSLPBUI = { hint: hint, showInspector: showInspector, setActiveTab: setActiveTab };
 } )();

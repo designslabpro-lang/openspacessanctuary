@@ -131,12 +131,11 @@ function oss_lpb_enqueue_editor( $hook ) {
 	wp_enqueue_style( 'oss-lpb-editor', OSS_CHILD_URI . '/assets/css/live-editor.css', array(), $ver );
 	wp_enqueue_style( 'oss-lpb-editor-responsive', OSS_CHILD_URI . '/assets/css/live-editor-responsive.css', array( 'oss-lpb-editor' ), $ver );
 
-	foreach ( array( 'history', 'elements', 'ui', 'live-editor' ) as $slug ) {
-		$handle = 'history' === $slug ? 'oss-lpb-history' : ( 'live-editor' === $slug ? 'oss-lpb-core' : 'oss-lpb-' . $slug );
-		$file   = 'live-editor' === $slug ? 'live-editor.js' : 'live-editor-' . $slug . '.js';
-		$deps   = 'live-editor' === $slug ? array( 'oss-lpb-history', 'oss-lpb-elements', 'oss-lpb-ui' ) : array();
-		wp_enqueue_script( $handle, OSS_CHILD_URI . '/assets/js/' . $file, $deps, $ver, true );
-	}
+	wp_enqueue_script( 'oss-lpb-history', OSS_CHILD_URI . '/assets/js/live-editor-history.js', array(), $ver, true );
+	wp_enqueue_script( 'oss-lpb-elements', OSS_CHILD_URI . '/assets/js/live-editor-elements.js', array(), $ver, true );
+	wp_enqueue_script( 'oss-lpb-fields', OSS_CHILD_URI . '/assets/js/live-editor-fields.js', array( 'oss-lpb-elements' ), $ver, true );
+	wp_enqueue_script( 'oss-lpb-ui', OSS_CHILD_URI . '/assets/js/live-editor-ui.js', array( 'oss-lpb-elements', 'oss-lpb-fields' ), $ver, true );
+	wp_enqueue_script( 'oss-lpb-core', OSS_CHILD_URI . '/assets/js/live-editor.js', array( 'oss-lpb-history', 'oss-lpb-elements', 'oss-lpb-fields', 'oss-lpb-ui' ), $ver, true );
 
 	wp_localize_script( 'oss-lpb-core', 'OSS_LPB', array(
 		'postId'  => $post_id,

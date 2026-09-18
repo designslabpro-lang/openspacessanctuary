@@ -121,3 +121,33 @@
 }
 .oss-lpb-eltoolbar button:hover { background: #f6f7f8; }
 .oss-lpb-eltoolbar button[disabled] { opacity: 0.4; cursor: default; }
+
+/* Field controls (Phase 1) */
+.oss-lpb-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+.oss-lpb-field { display: flex; flex-direction: column; gap: 5px; }
+.oss-lpb-field__label { font-size: 12px; font-weight: 600; color: #4b5158; }
+.oss-lpb-field input[type="text"],
+.oss-lpb-field input[type="url"],
+.oss-lpb-field select,
+.oss-lpb-field textarea {
+	width: 100%; box-sizing: border-box; border: 1px solid var(--lpb-line); border-radius: 6px;
+	padding: 7px 9px; font-size: 13px; font-family: inherit; color: var(--lpb-ink); background: #fff;
+}
+.oss-lpb-field textarea { resize: vertical; line-height: 1.5; }
+.oss-lpb-field input:focus, .oss-lpb-field select:focus, .oss-lpb-field textarea:focus {
+	outline: none; border-color: var(--lpb-accent); box-shadow: 0 0 0 3px rgba(89,107,88,0.12);
+}
+.oss-lpb-field--inline { flex-direction: row; align-items: center; gap: 8px; }
+.oss-lpb-field--inline .oss-lpb-field__label { font-weight: 500; color: var(--lpb-ink); }
+.oss-lpb-field--inline input[type="checkbox"] { width: 16px; height: 16px; }
+
+.oss-lpb-color { display: flex; gap: 6px; align-items: center; }
+.oss-lpb-color input[type="text"] { flex: 1; }
+.oss-lpb-color input[type="color"] { width: 34px; height: 32px; padding: 2px; border: 1px solid var(--lpb-line); border-radius: 6px; background: #fff; cursor: pointer; }
+
+.oss-lpb-media { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.oss-lpb-media__prev { width: 44px; height: 44px; border-radius: 6px; border: 1px solid var(--lpb-line); background: #f3f4f5 center/cover no-repeat; flex: 0 0 auto; }
+.oss-lpb-mini { appearance: none; border: 1px solid var(--lpb-accent); background: var(--lpb-accent); color: #fff; padding: 6px 11px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.oss-lpb-mini:hover { background: var(--lpb-accent-dark); }
+.oss-lpb-mini--ghost { background: #fff; color: var(--lpb-ink); border-color: var(--lpb-line); }
+.oss-lpb-mini--ghost:hover { background: #f6f7f8; }
