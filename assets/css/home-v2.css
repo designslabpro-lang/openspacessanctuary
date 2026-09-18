@@ -243,9 +243,11 @@
 	position: relative;
 	text-align: left;
 	min-height: 190px;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
+	justify-content: flex-start;
+	align-items: flex-start;
 }
 .oss2-serve-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: var(--oss-shadow-lg); }
 
@@ -293,19 +295,19 @@
 .oss2-programs-section .oss-card:hover { transform: translateY(-6px); box-shadow: var(--oss-shadow-lg); }
 .oss2-programs-section .oss-card__image { display: block; aspect-ratio: 4 / 3; overflow: hidden; }
 .oss2-programs-section .oss-card__image img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.oss2-programs-section .oss-card__body { padding: 1.6rem 1.5rem; color: var(--oss-white); }
+.oss2-programs-section .oss-card__body { padding: 1.6rem 1.5rem; color: var(--oss-text); }
 .oss2-programs-section .oss-card__meta {
 	display: inline-block;
 	font-size: 0.72rem;
 	font-weight: 600;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: rgba(255,255,255,0.75);
+	color: var(--oss-brown);
 	margin-bottom: 0.5rem;
 }
 .oss2-programs-section .oss-card__title { margin-bottom: 0.5rem; }
-.oss2-programs-section .oss-card__title a { color: var(--oss-white); }
-.oss2-programs-section .oss-card__excerpt { color: rgba(255,255,255,0.85); font-size: 0.92rem; }
+.oss2-programs-section .oss-card__title a { color: var(--oss-text); }
+.oss2-programs-section .oss-card__excerpt { color: var(--oss-brown); font-size: 0.92rem; }
 .oss2-programs-section .oss-card__link {
 	display: inline-block;
 	margin-top: 0.85rem;
@@ -313,21 +315,23 @@
 	font-weight: 600;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
-	color: var(--oss-white);
-	border-bottom: 1px solid rgba(255,255,255,0.5);
+	color: var(--oss-primary);
+	border-bottom: 1px solid var(--oss-gold);
 }
-.oss2-programs-section .oss-card__link:hover { color: var(--oss-white); border-color: var(--oss-white); }
+.oss2-programs-section .oss-card__link:hover { color: var(--oss-primary-dark); border-color: var(--oss-primary-dark); }
 
-.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+1) .oss-card__body { background: var(--oss-primary); }
-.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+2) .oss-card__body { background: var(--oss-brown); }
-.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+3) .oss-card__body { background: var(--oss-primary-dark); }
-.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+4) .oss-card__body { background: var(--oss-gold); }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+1) .oss-card__body { background: #EEF2EC; }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+2) .oss-card__body { background: #F5EFE6; }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+3) .oss-card__body { background: #F1E9E2; }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+4) .oss-card__body { background: var(--oss-white); }
 
 /* -------------------------------------------------------------------- */
-/* Full-bleed band — Meet Our Horses.                                    */
+/* Meet Our Horses — full-width photo band, explicit 50/50 columns:     */
+/* text on the left over a readability gradient that fades out by the   */
+/* midpoint, right column left empty so the photo shows through clean.  */
 /* -------------------------------------------------------------------- */
 
-.oss2-band {
+.oss2-herd {
 	position: relative;
 	min-height: 60vh;
 	display: flex;
@@ -335,22 +339,90 @@
 	background-color: var(--oss-primary-dark);
 	background-size: cover;
 	background-position: center;
-	color: var(--oss-white);
 }
-.oss2-band::before {
+.oss2-herd::before {
 	content: "";
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(90deg, rgba(30,34,28,0.88) 0%, rgba(30,34,28,0.55) 55%, rgba(30,34,28,0.25) 100%);
+	background: linear-gradient(90deg, rgba(30,34,28,0.88) 0%, rgba(30,34,28,0.5) 42%, rgba(30,34,28,0) 52%);
 }
-.oss2-band__inner { position: relative; z-index: 1; max-width: 560px; }
-.oss2-band h2, .oss2-band p { color: var(--oss-white); }
-.oss2-band .oss-eyebrow { color: var(--oss-gold-light); }
+.oss2-herd__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	position: relative;
+	z-index: 1;
+	/* The section is a flex container, so without this the .oss-container
+	   flex item shrink-wraps to its content and centers, pushing the text
+	   ~130px right of the header logo's edge. */
+	width: 100%;
+}
+.oss2-herd__panel { max-width: 480px; padding: clamp(3rem, 6vw, 4rem) 0; }
+.oss2-herd__panel h2,
+.oss2-herd__panel p { color: var(--oss-white); }
+.oss2-herd__panel .oss-eyebrow { color: var(--oss-gold-light); }
+.oss2-herd__spacer { pointer-events: none; }
+
+@media (max-width: 900px) {
+	.oss2-herd__grid { grid-template-columns: 1fr; }
+	.oss2-herd__spacer { display: none; }
+	.oss2-herd::before { background: linear-gradient(90deg, rgba(30,34,28,0.88) 0%, rgba(30,34,28,0.6) 100%); }
+}
 
 /* Every sage-background section on this template needs its eyebrow
    lightened too — the shared .oss-eyebrow default (brown) is unreadable
    on the sage fill, and the base stylesheet only lightens h1/h2/h3/p. */
 .oss-section--sage .oss-eyebrow { color: var(--oss-gold-light); }
+
+/* -------------------------------------------------------------------- */
+/* Stories of Hope — three static cards instead of a one-at-a-time      */
+/* carousel, plus two 3-circle decorative clusters in opposite corners. */
+/* -------------------------------------------------------------------- */
+
+.oss2-stories { position: relative; overflow: hidden; }
+
+.oss2-stories__circles { position: absolute; z-index: 0; pointer-events: none; width: 220px; height: 220px; }
+.oss2-stories__circles span {
+	position: absolute;
+	border-radius: 50%;
+	border: 1px solid rgba(212,190,147,0.22);
+}
+.oss2-stories__circles span:nth-child(1) { width: 220px; height: 220px; top: 0; left: 0; }
+.oss2-stories__circles span:nth-child(2) { width: 130px; height: 130px; top: 30px; left: 60px; }
+.oss2-stories__circles span:nth-child(3) { width: 60px; height: 60px; top: 80px; left: 20px; }
+.oss2-stories__circles--tl { top: -80px; left: -60px; }
+.oss2-stories__circles--br { bottom: -80px; right: -60px; }
+
+.oss2-stories__grid {
+	position: relative;
+	z-index: 1;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.5rem;
+	margin-top: 2.5rem;
+	text-align: left;
+}
+.oss2-stories__card {
+	background: var(--oss-white);
+	border-radius: 5px;
+	padding: 2rem 1.75rem;
+	box-shadow: var(--oss-shadow-md);
+}
+/* Doubled selectors on purpose: .oss-section--sage p (0,1,1) in global.css
+   paints every paragraph cream, which made the quotes near-invisible on
+   the white cards. (0,2,0) wins. */
+.oss2-stories .oss2-stories__quote {
+	font-family: var(--oss-font-body);
+	font-style: italic;
+	color: var(--oss-text);
+	line-height: 1.7;
+	margin-bottom: 1.25rem;
+}
+.oss2-stories .oss2-stories__name {
+	font-family: var(--oss-font-heading);
+	font-weight: 600;
+	color: var(--oss-gold);
+	margin: 0;
+}
 
 /* -------------------------------------------------------------------- */
 /* Founder — portrait with oversized quote mark.                         */

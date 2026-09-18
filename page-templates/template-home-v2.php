@@ -103,7 +103,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 				</div>
 			<?php endforeach; ?>
 		</div>
-		<p style="max-width:640px;margin:0 auto;"><?php echo esc_html( oss_home_get( 'serve_closing' ) ); ?></p>
+		<p><?php echo esc_html( oss_home_get( 'serve_closing' ) ); ?></p>
 	</div>
 </section>
 
@@ -119,9 +119,9 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 	</div>
 </section>
 
-<section class="oss2-band" style="<?php $horses_bg = (int) oss_home_get( 'horses_image_id' ); if ( $horses_bg ) { echo 'background-image:url(' . esc_url( wp_get_attachment_image_url( $horses_bg, 'full' ) ) . ');'; } ?>">
-	<div class="oss-container">
-		<div class="oss2-band__inner">
+<section class="oss2-herd" style="<?php $horses_bg = (int) oss_home_get( 'horses_image_id' ); if ( $horses_bg ) { echo 'background-image:url(' . esc_url( wp_get_attachment_image_url( $horses_bg, 'full' ) ) . ');'; } ?>">
+	<div class="oss-container oss2-herd__grid">
+		<div class="oss2-herd__panel">
 			<span class="oss-eyebrow"><?php esc_html_e( 'The Herd', 'astra-child' ); ?></span>
 			<h2><?php echo esc_html( oss_home_get( 'horses_heading' ) ); ?></h2>
 			<?php foreach ( explode( "\n", oss_home_get( 'horses_body' ) ) as $para ) : ?>
@@ -129,6 +129,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 			<?php endforeach; ?>
 			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( home_url( '/meet-the-herd/' ) ); ?>"><?php echo esc_html( oss_home_get( 'horses_sub' ) ); ?></a>
 		</div>
+		<div class="oss2-herd__spacer" aria-hidden="true"></div>
 	</div>
 </section>
 
@@ -151,11 +152,20 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 	</div>
 </section>
 
-<section class="oss-section oss-section--sage" style="text-align:center;">
+<section class="oss-section oss-section--sage oss2-stories" style="text-align:center;">
+	<span class="oss2-stories__circles oss2-stories__circles--tl" aria-hidden="true"><span></span><span></span><span></span></span>
+	<span class="oss2-stories__circles oss2-stories__circles--br" aria-hidden="true"><span></span><span></span><span></span></span>
 	<div class="oss-container">
 		<span class="oss-eyebrow"><?php esc_html_e( 'Stories of Hope', 'astra-child' ); ?></span>
 		<h2><?php echo esc_html( oss_home_get( 'stories_heading' ) ); ?></h2>
-		<?php echo do_shortcode( '[oss_testimonials]' ); ?>
+		<div class="oss2-stories__grid">
+			<?php foreach ( oss_home_get( 'testimonials' ) as $story ) : ?>
+				<div class="oss2-stories__card">
+					<p class="oss2-stories__quote">&ldquo;<?php echo esc_html( $story['quote'] ); ?>&rdquo;</p>
+					<p class="oss2-stories__name">&mdash; <?php echo esc_html( $story['name'] ); ?></p>
+				</div>
+			<?php endforeach; ?>
+		</div>
 	</div>
 </section>
 
