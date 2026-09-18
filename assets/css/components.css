@@ -194,6 +194,23 @@
 	position: absolute; inset: 0;
 	background: linear-gradient(90deg, rgba(30,34,28,0.72) 0%, rgba(30,34,28,0.45) 35%, rgba(30,34,28,0.12) 62%, rgba(30,34,28,0) 80%);
 }
+/* Editorial vertical bars breaking across the photo — 3 fixed stripes,
+   positioned over the undimmed right portion of the hero image. */
+.oss-hero::after {
+	content: '';
+	position: absolute; inset: 0;
+	pointer-events: none;
+	background-image:
+		linear-gradient(rgba(245,240,230,0.16), rgba(245,240,230,0.16)),
+		linear-gradient(rgba(245,240,230,0.16), rgba(245,240,230,0.16)),
+		linear-gradient(rgba(245,240,230,0.16), rgba(245,240,230,0.16));
+	background-repeat: no-repeat;
+	background-position: 60% 0, 74% 0, 88% 0;
+	background-size: 6.5% 100%, 6.5% 100%, 6.5% 100%;
+}
+@media (max-width: 900px) {
+	.oss-hero::after { display: none; }
+}
 .oss-hero__inner {
 	position: relative;
 	z-index: 1;
