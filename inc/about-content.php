@@ -21,18 +21,18 @@ function oss_about_content_defaults() {
 		'hero_eyebrow' => 'About Us',
 		'hero_heading' => 'Our Story',
 		'hero_body'    => 'Nestled in the peaceful countryside of Ocala, Florida.',
-		'hero_image_id' => 7,
+		'hero_image_id' => 0,
 
 		'story_eyebrow' => 'Our Story',
 		'story_heading' => 'A Place to Grow and Heal',
 		'story_body'    => "Life can leave us carrying burdens that feel too heavy to bear—grief, trauma, stress, illness, burnout, or the weight of caring for others. At Open Spaces Sanctuary, we believe healing begins when we reconnect with ourselves, with nature, and with the quiet wisdom of horses.\n\nNestled in the peaceful countryside of Ocala, Florida, Open Spaces Sanctuary offers transformative equine-assisted learning experiences designed to restore hope, build resilience, and inspire lasting personal growth. Here, people and horses come together in a safe, supportive environment where authentic connection leads to meaningful change.",
-		'story_image_id' => 7,
+		'story_image_id' => 0,
 
 		'philosophy_eyebrow' => 'The Healing Philosophy',
 		'philosophy_heading' => 'The Healing Power of Horses',
 		'philosophy_body'    => "Horses have an extraordinary ability to reflect what we are feeling without judgment or expectation. They respond honestly to our emotions, energy, and intentions, helping us become more aware of ourselves in ways words often cannot.\n\nThrough guided, ground-based experiences—no riding—participants discover greater confidence, healthier boundaries, improved communication, emotional resilience, and renewed hope.",
 		'philosophy_quote'   => "Healing doesn't happen because of what we do to the horses. It happens because of the experiences and relationships we build with them.",
-		'philosophy_image_id' => 13,
+		'philosophy_image_id' => 0,
 
 		'founder_heading' => 'Meet Our Founder',
 		'founder_name'    => 'Donna Blem',

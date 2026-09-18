@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'OSS_CHILD_VERSION', '1.10.17' );
+define( 'OSS_CHILD_VERSION', '1.11.0' );
 define( 'OSS_CHILD_DIR', get_stylesheet_directory() );
 define( 'OSS_CHILD_URI', get_stylesheet_directory_uri() );
 
@@ -23,3 +23,4 @@ require_once OSS_CHILD_DIR . '/inc/about-content.php';
 require_once OSS_CHILD_DIR . '/inc/about-content-admin.php';
 require_once OSS_CHILD_DIR . '/inc/contact-content.php';
 require_once OSS_CHILD_DIR . '/inc/contact-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/v2-helpers.php';

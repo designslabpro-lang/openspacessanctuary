@@ -8,19 +8,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header();
-$oss_hero_img = get_theme_mod( 'oss_events_hero_image', '' );
+$oss_slides = array_values( array_filter( array_map( 'intval', (array) oss_home_get( 'hero_slide_ids' ) ) ) );
+
+// Event and retreat types listed in the client's content document.
+$oss_event_types = array(
+	__( 'Upcoming Events', 'astra-child' ),
+	__( "Women's Retreats", 'astra-child' ),
+	__( 'Open House', 'astra-child' ),
+	__( "Horseman's Symposium", 'astra-child' ),
+	__( 'Workshops', 'astra-child' ),
+);
+$oss_chips = '<ul class="oss2-chips">';
+foreach ( $oss_event_types as $type ) {
+	$oss_chips .= '<li>' . esc_html( $type ) . '</li>';
+}
+$oss_chips .= '</ul>';
+
+oss2_page_hero( array(
+	'eyebrow'   => __( 'Join Us', 'astra-child' ),
+	'title'     => __( 'Events & Retreats', 'astra-child' ),
+	'intro'     => get_theme_mod( 'oss_events_intro', 'From open houses to community workshops, here is what is happening at the sanctuary.' ),
+	'image_id'  => isset( $oss_slides[1] ) ? $oss_slides[1] : oss2_first_hero_slide_id(),
+	'after'     => $oss_chips,
+) );
 ?>
 
-<header class="oss-hero oss-hero--page"<?php echo $oss_hero_img ? ' style="background-image:url(\'' . esc_url( $oss_hero_img ) . '\');"' : ''; ?>>
-	<div class="oss-container oss-hero__inner">
-		<span class="oss-eyebrow oss-hero__eyebrow"><?php esc_html_e( 'Join Us', 'astra-child' ); ?></span>
-		<div class="oss-hero__divider"></div>
-		<h1><?php esc_html_e( 'Upcoming Events', 'astra-child' ); ?></h1>
-		<p><?php echo esc_html( get_theme_mod( 'oss_events_intro', 'From open houses to community workshops, here is what is happening at the sanctuary.' ) ); ?></p>
-	</div>
-</header>
-
-<section class="oss-section oss-section--cream">
+<section class="oss-section oss-section--cream oss2-programs-section">
 	<div class="oss-container">
 		<?php echo do_shortcode( '[oss_events_grid limit="-1"]' ); ?>
 	</div>
@@ -36,4 +49,7 @@ $oss_hero_img = get_theme_mod( 'oss_events_hero_image', '' );
 	</div>
 </section>
 
-<?php get_footer(); ?>
+<?php
+oss2_connect_panel();
+get_footer();
+?>
