@@ -17,15 +17,32 @@ function oss_child_register_event_cpt() {
 			'all_items'          => __( 'Events', 'astra-child' ),
 			'menu_name'          => __( 'Events', 'astra-child' ),
 		),
-		'public'       => true,
-		'has_archive'  => true,
-		'rewrite'      => array( 'slug' => 'events' ),
-		'menu_icon'    => 'dashicons-calendar-alt',
-		'show_in_rest' => true,
-		'supports'     => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
+		// Retired in favour of the theme-managed timeline (Appearance → Events):
+		// kept registered so existing entries stay in the database, but with
+		// no archive, no single pages, and no admin menu.
+		'public'             => false,
+		'publicly_queryable' => false,
+		'has_archive'        => false,
+		'show_ui'            => false,
+		'show_in_rest'       => false,
+		'rewrite'            => false,
+		'menu_icon'          => 'dashicons-calendar-alt',
+		'supports'           => array( 'title', 'editor', 'thumbnail', 'excerpt' ),
 	) );
 }
 add_action( 'init', 'oss_child_register_event_cpt' );
+
+/**
+ * One-time rewrite flush after the /events/ archive was retired, so the
+ * "Events & Retreats" page at that slug resolves on hosts without WP-CLI.
+ */
+function oss_child_events_flush_once() {
+	if ( '2' !== get_option( 'oss_child_events_rewrite' ) ) {
+		flush_rewrite_rules();
+		update_option( 'oss_child_events_rewrite', '2' );
+	}
+}
+add_action( 'init', 'oss_child_events_flush_once', 99 );
 
 function oss_child_event_meta_box() {
 	add_meta_box( 'oss_event_details', __( 'Event Details', 'astra-child' ), 'oss_child_event_meta_box_html', 'oss_event', 'normal', 'high' );

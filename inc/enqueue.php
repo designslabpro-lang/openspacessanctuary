@@ -35,8 +35,9 @@ function oss_child_enqueue_assets() {
 		'page-templates/template-contact-v2.php',
 		'page-templates/template-herd-v2.php',
 		'page-templates/template-involved-v2.php',
+		'page-templates/template-events-v2.php',
 	);
-	if ( is_page_template( $oss_v2_templates ) || is_post_type_archive( array( 'oss_program', 'oss_event' ) ) ) {
+	if ( is_page_template( $oss_v2_templates ) || is_post_type_archive( 'oss_program' ) ) {
 		wp_enqueue_style( 'oss-home-v2', OSS_CHILD_URI . '/assets/css/home-v2.css', array( 'astra-child-style' ), OSS_CHILD_VERSION );
 		wp_enqueue_style( 'oss-pages-v2', OSS_CHILD_URI . '/assets/css/pages-v2.css', array( 'oss-home-v2' ), OSS_CHILD_VERSION );
 	}

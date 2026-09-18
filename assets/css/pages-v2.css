@@ -111,3 +111,100 @@
 /* Serve cards used as links (Get Involved). */
 a.oss2-serve-card { text-decoration: none; }
 a.oss2-serve-card .oss2-serve-card__label::after { content: " \2192"; opacity: 0.7; }
+
+/* Events timeline — date badge on a gold line, card to the right. */
+.oss2-timeline {
+	list-style: none;
+	margin: 0 auto;
+	padding: 0;
+	position: relative;
+	max-width: 980px;
+}
+.oss2-timeline::before {
+	content: "";
+	position: absolute;
+	left: 45px;
+	top: 12px;
+	bottom: 12px;
+	width: 2px;
+	background: linear-gradient(180deg, var(--oss-gold) 0%, var(--oss-gold-light) 100%);
+}
+.oss2-timeline__item {
+	position: relative;
+	display: grid;
+	grid-template-columns: 92px 1fr;
+	gap: 1.5rem;
+	align-items: start;
+	padding-bottom: 2.5rem;
+}
+.oss2-timeline__item:last-child { padding-bottom: 0; }
+.oss2-timeline__date {
+	position: relative;
+	z-index: 1;
+	width: 92px;
+	background: var(--oss-white);
+	border-radius: 14px;
+	box-shadow: var(--oss-shadow-sm);
+	padding: 0.7rem 0.25rem 0.6rem;
+	text-align: center;
+}
+.oss2-timeline__day {
+	display: block;
+	font-family: var(--oss-font-heading);
+	font-size: 1.7rem;
+	line-height: 1;
+	color: var(--oss-text);
+}
+.oss2-timeline__mon {
+	display: block;
+	margin-top: 0.3rem;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--oss-brown);
+}
+.oss2-timeline__card {
+	display: grid;
+	grid-template-columns: 220px 1fr;
+	background: var(--oss-white);
+	border-radius: 22px;
+	overflow: hidden;
+	box-shadow: var(--oss-shadow-md);
+}
+.oss2-timeline__card--noimg { grid-template-columns: 1fr; }
+.oss2-timeline__img img { width: 100%; height: 100%; min-height: 200px; object-fit: cover; display: block; }
+.oss2-timeline__body { padding: 1.5rem 1.75rem; }
+.oss2-timeline__type {
+	display: inline-block;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--oss-gold);
+	margin-bottom: 0.4rem;
+}
+.oss2-timeline__body h3 { margin-bottom: 0.5rem; }
+.oss2-timeline__meta {
+	list-style: none;
+	margin: 0 0 0.9rem;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 1.25rem;
+	color: var(--oss-brown);
+	font-size: 0.9rem;
+}
+.oss2-timeline__meta li + li::before { content: "\00b7"; margin-right: 1.25rem; color: var(--oss-gold); }
+.oss2-timeline__body p { color: var(--oss-brown); }
+.oss2-timeline__body .oss-btn { margin-top: 0.25rem; }
+
+@media (max-width: 700px) {
+	.oss2-timeline::before { display: none; }
+	.oss2-timeline__item { grid-template-columns: 1fr; gap: 0.75rem; }
+	.oss2-timeline__date { width: auto; display: inline-flex; align-items: baseline; gap: 0.5rem; padding: 0.4rem 0.9rem; }
+	.oss2-timeline__day { font-size: 1.25rem; }
+	.oss2-timeline__mon { margin-top: 0; }
+	.oss2-timeline__card { grid-template-columns: 1fr; }
+	.oss2-timeline__img img { min-height: 0; aspect-ratio: 16 / 9; }
+}
