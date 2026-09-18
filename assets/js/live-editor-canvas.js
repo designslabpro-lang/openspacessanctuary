@@ -343,7 +343,21 @@
 			var node = elById( m.scope, m.id );
 			if ( node ) { select( node ); node.scrollIntoView( { block: 'center', behavior: 'smooth' } ); }
 		}
+		else if ( 'globals' === m.type ) { applyGlobals( m.css ); }
 	} );
+
+	/* Global colors + typography preview: a live <style> that overrides the
+	   server-printed globals until the edit is saved. Placed after the base
+	   globals block so the :root vars win. */
+	var globalsStyle = null;
+	function applyGlobals( cssText ) {
+		if ( ! globalsStyle ) {
+			globalsStyle = document.createElement( 'style' );
+			globalsStyle.id = 'oss-lpb-globals-live';
+			document.head.appendChild( globalsStyle );
+		}
+		globalsStyle.textContent = cssText || '';
+	}
 
 	parentPost( { type: 'ready' } );
 } )();

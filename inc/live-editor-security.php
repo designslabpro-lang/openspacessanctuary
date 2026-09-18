@@ -13,12 +13,81 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'OSS_LPB_META', '_oss_lpb' );
 define( 'OSS_LPB_AUTOSAVE_META', '_oss_lpb_autosave' );
+define( 'OSS_LPB_GLOBALS_OPTION', 'oss_lpb_globals' );
 
 /**
  * Capability required to use the builder on a page.
  */
 function oss_lpb_capability() {
 	return 'edit_pages';
+}
+
+/**
+ * Global styles are site-wide, so they need the higher theme-options cap.
+ */
+function oss_lpb_user_can_globals() {
+	return current_user_can( 'edit_theme_options' );
+}
+
+/**
+ * Global colors + typography defaults (seeded from the theme's own tokens).
+ */
+function oss_lpb_default_globals() {
+	return array(
+		'colors' => array(
+			'primary'    => '#596B58',
+			'secondary'  => '#755B45',
+			'accent'     => '#B49A68',
+			'heading'    => '#353A35',
+			'body'       => '#755B45',
+			'background' => '#F5F0E6',
+			'button'     => '#596B58',
+		),
+		'fonts'  => array(
+			'heading' => "'Playfair Display', Georgia, serif",
+			'body'    => "'Montserrat', -apple-system, sans-serif",
+		),
+		'tags'   => array(
+			'h1'     => array( 'size' => '3rem',    'weight' => '600', 'line_height' => '1.15' ),
+			'h2'     => array( 'size' => '2.4rem',  'weight' => '600', 'line_height' => '1.2' ),
+			'h3'     => array( 'size' => '1.8rem',  'weight' => '600', 'line_height' => '1.3' ),
+			'h4'     => array( 'size' => '1.4rem',  'weight' => '600', 'line_height' => '1.3' ),
+			'h5'     => array( 'size' => '1.15rem', 'weight' => '600', 'line_height' => '1.4' ),
+			'h6'     => array( 'size' => '0.85rem', 'weight' => '700', 'line_height' => '1.4' ),
+			'body'   => array( 'size' => '1rem',    'weight' => '400', 'line_height' => '1.7' ),
+			'button' => array( 'size' => '0.85rem', 'weight' => '600', 'line_height' => '1' ),
+		),
+	);
+}
+
+/**
+ * Sanitize a globals payload against the default shape.
+ */
+function oss_lpb_sanitize_globals( $raw ) {
+	$def = oss_lpb_default_globals();
+	if ( ! is_array( $raw ) ) { return $def; }
+	$out = array( 'colors' => array(), 'fonts' => array(), 'tags' => array() );
+
+	foreach ( $def['colors'] as $k => $d ) {
+		$v = isset( $raw['colors'][ $k ] ) ? oss_lpb_sanitize_color( (string) $raw['colors'][ $k ] ) : '';
+		$out['colors'][ $k ] = $v ? $v : $d;
+	}
+	foreach ( $def['fonts'] as $k => $d ) {
+		$v = isset( $raw['fonts'][ $k ] ) ? sanitize_text_field( wp_unslash( (string) $raw['fonts'][ $k ] ) ) : '';
+		$out['fonts'][ $k ] = $v ? $v : $d;
+	}
+	foreach ( $def['tags'] as $tag => $props ) {
+		foreach ( $props as $p => $d ) {
+			$rawv = isset( $raw['tags'][ $tag ][ $p ] ) ? (string) $raw['tags'][ $tag ][ $p ] : '';
+			if ( 'weight' === $p ) {
+				$v = preg_match( '/^[1-9]00$|^(normal|bold|lighter|bolder)$/', trim( $rawv ) ) ? trim( $rawv ) : '';
+			} else {
+				$v = oss_lpb_sanitize_unit( $rawv );
+			}
+			$out['tags'][ $tag ][ $p ] = ( '' !== $v ) ? $v : $d;
+		}
+	}
+	return $out;
 }
 
 /**

@@ -192,6 +192,30 @@
 			sw.addEventListener( 'input', function () { text.value = sw.value; onChange( def.k, sw.value, { live: true } ); } );
 			row.appendChild( text ); row.appendChild( sw );
 			wrap.appendChild( row );
+
+			// Global-color swatches: click to link this value to a site token so
+			// changing the global later propagates here automatically.
+			var G = window.OSSLPBGlobals;
+			if ( G && G.get() && G.get().colors ) {
+				var pal = document.createElement( 'span' );
+				pal.className = 'oss-lpb-swatches';
+				G.COLORS.forEach( function ( gc ) {
+					var token = 'var(--site-' + gc.key + ')';
+					var b = document.createElement( 'button' );
+					b.type = 'button';
+					b.className = 'oss-lpb-swatch' + ( current === token ? ' is-active' : '' );
+					b.style.background = G.get().colors[ gc.key ] || '#fff';
+					b.title = gc.label + ' (' + token + ')';
+					b.addEventListener( 'click', function () {
+						text.value = token;
+						pal.querySelectorAll( '.oss-lpb-swatch' ).forEach( function ( x ) { x.classList.remove( 'is-active' ); } );
+						b.classList.add( 'is-active' );
+						onChange( def.k, token, { live: true } );
+					} );
+					pal.appendChild( b );
+				} );
+				wrap.appendChild( pal );
+			}
 			return wrap;
 		}
 

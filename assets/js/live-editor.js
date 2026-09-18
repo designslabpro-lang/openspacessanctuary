@@ -14,6 +14,7 @@
 
 	var UI = window.OSSLPBUI;
 	var El = window.OSSLPBElements;
+	var Globals = window.OSSLPBGlobals;
 	var frame = document.getElementById( 'oss-lpb-frame' );
 	var statusEl = document.getElementById( 'oss-lpb-status' );
 	var saveBtn = document.getElementById( 'oss-lpb-save' );
@@ -25,6 +26,12 @@
 	var activeTab = 'inspector';
 	var device = 'desktop';
 	var dirty = false;
+
+	// Working copy of the site-wide globals. Editing it lives in the Globals tab;
+	// the swatch palette in the color fields reads this same object.
+	var globals = ( Globals && OSS_LPB.globals ) ? Globals.clone( OSS_LPB.globals ) : null;
+	if ( Globals ) { Globals.set( globals ); }
+	var globalsDirty = false;
 	var histTimer = null;
 	var pendingSelect = null;
 	var history = new window.OSSLPBHistory();
@@ -57,13 +64,33 @@
 		if ( saveBtn.disabled ) { return; }
 		status( 'saving', 'Saving…' );
 		saveBtn.disabled = true;
-		api( 'POST', { document: doc, autosave: false } ).then( function ( res ) {
+		var jobs = [ api( 'POST', { document: doc, autosave: false } ).then( function ( res ) {
 			doc = res.document || doc;
+		} ) ];
+		if ( globalsDirty && globals && OSS_LPB.canGlobals ) {
+			jobs.push( saveGlobals() );
+		}
+		Promise.all( jobs ).then( function () {
 			dirty = false;
 			status( 'saved', 'Saved ✓' );
 			setTimeout( function () { if ( ! dirty ) { status( '', '' ); } }, 2500 );
 		} ).catch( function ( err ) { status( 'error', err.message ); } )
 			.finally( function () { saveBtn.disabled = false; } );
+	}
+
+	function saveGlobals() {
+		return fetch( OSS_LPB.restGlobals, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': OSS_LPB.nonce },
+			credentials: 'same-origin',
+			body: JSON.stringify( { globals: globals } )
+		} ).then( function ( r ) {
+			if ( ! r.ok ) { return r.json().then( function ( j ) { throw new Error( ( j && j.message ) || ( 'HTTP ' + r.status ) ); } ); }
+			return r.json();
+		} ).then( function ( res ) {
+			if ( res && res.globals ) { globals = res.globals; if ( Globals ) { Globals.set( globals ); } }
+			globalsDirty = false;
+		} );
 	}
 
 	/* ---- history ---- */
@@ -114,13 +141,32 @@
 	function refreshActiveTab() {
 		if ( 'inspector' === activeTab ) { refreshInspector(); }
 		else if ( 'sections' === activeTab ) { UI.showSections( doc, sectionHandlers() ); }
-		else { UI.hint( 'Global colors and typography arrive in a later phase.' ); }
+		else { UI.showGlobals( globals, globalHandlers() ); }
+	}
+
+	/* ---- global colors + typography (Phase 4) ---- */
+	function globalHandlers() {
+		return { canEdit: !! OSS_LPB.canGlobals, onChange: onGlobalChange };
+	}
+	function onGlobalChange() {
+		if ( ! globals ) { return; }
+		globalsDirty = true;
+		markSavable();
+		applyGlobalsToCanvas();
+		// Refresh the swatch palette in the inspector if it's showing an element.
+	}
+	function applyGlobalsToCanvas() {
+		if ( ! Globals || ! globals ) { return; }
+		toCanvas( { type: 'globals', css: Globals.css( globals ) } );
 	}
 
 	window.addEventListener( 'message', function ( e ) {
 		if ( e.origin !== window.location.origin || ! e.data || 'oss-lpb-canvas' !== e.data.source ) { return; }
 		var m = e.data;
 		if ( 'ready' === m.type ) {
+			// The freshly loaded canvas has the server's saved globals; re-push any
+			// unsaved edits so the working state survives a canvas reload.
+			if ( globalsDirty ) { applyGlobalsToCanvas(); }
 			if ( pendingSelect ) {
 				selection = { scope: pendingSelect.scope, id: pendingSelect.id, elType: pendingSelect.elType || elTypeOf( pendingSelect.id ) };
 				toCanvas( { type: 'select-node', scope: selection.scope, id: selection.id } );

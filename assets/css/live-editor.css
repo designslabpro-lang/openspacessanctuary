@@ -181,3 +181,27 @@ html.wp-toolbar { padding-top: 0 !important; }
 .oss-lpb-sectools button { appearance: none; border: 0; background: none; cursor: pointer; font-size: 13px; line-height: 1; padding: 4px 5px; border-radius: 5px; }
 .oss-lpb-sectools button:hover { background: #f0f1f2; }
 .oss-lpb-sectools button.is-danger:hover { background: #fdeceb; }
+
+/* Globals tab (Phase 4): colors + typography */
+.oss-lpb-gtitle {
+	font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700;
+	color: var(--lpb-gold); margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--lpb-line);
+}
+.oss-lpb-gtitle:first-child { margin-top: 4px; }
+
+/* Global-color swatch palette under an element's color field */
+.oss-lpb-swatches { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.oss-lpb-swatch {
+	width: 20px; height: 20px; border-radius: 5px; cursor: pointer; padding: 0;
+	border: 1px solid rgba(0,0,0,0.15); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+}
+.oss-lpb-swatch:hover { transform: scale(1.12); }
+.oss-lpb-swatch.is-active { outline: 2px solid var(--lpb-accent); outline-offset: 1px; }
+
+/* Per-tag typography row: label above a 3-up grid of size/weight/line-height */
+.oss-lpb-tagrow__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.oss-lpb-tagrow__grid input {
+	width: 100%; box-sizing: border-box; border: 1px solid var(--lpb-line); border-radius: 6px;
+	padding: 6px 7px; font-size: 12px; font-family: inherit; color: var(--lpb-ink); background: #fff; text-align: center;
+}
+.oss-lpb-tagrow__grid input:focus { outline: none; border-color: var(--lpb-accent); box-shadow: 0 0 0 3px rgba(89,107,88,0.12); }

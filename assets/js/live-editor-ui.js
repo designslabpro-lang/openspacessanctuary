@@ -164,11 +164,118 @@
 		} );
 	}
 
+	/* ---- Globals panel (Phase 4): site-wide colors + typography ---- */
+	function showGlobals( globals, handlers ) {
+		var p = panel();
+		p.innerHTML = '';
+		var G = window.OSSLPBGlobals;
+
+		if ( ! handlers.canEdit ) {
+			hint( 'Global colors and typography are site-wide. Your role can style this page but not change site globals.' );
+			return;
+		}
+		if ( ! globals ) { hint( 'Loading global styles…' ); return; }
+
+		var intro = document.createElement( 'p' );
+		intro.className = 'oss-lpb-hint';
+		intro.style.marginTop = '0';
+		intro.textContent = 'Site-wide colors and type. Elements linked to a color token update everywhere when you change it here.';
+		p.appendChild( intro );
+
+		// Colors
+		p.appendChild( groupTitle( 'Colors' ) );
+		G.COLORS.forEach( function ( c ) {
+			p.appendChild( colorRow( c.label, globals.colors[ c.key ], function ( val ) {
+				globals.colors[ c.key ] = val;
+				handlers.onChange();
+			} ) );
+		} );
+
+		// Typography — font families
+		p.appendChild( groupTitle( 'Typography' ) );
+		p.appendChild( textRow( 'Heading font', globals.fonts.heading, "e.g. 'Playfair Display', serif", function ( val ) {
+			globals.fonts.heading = val; handlers.onChange();
+		} ) );
+		p.appendChild( textRow( 'Body font', globals.fonts.body, "e.g. 'Montserrat', sans-serif", function ( val ) {
+			globals.fonts.body = val; handlers.onChange();
+		} ) );
+
+		// Typography — per-tag size / weight / line-height
+		G.TAGS.forEach( function ( tag ) {
+			p.appendChild( tagRow( tag.label, globals.tags[ tag.key ], function () { handlers.onChange(); } ) );
+		} );
+	}
+
+	function groupTitle( text ) {
+		var h = document.createElement( 'div' );
+		h.className = 'oss-lpb-gtitle';
+		h.textContent = text;
+		return h;
+	}
+
+	function fieldShell( labelText ) {
+		var f = document.createElement( 'label' );
+		f.className = 'oss-lpb-field';
+		var l = document.createElement( 'span' );
+		l.className = 'oss-lpb-field__label';
+		l.textContent = labelText;
+		f.appendChild( l );
+		return f;
+	}
+
+	function colorRow( labelText, value, onSet ) {
+		var f = fieldShell( labelText );
+		var row = document.createElement( 'span' );
+		row.className = 'oss-lpb-color';
+		var text = document.createElement( 'input' );
+		text.type = 'text'; text.value = value || ''; text.placeholder = '#RRGGBB';
+		var sw = document.createElement( 'input' );
+		sw.type = 'color';
+		sw.value = /^#([0-9a-f]{6})$/i.test( value ) ? value : '#000000';
+		text.addEventListener( 'input', function () { onSet( text.value ); } );
+		sw.addEventListener( 'input', function () { text.value = sw.value; onSet( sw.value ); } );
+		row.appendChild( text ); row.appendChild( sw );
+		f.appendChild( row );
+		return f;
+	}
+
+	function textRow( labelText, value, placeholder, onSet ) {
+		var f = fieldShell( labelText );
+		var inp = document.createElement( 'input' );
+		inp.type = 'text'; inp.value = value || ''; inp.placeholder = placeholder || '';
+		inp.addEventListener( 'input', function () { onSet( inp.value ); } );
+		f.appendChild( inp );
+		return f;
+	}
+
+	function tagRow( labelText, obj, onChange ) {
+		var f = document.createElement( 'div' );
+		f.className = 'oss-lpb-field oss-lpb-tagrow';
+		var l = document.createElement( 'span' );
+		l.className = 'oss-lpb-field__label';
+		l.textContent = labelText;
+		f.appendChild( l );
+		var grid = document.createElement( 'span' );
+		grid.className = 'oss-lpb-tagrow__grid';
+		[
+			[ 'size', 'Size' ],
+			[ 'weight', 'Weight' ],
+			[ 'line_height', 'Line height' ]
+		].forEach( function ( pair ) {
+			var i = document.createElement( 'input' );
+			i.type = 'text'; i.value = obj[ pair[ 0 ] ] || ''; i.placeholder = pair[ 1 ]; i.title = pair[ 1 ];
+			i.addEventListener( 'input', function () { obj[ pair[ 0 ] ] = i.value; onChange(); } );
+			grid.appendChild( i );
+		} );
+		f.appendChild( grid );
+		return f;
+	}
+
 	function esc( s ) {
 		return String( s ).replace( /[&<>"']/g, function ( c ) {
 			return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ c ];
 		} );
 	}
 
-	window.OSSLPBUI = { hint: hint, showInspector: showInspector, showSections: showSections, setActiveTab: setActiveTab };
+	window.OSSLPBUI = { hint: hint, showInspector: showInspector, showSections: showSections, showGlobals: showGlobals, setActiveTab: setActiveTab };
 } )();

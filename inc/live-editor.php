@@ -132,16 +132,20 @@ function oss_lpb_enqueue_editor( $hook ) {
 	wp_enqueue_style( 'oss-lpb-editor-responsive', OSS_CHILD_URI . '/assets/css/live-editor-responsive.css', array( 'oss-lpb-editor' ), $ver );
 
 	wp_enqueue_script( 'oss-lpb-history', OSS_CHILD_URI . '/assets/js/live-editor-history.js', array(), $ver, true );
+	wp_enqueue_script( 'oss-lpb-globals', OSS_CHILD_URI . '/assets/js/live-editor-globals.js', array(), $ver, true );
 	wp_enqueue_script( 'oss-lpb-elements', OSS_CHILD_URI . '/assets/js/live-editor-elements.js', array(), $ver, true );
-	wp_enqueue_script( 'oss-lpb-fields', OSS_CHILD_URI . '/assets/js/live-editor-fields.js', array( 'oss-lpb-elements' ), $ver, true );
-	wp_enqueue_script( 'oss-lpb-ui', OSS_CHILD_URI . '/assets/js/live-editor-ui.js', array( 'oss-lpb-elements', 'oss-lpb-fields' ), $ver, true );
-	wp_enqueue_script( 'oss-lpb-core', OSS_CHILD_URI . '/assets/js/live-editor.js', array( 'oss-lpb-history', 'oss-lpb-elements', 'oss-lpb-fields', 'oss-lpb-ui' ), $ver, true );
+	wp_enqueue_script( 'oss-lpb-fields', OSS_CHILD_URI . '/assets/js/live-editor-fields.js', array( 'oss-lpb-elements', 'oss-lpb-globals' ), $ver, true );
+	wp_enqueue_script( 'oss-lpb-ui', OSS_CHILD_URI . '/assets/js/live-editor-ui.js', array( 'oss-lpb-elements', 'oss-lpb-fields', 'oss-lpb-globals' ), $ver, true );
+	wp_enqueue_script( 'oss-lpb-core', OSS_CHILD_URI . '/assets/js/live-editor.js', array( 'oss-lpb-history', 'oss-lpb-globals', 'oss-lpb-elements', 'oss-lpb-fields', 'oss-lpb-ui' ), $ver, true );
 
 	wp_localize_script( 'oss-lpb-core', 'OSS_LPB', array(
-		'postId'  => $post_id,
-		'rest'    => esc_url_raw( rest_url( 'oss-lpb/v1/doc/' . $post_id ) ),
-		'nonce'   => wp_create_nonce( 'wp_rest' ),
-		'schema'  => oss_lpb_schema(),
+		'postId'      => $post_id,
+		'rest'        => esc_url_raw( rest_url( 'oss-lpb/v1/doc/' . $post_id ) ),
+		'restGlobals' => esc_url_raw( rest_url( 'oss-lpb/v1/globals' ) ),
+		'nonce'       => wp_create_nonce( 'wp_rest' ),
+		'schema'      => oss_lpb_schema(),
+		'globals'     => oss_lpb_get_globals(),
+		'canGlobals'  => oss_lpb_user_can_globals(),
 	) );
 }
 
@@ -152,6 +156,15 @@ function oss_lpb_enqueue_render() {
 	if ( is_page_template( 'page-templates/template-live-builder.php' ) ) {
 		$ver = defined( 'OSS_CHILD_VERSION' ) ? OSS_CHILD_VERSION : '1';
 		wp_enqueue_style( 'oss-lpb-render', OSS_CHILD_URI . '/assets/css/live-editor-render.css', array( 'oss-global' ), $ver );
+	}
+}
+
+/* Global colors + typography: printed as :root vars + low-specificity inherit
+   rules on every builder page (front end + canvas). Pure CSS, no visitor JS. */
+add_action( 'wp_head', 'oss_lpb_print_globals_css', 5 );
+function oss_lpb_print_globals_css() {
+	if ( is_page_template( 'page-templates/template-live-builder.php' ) ) {
+		echo oss_lpb_globals_css(); // phpcs:ignore WordPress.Security.EscapeOutput -- values sanitized on save.
 	}
 }
 

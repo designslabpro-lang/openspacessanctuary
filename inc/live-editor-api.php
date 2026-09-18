@@ -27,6 +27,19 @@ function oss_lpb_register_routes() {
 			'args'                => array( 'id' => array( 'validate_callback' => 'absint' ) ),
 		),
 	) );
+
+	register_rest_route( 'oss-lpb/v1', '/globals', array(
+		array(
+			'methods'             => 'GET',
+			'callback'            => 'oss_lpb_rest_get_globals',
+			'permission_callback' => 'oss_lpb_rest_globals_permission',
+		),
+		array(
+			'methods'             => 'POST',
+			'callback'            => 'oss_lpb_rest_save_globals',
+			'permission_callback' => 'oss_lpb_rest_globals_permission',
+		),
+	) );
 }
 
 /**
@@ -78,4 +91,32 @@ function oss_lpb_rest_save( WP_REST_Request $request ) {
 		'document' => $clean,
 		'time'     => current_time( 'H:i:s' ),
 	) );
+}
+
+/**
+ * Globals are site-wide, so they need the theme-options capability (+ nonce).
+ */
+function oss_lpb_rest_globals_permission( WP_REST_Request $request ) {
+	if ( ! oss_lpb_user_can_globals() ) {
+		return new WP_Error( 'oss_lpb_forbidden', __( 'You are not allowed to edit global styles.', 'astra-child' ), array( 'status' => 403 ) );
+	}
+	$nonce = $request->get_header( 'X-WP-Nonce' );
+	if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+		return new WP_Error( 'oss_lpb_bad_nonce', __( 'Invalid or expired session. Please reload the editor.', 'astra-child' ), array( 'status' => 403 ) );
+	}
+	return true;
+}
+
+function oss_lpb_rest_get_globals( WP_REST_Request $request ) {
+	return rest_ensure_response( array( 'globals' => oss_lpb_get_globals() ) );
+}
+
+function oss_lpb_rest_save_globals( WP_REST_Request $request ) {
+	$body = $request->get_json_params();
+	if ( ! is_array( $body ) || ! isset( $body['globals'] ) || ! is_array( $body['globals'] ) ) {
+		return new WP_Error( 'oss_lpb_bad_body', __( 'Malformed globals.', 'astra-child' ), array( 'status' => 400 ) );
+	}
+	$clean = oss_lpb_sanitize_globals( $body['globals'] );
+	update_option( OSS_LPB_GLOBALS_OPTION, $clean, false );
+	return rest_ensure_response( array( 'saved' => true, 'globals' => $clean, 'time' => current_time( 'H:i:s' ) ) );
 }

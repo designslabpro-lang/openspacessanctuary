@@ -307,3 +307,56 @@ function oss_lpb_render_styles( $doc ) {
 
 	return $css ? '<style id="oss-lpb-doc-css">' . $css . '</style>' : '';
 }
+
+/**
+ * Read the site-wide global colors + typography, merged over defaults.
+ */
+function oss_lpb_get_globals() {
+	$saved = get_option( OSS_LPB_GLOBALS_OPTION, array() );
+	return oss_lpb_sanitize_globals( is_array( $saved ) ? $saved : array() );
+}
+
+/**
+ * Map the globals model to CSS custom properties on :root, then a small set of
+ * low-specificity :where() rules so linked elements inherit them while any
+ * per-element setting (Phase 1) still wins. Returns raw CSS (no <style> tag).
+ */
+function oss_lpb_globals_css_raw( $g = null ) {
+	if ( null === $g ) { $g = oss_lpb_get_globals(); }
+	$c = $g['colors'];
+	$f = $g['fonts'];
+	$t = $g['tags'];
+
+	$vars  = '';
+	$vars .= '--site-primary:' . $c['primary'] . ';';
+	$vars .= '--site-secondary:' . $c['secondary'] . ';';
+	$vars .= '--site-accent:' . $c['accent'] . ';';
+	$vars .= '--site-heading:' . $c['heading'] . ';';
+	$vars .= '--site-body:' . $c['body'] . ';';
+	$vars .= '--site-background:' . $c['background'] . ';';
+	$vars .= '--site-button:' . $c['button'] . ';';
+	$vars .= '--site-font-heading:' . $f['heading'] . ';';
+	$vars .= '--site-font-body:' . $f['body'] . ';';
+	foreach ( $t as $tag => $p ) {
+		$vars .= '--site-' . $tag . '-size:' . $p['size'] . ';';
+		$vars .= '--site-' . $tag . '-weight:' . $p['weight'] . ';';
+		$vars .= '--site-' . $tag . '-lh:' . $p['line_height'] . ';';
+	}
+
+	$css  = ':root{' . $vars . '}';
+	$css .= ':where(.oss-lpb-doc){font-family:var(--site-font-body);color:var(--site-body);font-size:var(--site-body-size);line-height:var(--site-body-lh);}';
+	foreach ( array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) as $h ) {
+		$css .= ':where(.oss-lpb-doc ' . $h . '){font-family:var(--site-font-heading);color:var(--site-heading);'
+			. 'font-size:var(--site-' . $h . '-size);font-weight:var(--site-' . $h . '-weight);line-height:var(--site-' . $h . '-lh);}';
+	}
+	$css .= ':where(.oss-lpb-doc p),:where(.oss-lpb-doc li){font-size:var(--site-body-size);line-height:var(--site-body-lh);}';
+	$css .= ':where(.oss-lpb-doc .oss-lpb-btn){font-family:var(--site-font-body);font-size:var(--site-button-size);font-weight:var(--site-button-weight);line-height:var(--site-button-lh);}';
+	return $css;
+}
+
+/**
+ * The globals CSS wrapped in a <style> tag for printing on builder pages.
+ */
+function oss_lpb_globals_css( $g = null ) {
+	return '<style id="oss-lpb-globals-css">' . oss_lpb_globals_css_raw( $g ) . '</style>';
+}
