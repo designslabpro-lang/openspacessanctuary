@@ -169,14 +169,21 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 	</div>
 </section>
 
-<section class="oss-section oss-cta" style="background:var(--oss-primary-dark);color:var(--oss-bg);<?php $donate_bg = (int) oss_home_get( 'donate_image_id' ); if ( $donate_bg ) { echo 'background-image:linear-gradient(rgba(30,34,28,.75),rgba(30,34,28,.75)),url(' . esc_url( wp_get_attachment_image_url( $donate_bg, 'full' ) ) . ');background-size:cover;background-position:center;'; } ?>" >
-	<div class="oss-container oss-on-dark" style="text-align:center;">
-		<span class="oss-eyebrow" style="color:var(--oss-gold-light);"><?php esc_html_e( 'Support the Sanctuary', 'astra-child' ); ?></span>
-		<h2><?php echo esc_html( oss_home_get( 'donate_heading' ) ); ?></h2>
-		<?php foreach ( explode( "\n", oss_home_get( 'donate_body' ) ) as $para ) : ?>
-			<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-		<?php endforeach; ?>
-		<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'donate_btn_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'donate_btn' ) ); ?></a>
+<section class="oss-section oss-section--white oss2-give">
+	<span class="oss2-give__circles oss2-give__circles--tl" aria-hidden="true"><span></span><span></span><span></span></span>
+	<span class="oss2-give__circles oss2-give__circles--br" aria-hidden="true"><span></span><span></span><span></span></span>
+	<div class="oss-container oss2-give__grid">
+		<div class="oss2-give__media">
+			<?php echo oss_home_image( 'donate_image_id', 'large', esc_attr( oss_home_get( 'donate_heading' ) ) ); ?>
+		</div>
+		<div class="oss2-give__text">
+			<span class="oss-eyebrow"><?php esc_html_e( 'Support the Sanctuary', 'astra-child' ); ?></span>
+			<h2><?php echo esc_html( oss_home_get( 'donate_heading' ) ); ?></h2>
+			<?php foreach ( explode( "\n", oss_home_get( 'donate_body' ) ) as $para ) : ?>
+				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
+			<?php endforeach; ?>
+			<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'donate_btn_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'donate_btn' ) ); ?></a>
+		</div>
 	</div>
 </section>
 
