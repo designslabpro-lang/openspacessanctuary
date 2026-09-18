@@ -20,7 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php else : ?>
 							<p class="oss-footer__site-name"><?php bloginfo( 'name' ); ?></p>
 						<?php endif; ?>
-						<p class="oss-footer__tagline"><?php echo esc_html( get_bloginfo( 'description' ) ?: __( 'Healing Begins Here', 'astra-child' ) ); ?></p>
 
 						<h3><?php esc_html_e( 'Mission Statement', 'astra-child' ); ?></h3>
 						<p class="oss-footer__mission">
