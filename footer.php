@@ -12,18 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<footer id="colophon" class="oss-footer" role="contentinfo">
 
-			<div class="oss-footer__newsletter">
-				<div class="oss-container oss-footer__newsletter-inner">
-					<div class="oss-footer__newsletter-copy">
-						<h3><?php esc_html_e( 'Newsletter Signup', 'astra-child' ); ?></h3>
-						<p><?php esc_html_e( 'Stories, events, and updates from the sanctuary — no more than once a month.', 'astra-child' ); ?></p>
-					</div>
-					<div class="oss-footer__newsletter-form">
-						<?php echo do_shortcode( '[oss_newsletter_signup]' ); ?>
-					</div>
-				</div>
-			</div>
-
 			<div class="oss-container">
 				<div class="oss-footer__grid">
 					<div class="oss-footer__brand">
