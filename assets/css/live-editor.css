@@ -154,3 +154,29 @@ html.wp-toolbar { padding-top: 0 !important; }
 .oss-lpb-mini:hover { background: var(--lpb-accent-dark); }
 .oss-lpb-mini--ghost { background: #fff; color: var(--lpb-ink); border-color: var(--lpb-line); }
 .oss-lpb-mini--ghost:hover { background: #f6f7f8; }
+
+/* Inspector: Add-element row + danger button */
+.oss-lpb-addrow { margin-top: 12px; }
+.oss-lpb-addrow select { width: 100%; box-sizing: border-box; border: 1px dashed var(--lpb-accent); border-radius: 6px; padding: 8px; font-size: 13px; color: var(--lpb-accent); background: #fff; cursor: pointer; }
+.oss-lpb-eltoolbar button.is-danger { color: #b3261e; border-color: #f0c4c0; }
+.oss-lpb-eltoolbar button.is-danger:hover { background: #fdeceb; }
+
+/* Sections tab (Phase 2) */
+.oss-lpb-addsection { width: 100%; box-sizing: border-box; margin-bottom: 14px; padding: 9px; }
+.oss-lpb-seclist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.oss-lpb-secitem {
+	display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--lpb-line);
+	border-radius: 8px; padding: 8px 10px;
+}
+.oss-lpb-secitem.is-hidden { opacity: 0.55; }
+.oss-lpb-secitem.is-dragging { opacity: 0.4; box-shadow: 0 4px 14px rgba(0,0,0,0.14); }
+.oss-lpb-sechandle { cursor: grab; color: #9aa0a6; font-size: 12px; user-select: none; }
+.oss-lpb-secname {
+	flex: 1; text-align: left; appearance: none; border: 0; background: none; cursor: pointer;
+	font-size: 13px; font-weight: 600; color: var(--lpb-ink); padding: 2px 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.oss-lpb-secname:hover { color: var(--lpb-accent); }
+.oss-lpb-sectools { display: flex; gap: 1px; }
+.oss-lpb-sectools button { appearance: none; border: 0; background: none; cursor: pointer; font-size: 13px; line-height: 1; padding: 4px 5px; border-radius: 5px; }
+.oss-lpb-sectools button:hover { background: #f0f1f2; }
+.oss-lpb-sectools button.is-danger:hover { background: #fdeceb; }

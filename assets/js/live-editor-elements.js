@@ -1,9 +1,9 @@
 /**
  * Live Page Builder — element helpers (shell side).
  *
- * Document traversal + setting writes shared by the core/UI. Knows which
- * settings are responsive (from the localized schema) so a written value is
- * stored as a {desktop:…} triple where appropriate and a scalar otherwise.
+ * Document traversal, setting writes, and (Phase 2) structural mutation
+ * helpers: id generation, deep clone with fresh ids, and node factories for
+ * "add section" / "add element". Pure functions; the core orchestrates them.
  */
 ( function () {
 	'use strict';
@@ -12,7 +12,6 @@
 		section: 'Section', heading: 'Heading', paragraph: 'Paragraph',
 		richtext: 'Rich Text', list: 'List', image: 'Image', button: 'Button', icon: 'Icon'
 	};
-
 	function label( type ) { return LABELS[ type ] || type; }
 
 	/** Locate a node by id → { node, parent, index, scope } or null. */
@@ -21,13 +20,12 @@
 			if ( doc[ s ].id === id ) { return { node: doc[ s ], parent: doc, index: s, scope: 'section' }; }
 			var els = doc[ s ].elements || [];
 			for ( var e = 0; e < els.length; e++ ) {
-				if ( els[ e ].id === id ) { return { node: els[ e ], parent: els, index: e, scope: 'element' }; }
+				if ( els[ e ].id === id ) { return { node: els[ e ], parent: els, index: e, scope: 'element', section: doc[ s ] }; }
 			}
 		}
 		return null;
 	}
 
-	/** Base (desktop) value of a possibly-responsive setting. */
 	function baseVal( settings, key, def ) {
 		if ( ! settings || ! ( key in settings ) ) { return def === undefined ? '' : def; }
 		var v = settings[ key ];
@@ -42,10 +40,6 @@
 		} catch ( e ) { return false; }
 	}
 
-	/**
-	 * Write a setting into a node's settings, honouring responsive keys and
-	 * clearing empties. `raw` keeps arrays (e.g. list items) as-is.
-	 */
 	function writeSetting( node, type, key, value, opts ) {
 		opts = opts || {};
 		node.settings = node.settings || {};
@@ -61,5 +55,58 @@
 		node.settings[ key ] = value;
 	}
 
-	window.OSSLPBElements = { label: label, find: find, baseVal: baseVal, writeSetting: writeSetting, isResponsive: isResponsive };
+	/* ---- Phase 2: structural helpers ---- */
+
+	function makeId( prefix ) { return prefix + '_' + ( Math.random().toString( 36 ) + '00000000' ).slice( 2, 10 ); }
+
+	function reId( node ) {
+		node.id = makeId( 'section' === node.type ? 'sec' : 'el' );
+		if ( 'section' === node.type && node.elements ) {
+			node.elements.forEach( function ( e ) { e.id = makeId( 'el' ); } );
+		}
+		return node;
+	}
+
+	function deepClone( node ) { return JSON.parse( JSON.stringify( node ) ); }
+
+	function starterSection() {
+		return reId( {
+			type: 'section',
+			settings: { padding: { desktop: '64px 0' }, content_align: 'center' },
+			elements: [
+				{ type: 'heading', settings: { text: 'New Section', level: 'h2' } },
+				{ type: 'paragraph', settings: { text: 'Add your content here.' } }
+			]
+		} );
+	}
+
+	function starterElement( type ) {
+		var seeds = {
+			heading:   { text: 'New Heading', level: 'h2' },
+			paragraph: { text: 'New paragraph text.' },
+			richtext:  { html: '<p>Rich text content.</p>' },
+			list:      { items: [ 'Item one', 'Item two', 'Item three' ], style: 'disc' },
+			image:     {},
+			button:    { text: 'Button', url: '#' },
+			icon:      { name: '★', size: '2rem' }
+		};
+		return { id: makeId( 'el' ), type: type, settings: seeds[ type ] || {} };
+	}
+
+	/** Section label for lists: first heading text, else "Section N". */
+	function sectionLabel( section, i ) {
+		var els = section.elements || [];
+		for ( var e = 0; e < els.length; e++ ) {
+			if ( 'heading' === els[ e ].type ) {
+				var t = baseVal( els[ e ].settings, 'text', '' );
+				if ( t ) { return t.length > 40 ? t.slice( 0, 40 ) + '…' : t; }
+			}
+		}
+		return 'Section ' + ( i + 1 );
+	}
+
+	window.OSSLPBElements = {
+		label: label, find: find, baseVal: baseVal, writeSetting: writeSetting, isResponsive: isResponsive,
+		makeId: makeId, reId: reId, deepClone: deepClone, starterSection: starterSection, starterElement: starterElement, sectionLabel: sectionLabel
+	};
 } )();

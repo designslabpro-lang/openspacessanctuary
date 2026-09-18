@@ -2,9 +2,10 @@
  * Live Page Builder — editor shell core.
  *
  * Owns the working document + history, the postMessage bridge to the canvas,
- * and the top bar. Phase 1: field edits and inline text edits update the
- * document, apply live to the canvas without reload, push (debounced) history
- * snapshots, mark dirty, and Save persists via the secured REST endpoint.
+ * and the top bar. Phase 1: field/inline edits apply live. Phase 2: structural
+ * actions (add/duplicate/move/delete/hide, reorder) mutate the document and
+ * re-render the canvas at the in-progress state (persisted to an autosave
+ * draft), with undo/redo across the whole session. Save commits via REST.
  */
 ( function () {
 	'use strict';
@@ -21,8 +22,10 @@
 
 	var doc = [];
 	var selection = null;
+	var activeTab = 'inspector';
 	var dirty = false;
 	var histTimer = null;
+	var pendingSelect = null;
 	var history = new window.OSSLPBHistory();
 	history.onChange = syncHistoryButtons;
 
@@ -40,10 +43,8 @@
 	}
 
 	function load() {
-		api( 'GET' ).then( function ( data ) {
-			doc = data.document || [];
-			history.reset( doc );
-		} ).catch( function ( err ) { status( 'error', err.message ); } );
+		api( 'GET' ).then( function ( data ) { doc = data.document || []; history.reset( doc ); } )
+			.catch( function ( err ) { status( 'error', err.message ); } );
 	}
 
 	function status( kind, text ) {
@@ -60,8 +61,8 @@
 			dirty = false;
 			status( 'saved', 'Saved ✓' );
 			setTimeout( function () { if ( ! dirty ) { status( '', '' ); } }, 2500 );
-		} ).catch( function ( err ) { status( 'error', err.message ); }
-		).finally( function () { saveBtn.disabled = false; } );
+		} ).catch( function ( err ) { status( 'error', err.message ); } )
+			.finally( function () { saveBtn.disabled = false; } );
 	}
 
 	/* ---- history ---- */
@@ -77,15 +78,20 @@
 		if ( ! snap ) { return; }
 		doc = snap;
 		dirty = true;
-		markSavable();
-		reloadCanvas(); // simplest faithful re-render of a historical state
+		rerender( selection );
 	}
-	function reloadCanvas() {
-		// Persist current doc to an autosave draft, then reload the iframe so
-		// the server renders the exact state (used for undo/redo + big changes).
+
+	/* Persist the working doc to the autosave draft, then reload the canvas so
+	   the server renders the exact in-progress structure. selectAfter is
+	   restored once the canvas signals ready. */
+	function rerender( selectAfter ) {
+		markSavable();
+		status( 'saving', 'Updating…' );
 		api( 'POST', { document: doc, autosave: true } ).then( function () {
+			pendingSelect = selectAfter || null;
 			frame.contentWindow.location.reload();
-		} );
+			status( '', '' );
+		} ).catch( function ( err ) { status( 'error', err.message ); } );
 	}
 
 	function markSavable() { dirty = true; }
@@ -103,30 +109,39 @@
 		return hit ? hit.node : null;
 	}
 
-	function refreshInspector() {
-		UI.showInspector( selection, currentNode(), { onChange: onFieldChange, onAction: onAction } );
+	function refreshInspector() { UI.showInspector( selection, currentNode(), inspectorHandlers() ); }
+	function refreshActiveTab() {
+		if ( 'inspector' === activeTab ) { refreshInspector(); }
+		else if ( 'sections' === activeTab ) { UI.showSections( doc, sectionHandlers() ); }
+		else { UI.hint( 'Global colors and typography arrive in a later phase.' ); }
 	}
 
 	window.addEventListener( 'message', function ( e ) {
 		if ( e.origin !== window.location.origin || ! e.data || 'oss-lpb-canvas' !== e.data.source ) { return; }
 		var m = e.data;
 		if ( 'ready' === m.type ) {
-			// Canvas (re)loaded — restore selection if any.
-			if ( selection ) { toCanvas( { type: 'select-node', scope: selection.scope, id: selection.id } ); }
+			if ( pendingSelect ) {
+				selection = { scope: pendingSelect.scope, id: pendingSelect.id, elType: pendingSelect.elType || elTypeOf( pendingSelect.id ) };
+				toCanvas( { type: 'select-node', scope: selection.scope, id: selection.id } );
+			} else if ( selection ) {
+				toCanvas( { type: 'select-node', scope: selection.scope, id: selection.id } );
+			}
+			pendingSelect = null;
+			refreshActiveTab();
 			return;
 		}
 		if ( 'select' === m.type ) {
 			selection = { scope: m.scope, id: m.id, elType: m.elType };
+			activeTab = 'inspector';
 			UI.setActiveTab( 'inspector' );
 			refreshInspector();
 		} else if ( 'deselect' === m.type ) {
 			selection = null;
-			UI.showInspector( null );
+			if ( 'inspector' === activeTab ) { UI.showInspector( null ); }
 		} else if ( 'text-input' === m.type || 'text-commit' === m.type ) {
 			var hit = El.find( doc, m.id );
 			if ( hit ) {
-				var key = ( 'button' === hit.node.type ) ? 'text' : 'text';
-				El.writeSetting( hit.node, hit.node.type, key, m.text );
+				El.writeSetting( hit.node, hit.node.type, 'text', m.text );
 				markSavable();
 				if ( 'text-commit' === m.type ) { pushHistorySoon(); refreshInspector(); }
 			}
@@ -135,29 +150,111 @@
 		}
 	} );
 
-	/* ---- field editing ---- */
+	function elTypeOf( id ) {
+		var hit = El.find( doc, id );
+		return hit ? hit.node.type : 'element';
+	}
+
+	/* ---- field editing (Phase 1) ---- */
+	function inspectorHandlers() {
+		return { onChange: onFieldChange, onAction: onAction, onAddElement: onAddElement };
+	}
 	function onFieldChange( key, value, opts ) {
 		var node = currentNode();
 		if ( ! node ) { return; }
 		El.writeSetting( node, node.type, key, value, opts );
 		markSavable();
-
-		// Send a live-apply to the canvas (attach a preview url for media).
 		var settings = shallow( node.settings );
 		if ( opts && opts.previewUrl ) {
 			if ( 'section' === selection.scope ) { settings._bg_preview = opts.previewUrl; }
 			else { settings._preview = opts.previewUrl; }
 		}
 		toCanvas( { type: 'apply', scope: selection.scope, id: selection.id, elType: selection.elType, settings: settings } );
-
+		// Hiding a section can't be un-clicked in the canvas; refresh sections list too.
+		if ( 'hidden' === key && 'sections' === activeTab ) { refreshActiveTab(); }
 		pushHistorySoon();
 	}
-
 	function shallow( o ) { var c = {}; for ( var k in o ) { c[ k ] = o[ k ]; } return c; }
 
+	/* ---- structural actions (Phase 2) ---- */
 	function onAction( act ) {
-		// Section/element structural actions are wired in Phase 2.
-		status( '', '' );
+		if ( ! selection ) { return; }
+		doActionOn( selection.id, act );
+	}
+	function doActionOn( id, act ) {
+		var hit = El.find( doc, id );
+		if ( ! hit ) { return; }
+
+		if ( 'toggle-hide' === act ) {
+			var s = hit.node.settings = hit.node.settings || {};
+			if ( s.hidden ) { delete s.hidden; } else { s.hidden = 1; }
+			pushHistorySoon();
+			rerender( { scope: hit.scope, id: id, elType: hit.node.type } );
+			return;
+		}
+		if ( 'duplicate' === act ) {
+			var clone = El.reId( El.deepClone( hit.node ) );
+			hit.parent.splice( hit.index + 1, 0, clone );
+			pushHistorySoon();
+			rerender( { scope: hit.scope, id: clone.id, elType: clone.type } );
+			return;
+		}
+		if ( 'delete' === act ) {
+			hit.parent.splice( hit.index, 1 );
+			selection = null;
+			pushHistorySoon();
+			rerender( null );
+			return;
+		}
+		if ( 'move-up' === act || 'move-down' === act ) {
+			var to = hit.index + ( 'move-up' === act ? -1 : 1 );
+			if ( to < 0 || to >= hit.parent.length ) { return; }
+			var moved = hit.parent.splice( hit.index, 1 )[ 0 ];
+			hit.parent.splice( to, 0, moved );
+			pushHistorySoon();
+			rerender( { scope: hit.scope, id: id, elType: hit.node.type } );
+			return;
+		}
+	}
+
+	function onAddElement( type ) {
+		if ( ! selection ) { return; }
+		var hit = El.find( doc, selection.id );
+		if ( ! hit ) { return; }
+		var section = ( 'section' === hit.scope ) ? hit.node : hit.section;
+		if ( ! section ) { return; }
+		section.elements = section.elements || [];
+		var el = El.starterElement( type );
+		// Insert after the selected element, or at the end of the section.
+		if ( 'element' === hit.scope ) {
+			var idx = section.elements.indexOf( hit.node );
+			section.elements.splice( idx + 1, 0, el );
+		} else {
+			section.elements.push( el );
+		}
+		pushHistorySoon();
+		rerender( { scope: 'element', id: el.id, elType: type } );
+	}
+
+	/* ---- sections tab ---- */
+	function sectionHandlers() {
+		return {
+			onSelectNode: function ( scope, id ) { toCanvas( { type: 'select-node', scope: scope, id: id } ); },
+			onSectionAction: function ( id, act ) { doActionOn( id, act ); },
+			onAddSection: function () {
+				var sec = El.starterSection();
+				doc.push( sec );
+				pushHistorySoon();
+				rerender( { scope: 'section', id: sec.id, elType: 'section' } );
+			},
+			onReorder: function ( ids ) {
+				var map = {};
+				doc.forEach( function ( s ) { map[ s.id ] = s; } );
+				var next = [];
+				ids.forEach( function ( id ) { if ( map[ id ] ) { next.push( map[ id ] ); } } );
+				if ( next.length === doc.length ) { doc = next; pushHistorySoon(); rerender( selection ); }
+			}
+		};
 	}
 
 	/* ---- top bar ---- */
@@ -172,11 +269,9 @@
 
 	document.querySelectorAll( '.oss-lpb-tab' ).forEach( function ( tab ) {
 		tab.addEventListener( 'click', function () {
-			var name = tab.getAttribute( 'data-tab' );
-			UI.setActiveTab( name );
-			if ( 'inspector' === name ) { refreshInspector(); }
-			else if ( 'sections' === name ) { UI.hint( 'Section management (add, reorder, duplicate) arrives in a later phase.' ); }
-			else { UI.hint( 'Global colors and typography arrive in a later phase.' ); }
+			activeTab = tab.getAttribute( 'data-tab' );
+			UI.setActiveTab( activeTab );
+			refreshActiveTab();
 		} );
 	} );
 
@@ -193,9 +288,7 @@
 		else if ( 'y' === k || ( 'z' === k && e.shiftKey ) ) { e.preventDefault(); applySnapshot( history.redo() ); }
 	} );
 
-	window.addEventListener( 'beforeunload', function ( e ) {
-		if ( dirty ) { e.preventDefault(); e.returnValue = ''; }
-	} );
+	window.addEventListener( 'beforeunload', function ( e ) { if ( dirty ) { e.preventDefault(); e.returnValue = ''; } } );
 
 	syncHistoryButtons();
 	load();
