@@ -16,15 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 
-$icons          = oss_home_icon_library();
-$hero_photo_url = wp_get_attachment_image_url( (int) oss_home_get( 'hero_image_id' ), 'full' );
+$icons           = oss_home_icon_library();
+$hero_slide_ids  = array_values( array_filter( array_map( 'intval', oss_home_get( 'hero_slide_ids' ) ) ) );
+$hero_thumb_id   = isset( $hero_slide_ids[1] ) ? $hero_slide_ids[1] : ( isset( $hero_slide_ids[0] ) ? $hero_slide_ids[0] : 0 );
 ?>
 
 <header class="oss2-hero">
 	<div class="oss-container">
 		<div class="oss2-hero__panel">
-			<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
-			<div class="oss-divider"></div>
+			<span class="oss-eyebrow oss2-hero__eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
 			<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
 			<div class="oss2-hero__body">
 				<?php foreach ( explode( "\n", oss_home_get( 'hero_body' ) ) as $para ) : ?>
@@ -32,19 +32,43 @@ $hero_photo_url = wp_get_attachment_image_url( (int) oss_home_get( 'hero_image_i
 				<?php endforeach; ?>
 			</div>
 			<div class="oss2-hero__actions">
-				<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
-				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
+				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
+				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 			</div>
 			<p class="oss2-hero__trust"><?php esc_html_e( 'A 501(c)(3) nonprofit organization', 'astra-child' ); ?></p>
+			<div class="oss2-hero__foot">
+				<?php if ( $hero_thumb_id && wp_get_attachment_image_src( $hero_thumb_id, 'thumbnail' ) ) : ?>
+					<div class="oss2-hero__thumb"><?php echo wp_get_attachment_image( $hero_thumb_id, 'thumbnail', false, array( 'alt' => '' ) ); ?></div>
+				<?php endif; ?>
+				<span class="oss2-hero__scroll"><?php esc_html_e( 'Scroll', 'astra-child' ); ?></span>
+			</div>
 		</div>
 		<div class="oss2-hero__photo">
-			<?php if ( $hero_photo_url ) : ?>
-				<img src="<?php echo esc_url( $hero_photo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
-			<?php endif; ?>
+			<div class="oss-hero__slides" data-oss-hero-slides data-oss-autoplay="6500">
+				<?php foreach ( $hero_slide_ids as $i => $slide_id ) :
+					$slide_url = wp_get_attachment_image_url( $slide_id, 'full' );
+					if ( ! $slide_url ) {
+						continue;
+					}
+					?>
+					<div class="oss-hero__slide<?php echo 0 === $i ? ' is-active' : ''; ?>" style="background-image:url('<?php echo esc_url( $slide_url ); ?>');"></div>
+				<?php endforeach; ?>
+			</div>
 			<span class="oss2-hero__badge">
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-7.4 7-12.5A7 7 0 0 0 5 9.5C5 14.6 12 22 12 22z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
 				<?php esc_html_e( 'Ocala, Florida', 'astra-child' ); ?>
 			</span>
+			<?php if ( count( $hero_slide_ids ) > 1 ) : ?>
+				<div class="oss2-hero__dots">
+					<?php foreach ( $hero_slide_ids as $i => $slide_id ) : ?>
+						<button type="button" class="oss2-hero__dot<?php echo 0 === $i ? ' is-active' : ''; ?>" data-oss-carousel-dot aria-label="<?php echo esc_attr( sprintf( __( 'Go to photo %d', 'astra-child' ), $i + 1 ) ); ?>"></button>
+					<?php endforeach; ?>
+				</div>
+				<div class="oss2-hero__nav">
+					<button type="button" class="oss2-hero__nav-btn" data-oss-carousel-prev aria-label="<?php esc_attr_e( 'Previous photo', 'astra-child' ); ?>">&larr;</button>
+					<button type="button" class="oss2-hero__nav-btn" data-oss-carousel-next aria-label="<?php esc_attr_e( 'Next photo', 'astra-child' ); ?>">&rarr;</button>
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 </header>

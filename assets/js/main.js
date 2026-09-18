@@ -76,23 +76,26 @@
 		/* Hero background slideshow */
 		document.querySelectorAll( '[data-oss-hero-slides]' ).forEach( function ( wrap ) {
 			var slides = wrap.querySelectorAll( '.oss-hero__slide' );
-			var hero = wrap.closest( '.oss-hero' );
+			var hero = wrap.closest( '.oss-hero, .oss2-hero' );
 			if ( slides.length < 2 || ! hero ) return;
 
 			var index = 0;
 			var counter = hero.querySelector( '[data-oss-carousel-current]' );
 			var prevBtn = hero.querySelector( '[data-oss-carousel-prev]' );
 			var nextBtn = hero.querySelector( '[data-oss-carousel-next]' );
+			var dots = hero.querySelectorAll( '[data-oss-carousel-dot]' );
 
 			function render() {
 				slides.forEach( function ( s, i ) { s.classList.toggle( 'is-active', i === index ); } );
 				if ( counter ) counter.textContent = String( index + 1 ).padStart( 2, '0' );
+				dots.forEach( function ( d, i ) { d.classList.toggle( 'is-active', i === index ); } );
 			}
 			function goTo( i ) {
 				index = ( i + slides.length ) % slides.length;
 				render();
 			}
 
+			dots.forEach( function ( d, i ) { d.addEventListener( 'click', function () { goTo( i ); } ); } );
 			if ( prevBtn ) prevBtn.addEventListener( 'click', function () { goTo( index - 1 ); } );
 			if ( nextBtn ) nextBtn.addEventListener( 'click', function () { goTo( index + 1 ); } );
 
