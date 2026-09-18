@@ -153,7 +153,6 @@
 		globalsDirty = true;
 		markSavable();
 		applyGlobalsToCanvas();
-		// Refresh the swatch palette in the inspector if it's showing an element.
 	}
 	function applyGlobalsToCanvas() {
 		if ( ! Globals || ! globals ) { return; }
