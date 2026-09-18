@@ -168,10 +168,15 @@
 	transition: background-color 0.25s var(--oss-ease);
 }
 .oss2-hero__nav-btn:first-child { border-left: none; }
+/* Astra's parent stylesheet paints button:focus with its blue theme
+   color; the transparent focus background here must come BEFORE the
+   hover/active rules (same specificity) so hover still wins. */
+.oss2-hero__nav-btn:focus { outline: none; background: transparent; color: var(--oss-white); }
 .oss2-hero__nav-btn:hover,
-.oss2-hero__nav-btn:active { background: var(--oss-primary-dark); }
-.oss2-hero__nav-btn:focus { outline: none; }
+.oss2-hero__nav-btn:active { background: var(--oss-primary-dark); color: var(--oss-white); }
 .oss2-hero__nav-btn:focus-visible { outline: 2px solid var(--oss-white); outline-offset: -4px; }
+.oss2-hero__dot:focus { outline: none; background: rgba(245,240,230,0.45); }
+.oss2-hero__dot.is-active:focus { background: var(--oss-gold); }
 
 @media (max-width: 900px) {
 	.oss2-hero .oss-container { grid-template-columns: 1fr; min-height: 0; }
@@ -537,7 +542,7 @@
 .oss2-give__media img,
 .oss2-give__media .oss-image-placeholder {
 	width: 100%;
-	aspect-ratio: 4 / 3;
+	aspect-ratio: 4 / 5;
 	object-fit: cover;
 	display: block;
 	border-radius: 22px;

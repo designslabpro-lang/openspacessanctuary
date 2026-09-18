@@ -36,7 +36,19 @@ function oss_home_content_menu() {
 add_action( 'admin_menu', 'oss_home_content_menu' );
 
 function oss_home_content_register() {
-	register_setting( 'oss_home_content_group', OSS_HOME_OPTION, 'oss_home_content_sanitize' );
+	register_setting( 'oss_home_content_group', OSS_HOME_OPTION, array(
+		'type'              => 'object',
+		'sanitize_callback' => 'oss_home_content_sanitize',
+		// Exposed on /wp/v2/settings (admin-only) so the live site's content
+		// can be synced with a single authenticated REST call instead of
+		// hand-editing the database.
+		'show_in_rest'      => array(
+			'schema' => array(
+				'type'                 => 'object',
+				'additionalProperties' => true,
+			),
+		),
+	) );
 }
 add_action( 'admin_init', 'oss_home_content_register' );
 
