@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'OSS_CHILD_VERSION', '1.9.3' );
+define( 'OSS_CHILD_VERSION', '1.9.4' );
 define( 'OSS_CHILD_DIR', get_stylesheet_directory() );
 define( 'OSS_CHILD_URI', get_stylesheet_directory_uri() );
 

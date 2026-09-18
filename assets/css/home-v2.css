@@ -56,7 +56,8 @@
 .oss2-hero__panel p { color: var(--oss-bg); }
 .oss2-hero__panel h1 { font-size: clamp(2rem, 2.7vw, 2.85rem); line-height: 1.15; margin-bottom: 0.85rem; }
 
-.oss2-hero__body p { max-width: 46ch; color: rgba(245,240,230,0.88); margin-bottom: 0; }
+.oss2-hero__body p { max-width: 50ch; color: rgba(245,240,230,0.88); margin-bottom: 1em; }
+.oss2-hero__body p:last-child { margin-bottom: 0; }
 
 .oss2-hero__actions {
 	display: flex;
