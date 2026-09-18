@@ -107,7 +107,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 	</div>
 </section>
 
-<section class="oss-section oss-section--cream">
+<section class="oss-section oss-section--cream oss2-programs-section">
 	<div class="oss-container">
 		<div class="oss-section-heading oss-section-heading--center" style="text-align:center;margin-left:auto;margin-right:auto;">
 			<span class="oss-eyebrow"><?php esc_html_e( 'What We Offer', 'astra-child' ); ?></span>

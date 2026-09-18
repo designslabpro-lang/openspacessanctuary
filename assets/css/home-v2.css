@@ -277,6 +277,53 @@
 }
 
 /* -------------------------------------------------------------------- */
+/* Our Programs — same colorful-card language as Who We Serve, but      */
+/* keeps the real program photo up top instead of a solid fill.         */
+/* Scoped to .oss2-programs-section so the shared [oss_programs_grid]   */
+/* shortcode still renders plain on the Programs archive page.          */
+/* -------------------------------------------------------------------- */
+
+.oss2-programs-section .oss-card {
+	border-radius: 22px;
+	overflow: hidden;
+	box-shadow: var(--oss-shadow-md);
+	border: none;
+	transition: transform 0.3s var(--oss-ease), box-shadow 0.3s var(--oss-ease);
+}
+.oss2-programs-section .oss-card:hover { transform: translateY(-6px); box-shadow: var(--oss-shadow-lg); }
+.oss2-programs-section .oss-card__image { display: block; aspect-ratio: 4 / 3; overflow: hidden; }
+.oss2-programs-section .oss-card__image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.oss2-programs-section .oss-card__body { padding: 1.6rem 1.5rem; color: var(--oss-white); }
+.oss2-programs-section .oss-card__meta {
+	display: inline-block;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: rgba(255,255,255,0.75);
+	margin-bottom: 0.5rem;
+}
+.oss2-programs-section .oss-card__title { margin-bottom: 0.5rem; }
+.oss2-programs-section .oss-card__title a { color: var(--oss-white); }
+.oss2-programs-section .oss-card__excerpt { color: rgba(255,255,255,0.85); font-size: 0.92rem; }
+.oss2-programs-section .oss-card__link {
+	display: inline-block;
+	margin-top: 0.85rem;
+	font-size: 0.78rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--oss-white);
+	border-bottom: 1px solid rgba(255,255,255,0.5);
+}
+.oss2-programs-section .oss-card__link:hover { color: var(--oss-white); border-color: var(--oss-white); }
+
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+1) .oss-card__body { background: var(--oss-primary); }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+2) .oss-card__body { background: var(--oss-brown); }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+3) .oss-card__body { background: var(--oss-primary-dark); }
+.oss2-programs-section .oss-card-grid > .oss-card:nth-child(4n+4) .oss-card__body { background: var(--oss-gold); }
+
+/* -------------------------------------------------------------------- */
 /* Full-bleed band — Meet Our Horses.                                    */
 /* -------------------------------------------------------------------- */
 
