@@ -16,19 +16,18 @@
 /* -------------------------------------------------------------------- */
 
 .oss2-hero {
-	background: var(--oss-bg);
-	padding: clamp(1.25rem, 3vw, 2.25rem) 0;
+	background: var(--oss-white);
+	padding: 0;
 }
 .oss2-hero .oss-container {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	align-items: stretch;
 	gap: 0;
-	min-height: min(76vh, 620px);
+	min-height: calc(100vh - 94px);
+	max-width: none;
 	background: var(--oss-white);
-	border-radius: var(--oss-radius-lg);
 	overflow: hidden;
-	box-shadow: var(--oss-shadow-lg);
 	position: relative;
 	padding-left: 0;
 	padding-right: 0;
