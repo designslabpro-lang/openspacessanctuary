@@ -13,7 +13,10 @@
 	--lpb-gold: #b49a68;
 }
 
-/* Take over the full admin viewport. */
+/* Take over the full admin viewport (full-screen builder: no admin bar,
+   no menu, no footer — reclaim the space the admin bar would occupy). */
+#wpadminbar { display: none !important; }
+html.wp-toolbar { padding-top: 0 !important; }
 #wpwrap, #wpbody, #wpbody-content { background: #f3f4f5; }
 #adminmenumain, #wpfooter, .update-nag { display: none !important; }
 #wpcontent { margin-left: 0 !important; padding-left: 0 !important; }
