@@ -362,14 +362,14 @@ function oss_home_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
-	wp_add_inline_script( 'jquery-core', "
+	$oss_home_admin_js = <<<'JS'
 		jQuery(function($){
 			// Give a (new or cloned) story row a unique index so its fields
 			// don't collide with an existing row's on save.
 			function reindex($row){
 				var k = 'n' + Date.now() + Math.floor(Math.random() * 1000);
 				$row.find('[name]').each(function(){
-					this.name = this.name.replace(/\\[testimonials\\]\\[[^\\]]+\\]/, '[testimonials][' + k + ']');
+					this.name = this.name.replace(/\[testimonials\]\[[^\]]+\]/, '[testimonials][' + k + ']');
 				});
 			}
 			$('#oss-story-add').on('click', function(){
@@ -381,7 +381,7 @@ function oss_home_content_admin_assets( $hook ) {
 				var $src = $(this).closest('.oss-story-row');
 				var $c = $src.clone();
 				$c.find('textarea').val($src.find('textarea').val());
-				$c.find('input[type=\"text\"]').val($src.find('input[type=\"text\"]').val());
+				$c.find('input[type="text"]').val($src.find('input[type="text"]').val());
 				$c.find('.oss-image-field__id').val($src.find('.oss-image-field__id').val());
 				reindex($c);
 				$src.after($c);
@@ -407,6 +407,7 @@ function oss_home_content_admin_assets( $hook ) {
 				$(this).hide();
 			});
 		});
-	" );
+JS;
+	wp_add_inline_script( 'jquery-core', $oss_home_admin_js );
 }
 add_action( 'admin_enqueue_scripts', 'oss_home_content_admin_assets' );
