@@ -3,8 +3,21 @@
    ========================================================================== */
 
 .oss-footer {
+	position: relative;
 	background: linear-gradient(180deg, var(--oss-bg) 0%, var(--oss-white) 100%);
 	color: var(--oss-text);
+}
+/* Soft gradient rule along the top so the footer reads as separate from the
+   page above it, even when the section above is also light/cream. */
+.oss-footer::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: linear-gradient(90deg, var(--oss-gold-light) 0%, var(--oss-gold) 50%, var(--oss-brown) 100%);
+	opacity: 0.85;
 }
 
 .oss-footer a { color: var(--oss-text); }

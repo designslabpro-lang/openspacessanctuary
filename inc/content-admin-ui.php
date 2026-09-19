@@ -67,6 +67,69 @@ function oss_cadmin_sections_end() {
 }
 
 /**
+ * A labelled text/textarea row for an options-page form table. Generic over the
+ * option name so any content editor can use it.
+ */
+function oss_cadmin_field_row( $option, $key, $value, $label, $type = 'text' ) {
+	$id   = $option . '_' . $key;
+	$name = $option . '[' . $key . ']';
+	echo '<tr><th scope="row"><label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label></th><td>';
+	if ( 'textarea' === $type ) {
+		echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" rows="5" class="large-text">' . esc_textarea( $value ) . '</textarea>';
+	} else {
+		echo '<input type="text" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '" class="large-text">';
+	}
+	echo '</td></tr>';
+}
+
+/**
+ * A media-picker row (attachment id) for an options-page form table.
+ */
+function oss_cadmin_image_row( $option, $key, $id, $label ) {
+	$id  = (int) $id;
+	$src = $id ? wp_get_attachment_image_url( $id, 'medium' ) : '';
+	echo '<tr><th scope="row">' . esc_html( $label ) . '</th><td>';
+	echo '<div class="oss-image-field" data-key="' . esc_attr( $key ) . '">';
+	echo '<img src="' . esc_url( $src ) . '" style="max-width:180px;height:auto;display:' . ( $src ? 'block' : 'none' ) . ';margin-bottom:8px;border:1px solid #ddd;">';
+	echo '<input type="hidden" name="' . esc_attr( $option . '[' . $key . ']' ) . '" class="oss-image-field__id" value="' . esc_attr( $id ) . '">';
+	echo '<p><button type="button" class="button oss-image-field__select">' . esc_html__( 'Select Image', 'astra-child' ) . '</button> ';
+	echo '<button type="button" class="button oss-image-field__remove"' . ( $src ? '' : ' style="display:none;"' ) . '>' . esc_html__( 'Remove', 'astra-child' ) . '</button></p>';
+	echo '</div></td></tr>';
+}
+
+/**
+ * The core media-picker JS for oss_cadmin_image_row() rows. Call from a page's
+ * admin_enqueue hook (after wp_enqueue_media()). Delegated, so it also covers
+ * rows added dynamically.
+ */
+function oss_cadmin_media_js() {
+	$js = <<<'JS'
+		jQuery(function($){
+			$(document).on('click', '.oss-image-field__select', function(e){
+				e.preventDefault();
+				var wrap = $(this).closest('.oss-image-field');
+				var frame = wp.media({ title: 'Select Image', multiple: false });
+				frame.on('select', function(){
+					var att = frame.state().get('selection').first().toJSON();
+					wrap.find('.oss-image-field__id').val(att.id);
+					wrap.find('img').attr('src', att.sizes && att.sizes.medium ? att.sizes.medium.url : att.url).show();
+					wrap.find('.oss-image-field__remove').show();
+				});
+				frame.open();
+			});
+			$(document).on('click', '.oss-image-field__remove', function(e){
+				e.preventDefault();
+				var wrap = $(this).closest('.oss-image-field');
+				wrap.find('.oss-image-field__id').val('');
+				wrap.find('img').hide();
+				$(this).hide();
+			});
+		});
+JS;
+	wp_add_inline_script( 'jquery-core', $js );
+}
+
+/**
  * Enqueue the shared toggle CSS + JS. Safe to call from several pages; the
  * open/closed memory is namespaced per admin page via the ?page= slug.
  */
