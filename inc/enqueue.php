@@ -27,6 +27,13 @@ function oss_child_enqueue_assets() {
 	// Child stylesheet last (allows minor overrides via style.css if ever needed).
 	wp_enqueue_style( 'astra-child-style', get_stylesheet_uri(), array( 'oss-responsive' ), OSS_CHILD_VERSION );
 
+	// Global Gravity Forms brand styling — loaded site-wide whenever Gravity
+	// Forms is active, so ANY [gravityform] shortcode is auto-styled. Scoped to
+	// .gform_wrapper, so it never touches non-form elements.
+	if ( class_exists( 'GFForms' ) ) {
+		wp_enqueue_style( 'oss-gravity-forms', OSS_CHILD_URI . '/assets/css/gravity-forms.css', array( 'astra-child-style' ), OSS_CHILD_VERSION );
+	}
+
 	wp_enqueue_script( 'oss-main', OSS_CHILD_URI . '/assets/js/main.js', array(), OSS_CHILD_VERSION, true );
 
 	$oss_v2_templates = array(
