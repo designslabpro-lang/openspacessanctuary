@@ -2,6 +2,16 @@
    Open Spaces Sanctuary — Design Tokens & Base Styles
    ========================================================================== */
 
+/* Mellos — self-hosted display font used for all headings. */
+@font-face {
+	font-family: 'Mellos';
+	src: url('../fonts/Mellos.ttf') format('truetype'),
+	     url('../fonts/Mellos.otf') format('opentype');
+	font-weight: 400 700;
+	font-style: normal;
+	font-display: swap;
+}
+
 :root {
 	--oss-bg: #F5F0E6;
 	--oss-primary: #596B58;
@@ -12,7 +22,7 @@
 	--oss-text: #353A35;
 	--oss-white: #FFFFFF;
 
-	--oss-font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+	--oss-font-heading: 'Mellos', 'Playfair Display', Georgia, 'Times New Roman', serif;
 	--oss-font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
 	--oss-section-space: clamp(3.5rem, 6vw, 7rem);

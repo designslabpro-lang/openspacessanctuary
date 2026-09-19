@@ -48,7 +48,7 @@ function oss_lpb_default_globals() {
 			'button'     => '#596B58',
 		),
 		'fonts'  => array(
-			'heading' => "'Playfair Display', Georgia, serif",
+			'heading' => "'Mellos', 'Playfair Display', Georgia, serif",
 			'body'    => "'Montserrat', -apple-system, sans-serif",
 		),
 		'tags'   => array(
