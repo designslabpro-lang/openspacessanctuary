@@ -135,6 +135,6 @@
 .oss-mobile-overlay {
 	display: none;
 	position: fixed; inset: 0; background: rgba(53,58,53,0.5);
-	z-index: 1000; opacity: 0; transition: opacity 0.3s ease;
+	z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
 }
-.oss-mobile-overlay.is-open { opacity: 1; }
+.oss-mobile-overlay.is-open { opacity: 1; pointer-events: auto; }

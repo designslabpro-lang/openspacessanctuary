@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="oss-footer__col">
 						<h3><?php esc_html_e( 'Contact', 'astra-child' ); ?></h3>
 						<ul>
-							<li><?php echo esc_html( get_theme_mod( 'oss_address', '' ) ); ?></li>
+							<li><?php echo esc_html( get_theme_mod( 'oss_address', 'PO Box 129, Citra, FL 32113' ) ); ?></li>
 							<li><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', get_theme_mod( 'oss_phone', '' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'oss_phone', '' ) ); ?></a></li>
 							<li><a href="mailto:<?php echo esc_attr( get_theme_mod( 'oss_email', '' ) ); ?>"><?php echo esc_html( get_theme_mod( 'oss_email', '' ) ); ?></a></li>
 							<li><?php echo esc_html( get_theme_mod( 'oss_hours', '' ) ); ?></li>

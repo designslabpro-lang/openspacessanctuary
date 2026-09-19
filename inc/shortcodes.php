@@ -136,8 +136,8 @@ function oss_child_contact_info_shortcode() {
 	?>
 	<div class="oss-contact-info">
 		<dl>
-			<dt><?php esc_html_e( 'Address', 'astra-child' ); ?></dt>
-			<dd><?php echo esc_html( get_theme_mod( 'oss_address', '' ) ); ?></dd>
+			<dt><?php esc_html_e( 'Mailing Address', 'astra-child' ); ?></dt>
+			<dd><?php echo esc_html( get_theme_mod( 'oss_address', 'PO Box 129, Citra, FL 32113' ) ); ?></dd>
 			<dt><?php esc_html_e( 'Phone', 'astra-child' ); ?></dt>
 			<dd><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', get_theme_mod( 'oss_phone', '' ) ) ); ?>"><?php echo esc_html( get_theme_mod( 'oss_phone', '' ) ); ?></a></dd>
 			<dt><?php esc_html_e( 'Email', 'astra-child' ); ?></dt>
