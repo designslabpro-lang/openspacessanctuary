@@ -366,3 +366,89 @@ a.oss2-serve-card .oss2-serve-card__label::after { content: " \2192"; opacity: 0
 	border-color: var(--oss-gold-light) !important;
 	transform: translateY(-2px);
 }
+
+/* ==========================================================================
+   Single Program page (V2) — full 1300px content width + extra sections.
+   ========================================================================== */
+.oss2-prose { font-size: 1.05rem; line-height: 1.8; color: var(--oss-text); }
+.oss2-prose > * + * { margin-top: 1.1em; }
+.oss2-prose h2, .oss2-prose h3 { margin-top: 1.6em; margin-bottom: 0.4em; }
+.oss2-prose img { border-radius: var(--oss-radius-lg, 20px); height: auto; }
+
+.oss-prog-facts {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+	gap: 1.25rem;
+	margin-top: 1.75rem;
+}
+.oss-prog-fact {
+	background: var(--oss-bg);
+	border: 1px solid rgba(117, 91, 69, 0.14);
+	border-radius: var(--oss-radius-lg, 20px);
+	padding: 1.6rem 1.5rem;
+	text-align: center;
+}
+.oss-prog-fact__label { display: block; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--oss-gold); font-weight: 700; margin-bottom: 0.5rem; }
+.oss-prog-fact__value { display: block; font-family: var(--oss-font-heading); font-size: 1.2rem; color: var(--oss-text); line-height: 1.3; }
+
+.oss-prog-checklist {
+	list-style: none;
+	margin: 1.75rem 0 0;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 0.85rem 2.5rem;
+}
+.oss-prog-checklist li {
+	position: relative;
+	padding-left: 2.1rem;
+	line-height: 1.6;
+	color: var(--oss-text);
+	font-size: 1rem;
+}
+.oss-prog-checklist li::before {
+	content: "\2713";
+	position: absolute;
+	left: 0;
+	top: 0.1em;
+	width: 1.45rem;
+	height: 1.45rem;
+	line-height: 1.45rem;
+	text-align: center;
+	border-radius: 50%;
+	background: rgba(89, 107, 88, 0.12);
+	color: var(--oss-primary);
+	font-size: 0.8rem;
+	font-weight: 700;
+}
+
+.oss-prog-cta { background: var(--oss-bg); }
+.oss-prog-cta__panel {
+	background: linear-gradient(165deg, var(--oss-primary-dark) 0%, #2a3126 100%);
+	border-radius: 26px;
+	padding: clamp(2.25rem, 5vw, 3.5rem);
+	text-align: center;
+	color: var(--oss-white);
+	box-shadow: var(--oss-shadow-lg);
+}
+.oss-prog-cta__panel h2 { color: var(--oss-white); margin-bottom: 0.5rem; }
+.oss-prog-cta__panel p { color: rgba(245, 240, 230, 0.85); margin: 0 auto 1.5rem; max-width: 560px; }
+.oss-prog-cta__actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+/* CTA buttons need light-on-dark treatment on the program CTA panel. */
+.oss-prog-cta__panel .oss-btn--primary {
+	background: var(--oss-gold);
+	color: var(--oss-primary-dark);
+	border-color: var(--oss-gold);
+}
+.oss-prog-cta__panel .oss-btn--primary:hover {
+	background: var(--oss-gold-light);
+	border-color: var(--oss-gold-light);
+}
+.oss-prog-cta__panel .oss-btn--secondary {
+	border-color: var(--oss-bg);
+	color: var(--oss-bg);
+}
+.oss-prog-cta__panel .oss-btn--secondary:hover {
+	background: rgba(245, 240, 230, 0.12);
+	color: var(--oss-white);
+}
