@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'OSS_CHILD_VERSION', '1.20.2' );
+define( 'OSS_CHILD_VERSION', '1.20.3' );
 define( 'OSS_CHILD_DIR', get_stylesheet_directory() );
 define( 'OSS_CHILD_URI', get_stylesheet_directory_uri() );
 
@@ -17,6 +17,7 @@ require_once OSS_CHILD_DIR . '/inc/cpt-events.php';
 require_once OSS_CHILD_DIR . '/inc/cpt-programs.php';
 require_once OSS_CHILD_DIR . '/inc/shortcodes.php';
 require_once OSS_CHILD_DIR . '/inc/helpers.php';
+require_once OSS_CHILD_DIR . '/inc/content-admin-ui.php';
 require_once OSS_CHILD_DIR . '/inc/homepage-content.php';
 require_once OSS_CHILD_DIR . '/inc/homepage-content-admin.php';
 require_once OSS_CHILD_DIR . '/inc/about-content.php';

@@ -121,22 +121,24 @@ function oss_events_content_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Events & Retreats', 'astra-child' ); ?></h1>
 		<p><?php esc_html_e( 'Events shown on the Events & Retreats page as a timeline. Add, edit, or remove events here — no page builder, no code. Rows without a title are dropped on save.', 'astra-child' ); ?></p>
-		<form method="post" action="options.php">
+		<?php oss_cadmin_toolbar(); ?>
+			<form method="post" action="options.php">
 			<?php settings_fields( 'oss_events_content_group' ); ?>
 
-			<h2><?php esc_html_e( 'Page Banner', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ) ); ?>
 			<table class="form-table">
 				<tr><th scope="row"><label for="oss_events_heading"><?php esc_html_e( 'Heading', 'astra-child' ); ?></label></th><td><input type="text" id="oss_events_heading" class="large-text" name="<?php echo esc_attr( OSS_EVENTS_OPTION ); ?>[heading]" value="<?php echo esc_attr( oss_events_get( 'heading' ) ); ?>"></td></tr>
 				<tr><th scope="row"><label for="oss_events_intro"><?php esc_html_e( 'Intro', 'astra-child' ); ?></label></th><td><textarea id="oss_events_intro" class="large-text" rows="3" name="<?php echo esc_attr( OSS_EVENTS_OPTION ); ?>[intro]"><?php echo esc_textarea( oss_events_get( 'intro' ) ); ?></textarea></td></tr>
 			</table>
 
-			<h2><?php esc_html_e( 'Events', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'events', __( 'Events', 'astra-child' ) ); ?>
 			<div id="oss-event-rows">
 				<?php foreach ( array_values( $events ) as $i => $row ) { oss_events_content_row( $i, $row ); } ?>
 			</div>
 			<p><button type="button" class="button button-secondary" id="oss-event-add"><?php esc_html_e( '+ Add Event', 'astra-child' ); ?></button></p>
 			<template id="oss-event-row-template"><?php oss_events_content_row( '__i__', array() ); ?></template>
 
+			<?php oss_cadmin_sections_end(); ?>
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -148,6 +150,7 @@ function oss_events_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_toggle_assets();
 	wp_add_inline_script( 'jquery-core', "
 		jQuery(function($){
 			$('#oss-event-add').on('click', function(){

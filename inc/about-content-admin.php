@@ -94,10 +94,11 @@ function oss_about_content_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'About Page Content', 'astra-child' ); ?></h1>
 		<p><?php esc_html_e( 'Edit every piece of About page text and imagery here — no page builder, no code.', 'astra-child' ); ?></p>
-		<form method="post" action="options.php">
+		<?php oss_cadmin_toolbar(); ?>
+			<form method="post" action="options.php">
 			<?php settings_fields( 'oss_about_content_group' ); ?>
 
-			<h2><?php esc_html_e( 'Page Banner', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ) ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -107,7 +108,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Our Story', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'our-story', __( 'Our Story', 'astra-child' ) ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'story_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -117,7 +118,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'The Healing Power of Horses', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'the-healing-power-of-horses', __( 'The Healing Power of Horses', 'astra-child' ) ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'philosophy_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -128,7 +129,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Meet Our Founder', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'meet-our-founder', __( 'Meet Our Founder', 'astra-child' ) ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'founder_heading', __( 'Eyebrow', 'astra-child' ) );
@@ -137,7 +138,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Final CTA', 'astra-child' ); ?></h2>
+			<?php oss_cadmin_section( 'final-cta', __( 'Final CTA', 'astra-child' ) ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'final_heading', __( 'Heading', 'astra-child' ) );
@@ -147,6 +148,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
+			<?php oss_cadmin_sections_end(); ?>
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -158,6 +160,7 @@ function oss_about_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_toggle_assets();
 	wp_add_inline_script( 'jquery-core', "
 		jQuery(function($){
 			$('.oss-image-field__select').on('click', function(e){
