@@ -201,10 +201,17 @@ function oss_home_content_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Homepage Content', 'astra-child' ); ?></h1>
 		<p><?php esc_html_e( 'Edit every piece of homepage text and imagery here — no page builder, no code. Content here mirrors the approved copy; wording fields are still editable if something needs a small correction.', 'astra-child' ); ?></p>
+		<p class="oss-sections-toolbar">
+			<button type="button" class="button" id="oss-sections-expand"><?php esc_html_e( 'Expand all', 'astra-child' ); ?></button>
+			<button type="button" class="button" id="oss-sections-collapse"><?php esc_html_e( 'Collapse all', 'astra-child' ); ?></button>
+			<span class="description"><?php esc_html_e( 'Each homepage section below is a toggle. Open the one you want to edit; your open/closed choices are remembered after saving.', 'astra-child' ); ?></span>
+		</p>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'oss_home_content_group' ); ?>
 
-			<h2><?php esc_html_e( 'Hero', 'astra-child' ); ?></h2>
+			<details class="oss-section" id="oss-section-hero">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Hero', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -222,7 +229,11 @@ function oss_home_content_page() {
 			</table>
 			<p class="description"><?php esc_html_e( 'The V2 homepage preview shows these as a rotating slideshow. Leave Photo 3 empty to show just two.', 'astra-child' ); ?></p>
 
-			<h2><?php esc_html_e( 'The Healing Power of Horses', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-the-healing-power-of-horses">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'The Healing Power of Horses', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'power_heading', __( 'Heading', 'astra-child' ) );
@@ -234,7 +245,11 @@ function oss_home_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Who We Serve', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-who-we-serve">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Who We Serve', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'serve_heading', __( 'Heading', 'astra-child' ) );
@@ -265,7 +280,11 @@ function oss_home_content_page() {
 				<?php oss_home_content_field_row( 'serve_closing', __( 'Closing Line', 'astra-child' ) ); ?>
 			</table>
 
-			<h2><?php esc_html_e( 'Our Programs', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-our-programs">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Our Programs', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'programs_heading', __( 'Heading', 'astra-child' ) );
@@ -280,7 +299,11 @@ function oss_home_content_page() {
 				?></p></td></tr>
 			</table>
 
-			<h2><?php esc_html_e( 'Meet Our Horses', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-meet-our-horses">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Meet Our Horses', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'horses_heading', __( 'Heading', 'astra-child' ) );
@@ -290,7 +313,11 @@ function oss_home_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Our Founder', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-our-founder">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Our Founder', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'founder_heading', __( 'Heading', 'astra-child' ) );
@@ -301,7 +328,11 @@ function oss_home_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Stories of Hope', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-stories-of-hope">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Stories of Hope', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php oss_home_content_field_row( 'stories_heading', __( 'Heading', 'astra-child' ) ); ?>
 				<tr>
@@ -317,7 +348,11 @@ function oss_home_content_page() {
 				</tr>
 			</table>
 
-			<h2><?php esc_html_e( 'Help Us Change Lives', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-help-us-change-lives">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Help Us Change Lives', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'donate_heading', __( 'Heading', 'astra-child' ) );
@@ -328,7 +363,11 @@ function oss_home_content_page() {
 				?>
 			</table>
 
-			<h2><?php esc_html_e( 'Stay Connected', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-stay-connected">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Stay Connected', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'connect_heading', __( 'Heading', 'astra-child' ) );
@@ -337,7 +376,11 @@ function oss_home_content_page() {
 				<tr><th></th><td><p class="description"><?php esc_html_e( 'The signup form itself is the [oss_newsletter_signup] shortcode — connect a mailing list plugin any time and it activates automatically.', 'astra-child' ); ?></p></td></tr>
 			</table>
 
-			<h2><?php esc_html_e( 'Final CTA', 'astra-child' ); ?></h2>
+			</div></details>
+
+			<details class="oss-section" id="oss-section-final-cta">
+				<summary><span class="oss-section__title"><?php esc_html_e( 'Final CTA', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
+				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'final_heading', __( 'Heading', 'astra-child' ) );
@@ -351,6 +394,8 @@ function oss_home_content_page() {
 				?>
 			</table>
 
+			</div></details>
+
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -362,7 +407,51 @@ function oss_home_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+
+	// Collapsible section toggles — styled like core postboxes.
+	$oss_home_admin_css = <<<'CSS'
+		.oss-sections-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px;}
+		.oss-sections-toolbar .description{margin-left:6px;}
+		.oss-section{background:#fff;border:1px solid #c3c4c7;box-shadow:0 1px 1px rgba(0,0,0,.04);margin:0 0 12px;max-width:1100px;}
+		.oss-section > summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:14px;font-weight:600;line-height:1.4;user-select:none;}
+		.oss-section > summary::-webkit-details-marker{display:none;}
+		.oss-section > summary::before{content:"";display:inline-block;width:8px;height:8px;border-right:2px solid #50575e;border-bottom:2px solid #50575e;transform:rotate(-45deg);transition:transform .15s ease;margin:0 4px 0 2px;flex:0 0 auto;}
+		.oss-section[open] > summary::before{transform:rotate(45deg);}
+		.oss-section[open] > summary{border-bottom:1px solid #dcdcde;}
+		.oss-section > summary:hover{background:#f6f7f7;}
+		.oss-section > summary:focus-visible{outline:2px solid #2271b1;outline-offset:-2px;}
+		.oss-section__title{flex:1 1 auto;}
+		.oss-section__hint{font-weight:400;font-size:12px;color:#787c82;}
+		.oss-section[open] .oss-section__hint{display:none;}
+		.oss-section__body{padding:0 16px 8px;}
+		.oss-section__body .form-table{margin-top:0;}
+CSS;
+	wp_register_style( 'oss-home-content-admin', false, array(), null );
+	wp_enqueue_style( 'oss-home-content-admin' );
+	wp_add_inline_style( 'oss-home-content-admin', $oss_home_admin_css );
+
 	$oss_home_admin_js = <<<'JS'
+		jQuery(function($){
+			// Section toggles: remember which ones are open (per browser) so the
+			// section you were editing is still open after Save reloads the page.
+			var STORE = 'ossHomeContentOpenSections';
+			var $sections = $('.oss-section');
+			function readOpen(){
+				try { return JSON.parse(window.localStorage.getItem(STORE) || '[]'); } catch (e) { return []; }
+			}
+			function saveOpen(){
+				var ids = $sections.filter('[open]').map(function(){ return this.id; }).get();
+				try { window.localStorage.setItem(STORE, JSON.stringify(ids)); } catch (e) {}
+			}
+			var open = readOpen();
+			$sections.each(function(){ this.open = open.indexOf(this.id) !== -1; });
+			if (window.location.hash && $(window.location.hash).is('.oss-section')) {
+				$(window.location.hash).prop('open', true);
+			}
+			$sections.on('toggle', saveOpen);
+			$('#oss-sections-expand').on('click', function(){ $sections.prop('open', true); saveOpen(); });
+			$('#oss-sections-collapse').on('click', function(){ $sections.prop('open', false); saveOpen(); });
+		});
 		jQuery(function($){
 			// Give a (new or cloned) story row a unique index so its fields
 			// don't collide with an existing row's on save.
