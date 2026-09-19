@@ -23,12 +23,12 @@
 	--gf-ctrl-border-color-focus: var(--oss-gold);
 	--gf-ctrl-radius: var(--oss-radius);
 	--gf-ctrl-label-color-primary: var(--oss-brown);
-	--gf-ctrl-btn-bg-color-primary: var(--oss-primary);
-	--gf-ctrl-btn-bg-color-hover-primary: var(--oss-primary-dark);
-	--gf-ctrl-btn-border-color-primary: var(--oss-primary);
-	--gf-ctrl-btn-border-color-hover-primary: var(--oss-primary-dark);
-	--gf-ctrl-btn-color-primary: var(--oss-bg);
-	--gf-ctrl-btn-color-hover-primary: var(--oss-bg);
+	--gf-ctrl-btn-bg-color-primary: var(--oss-gold);
+	--gf-ctrl-btn-bg-color-hover-primary: var(--oss-gold-light);
+	--gf-ctrl-btn-border-color-primary: var(--oss-gold);
+	--gf-ctrl-btn-border-color-hover-primary: var(--oss-gold-light);
+	--gf-ctrl-btn-color-primary: var(--oss-primary-dark);
+	--gf-ctrl-btn-color-hover-primary: var(--oss-primary-dark);
 	--gf-ctrl-btn-radius: var(--oss-radius);
 	--gf-ctrl-btn-font-family: var(--oss-font-body);
 	--gf-ctrl-btn-font-size: 0.85rem;
@@ -148,9 +148,9 @@
 	align-items: center;
 	justify-content: center;
 	padding: 14px 28px !important;
-	background: var(--oss-primary) !important;
-	color: var(--oss-bg) !important;
-	border: 1px solid var(--oss-primary) !important;
+	background: var(--oss-gold) !important;
+	color: var(--oss-primary-dark) !important;
+	border: 1px solid var(--oss-gold) !important;
 	border-radius: var(--oss-radius) !important;
 	font-family: var(--oss-font-body) !important;
 	font-size: 0.85rem !important;
@@ -164,8 +164,8 @@
 .gform_wrapper .gform_footer button.gform_button:hover,
 .gform_wrapper input[type="submit"].gform_button:hover,
 .gform_wrapper button.gform_button:hover {
-	background: var(--oss-primary-dark) !important;
-	border-color: var(--oss-primary-dark) !important;
+	background: var(--oss-gold-light) !important;
+	border-color: var(--oss-gold-light) !important;
 	transform: translateY(-2px);
 }
 

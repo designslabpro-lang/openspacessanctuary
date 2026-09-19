@@ -279,12 +279,12 @@ a.oss2-serve-card .oss2-serve-card__label::after { content: " \2192"; opacity: 0
    (its own selectors outrank ours), so set the variables and also force
    the submit button as a belt-and-braces measure. */
 .oss2-contact__card .gform_wrapper {
-	--gf-ctrl-btn-bg-color-primary: var(--oss-primary);
-	--gf-ctrl-btn-bg-color-hover-primary: var(--oss-primary-dark);
-	--gf-ctrl-btn-border-color-primary: var(--oss-primary);
-	--gf-ctrl-btn-border-color-hover-primary: var(--oss-primary-dark);
-	--gf-ctrl-btn-color-primary: var(--oss-bg);
-	--gf-ctrl-btn-color-hover-primary: var(--oss-bg);
+	--gf-ctrl-btn-bg-color-primary: var(--oss-gold);
+	--gf-ctrl-btn-bg-color-hover-primary: var(--oss-gold-light);
+	--gf-ctrl-btn-border-color-primary: var(--oss-gold);
+	--gf-ctrl-btn-border-color-hover-primary: var(--oss-gold-light);
+	--gf-ctrl-btn-color-primary: var(--oss-primary-dark);
+	--gf-ctrl-btn-color-hover-primary: var(--oss-primary-dark);
 	--gf-ctrl-btn-radius: var(--oss-radius);
 	--gf-ctrl-btn-font-family: var(--oss-font-body);
 	--gf-ctrl-btn-font-size: 0.85rem;
@@ -347,9 +347,9 @@ a.oss2-serve-card .oss2-serve-card__label::after { content: " \2192"; opacity: 0
 	display: inline-flex;
 	align-items: center;
 	padding: 15px 28px !important;
-	background: var(--oss-primary) !important;
-	color: var(--oss-bg) !important;
-	border: 1px solid var(--oss-primary) !important;
+	background: var(--oss-gold) !important;
+	color: var(--oss-primary-dark) !important;
+	border: 1px solid var(--oss-gold) !important;
 	border-radius: var(--oss-radius) !important;
 	font-family: var(--oss-font-body) !important;
 	font-size: 0.85rem !important;
@@ -362,7 +362,7 @@ a.oss2-serve-card .oss2-serve-card__label::after { content: " \2192"; opacity: 0
 }
 .oss2-contact__card .gform_wrapper input[type="submit"]:hover,
 .oss2-contact__card .gform_wrapper button.gform_button:hover {
-	background: var(--oss-primary-dark) !important;
-	border-color: var(--oss-primary-dark) !important;
+	background: var(--oss-gold-light) !important;
+	border-color: var(--oss-gold-light) !important;
 	transform: translateY(-2px);
 }
