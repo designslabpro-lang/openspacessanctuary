@@ -67,6 +67,19 @@ function oss2_page_hero( $args ) {
 	<?php
 }
 
+/**
+ * The Stay Connected signup form. Renders Gravity Forms form 2 ("Stay
+ * Connected": Name, Email) when it exists, and nothing otherwise — so the
+ * panel never shows a "form not found" message if the form hasn't been
+ * imported on a given environment yet.
+ */
+function oss_connect_form_html() {
+	if ( class_exists( 'GFAPI' ) && GFAPI::get_form( 2 ) ) {
+		return do_shortcode( '[gravityform id="2" title="false" description="false" ajax="true"]' );
+	}
+	return '';
+}
+
 function oss2_connect_panel() {
 	?>
 	<section class="oss-section oss-section--cream">
@@ -78,7 +91,7 @@ function oss2_connect_panel() {
 					<p><?php esc_html_e( 'Receive stories, upcoming events, healing resources and opportunities to make a difference.', 'astra-child' ); ?></p>
 				</div>
 				<div class="oss2-connect__form">
-					<?php echo do_shortcode( '[oss_newsletter_signup show_name="1" button="Join Our Community"]' ); ?>
+					<?php echo oss_connect_form_html(); ?>
 				</div>
 			</div>
 		</div>

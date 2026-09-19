@@ -204,7 +204,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 				<p><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
 			</div>
 			<div class="oss2-connect__form">
-				<?php echo do_shortcode( '[oss_newsletter_signup show_name="1"]' ); ?>
+				<?php echo oss_connect_form_html(); ?>
 			</div>
 		</div>
 	</div>

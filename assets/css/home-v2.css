@@ -514,6 +514,43 @@
 .oss2-connect .oss-newsletter-form button.oss-btn { flex-shrink: 0; }
 .oss2-connect .oss-newsletter-form__note { color: rgba(245,240,230,0.7); opacity: 1; }
 
+/* Stay Connected — Gravity Form (form 2) on the dark connect panel.
+   Stacked: intro line above, then Name, Email, then the button. */
+.oss2-connect__form .gform_wrapper,
+.oss2-connect__form .gform_wrapper form { margin: 0; }
+.oss2-connect__form .gform_heading { display: none; }
+.oss2-connect__form .gform_fields { display: grid; grid-template-columns: 1fr; row-gap: 0.9rem; gap: 0.9rem; }
+.oss2-connect__form .gfield_label,
+.oss2-connect__form .ginput_complex label,
+.oss2-connect__form legend.gfield_label {
+	color: rgba(245,240,230,0.9); font-family: var(--oss-font-body); font-weight: 600;
+	font-size: 0.8rem; letter-spacing: 0.01em; margin-bottom: 0.35rem; display: block;
+}
+.oss2-connect__form .gfield_required { color: var(--oss-gold-light); }
+.oss2-connect__form input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+.oss2-connect__form textarea {
+	width: 100%; box-sizing: border-box; background: var(--oss-white);
+	border: 1px solid transparent; border-radius: var(--oss-radius, 10px);
+	padding: 0.8rem 1rem; font-family: var(--oss-font-body); font-size: 0.95rem; color: var(--oss-text);
+}
+.oss2-connect__form input:focus, .oss2-connect__form textarea:focus {
+	outline: 2px solid var(--oss-gold); outline-offset: 1px;
+}
+.oss2-connect__form .gfield_description,
+.oss2-connect__form .validation_message { color: rgba(245,240,230,0.85); font-size: 0.8rem; }
+.oss2-connect__form .gfield_error input, .oss2-connect__form .gfield_error textarea { border-color: #e5b3ae; }
+.oss2-connect__form .gform_footer { margin: 1rem 0 0; padding: 0; }
+.oss2-connect__form input[type="submit"],
+.oss2-connect__form button.gform_button {
+	width: 100%; cursor: pointer; border: 0; border-radius: var(--oss-radius, 10px);
+	background: var(--oss-gold); color: var(--oss-primary-dark);
+	font-family: var(--oss-font-heading); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em;
+	padding: 0.85rem 1.5rem; transition: background 0.2s ease, transform 0.2s ease;
+}
+.oss2-connect__form input[type="submit"]:hover,
+.oss2-connect__form button.gform_button:hover { background: var(--oss-gold-light); transform: translateY(-1px); }
+.oss2-connect__form .gform_confirmation_message { color: var(--oss-white); font-weight: 600; line-height: 1.6; }
+
 @media (max-width: 900px) {
 	.oss2-connect { grid-template-columns: 1fr; }
 }
