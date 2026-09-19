@@ -192,7 +192,7 @@ $icons = oss_home_icon_library();
 		<div class="oss-kicker oss-kicker--center"><span class="oss-kicker__line"></span><span class="oss-kicker__num">09</span><span class="oss-kicker__line"></span></div>
 		<h2><?php echo esc_html( oss_home_get( 'connect_heading' ) ); ?></h2>
 		<p style="max-width:560px;margin:0 auto 1.5rem;"><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
-		<?php echo do_shortcode( '[oss_newsletter_signup show_name="1"]' ); ?>
+		<?php echo oss_connect_form_html(); ?>
 	</div>
 </section>
 
