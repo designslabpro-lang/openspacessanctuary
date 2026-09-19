@@ -807,3 +807,15 @@ body.oss-transparent-header .oss-hero { padding-top: 110px; }
 	border: 1px dashed rgba(117,91,69,0.4);
 	color: var(--oss-brown);
 }
+
+/* Default page template (page.php) — compact hero + readable content column. */
+.oss-hero--slim { min-height: 32vh; }
+.oss-content-narrow { max-width: 880px; }
+.oss-content-narrow .oss-prose { font-size: 1.05rem; }
+.oss-content-narrow .oss-prose p,
+.oss-content-narrow .oss-prose li { line-height: 1.85; }
+.oss-content-narrow .oss-prose h2 { font-size: 1.55rem; margin-top: 2.2rem; }
+.oss-content-narrow .oss-prose h3 { font-size: 1.25rem; }
+.oss-content-narrow .oss-prose a { color: var(--oss-primary); text-decoration: underline; text-underline-offset: 2px; }
+.oss-content-narrow .oss-prose a:hover { color: var(--oss-gold); }
+.oss-page-links { margin-top: 2rem; font-size: 0.9rem; color: var(--oss-brown); }
