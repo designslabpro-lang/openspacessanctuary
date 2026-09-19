@@ -28,6 +28,15 @@ function oss_lpb_register_routes() {
 		),
 	) );
 
+	register_rest_route( 'oss-lpb/v1', '/enable/(?P<id>\d+)', array(
+		array(
+			'methods'             => 'POST',
+			'callback'            => 'oss_lpb_rest_enable',
+			'permission_callback' => 'oss_lpb_rest_permission',
+			'args'                => array( 'id' => array( 'validate_callback' => 'absint' ) ),
+		),
+	) );
+
 	register_rest_route( 'oss-lpb/v1', '/globals', array(
 		array(
 			'methods'             => 'GET',
@@ -126,4 +135,26 @@ function oss_lpb_rest_save_globals( WP_REST_Request $request ) {
 	$clean = oss_lpb_sanitize_globals( $body['globals'] );
 	update_option( OSS_LPB_GLOBALS_OPTION, $clean, false );
 	return rest_ensure_response( array( 'saved' => true, 'globals' => $clean, 'time' => current_time( 'H:i:s' ) ) );
+}
+
+/**
+ * Turn the Live Builder on or off for a single page (opt-in rendering).
+ * Enabling only sets a flag; the page's builder document is created lazily by
+ * the renderer. Disabling removes the flag so the page reverts to its assigned
+ * template and original design — the stored document is kept, not destroyed.
+ */
+function oss_lpb_rest_enable( WP_REST_Request $request ) {
+	$post_id = (int) $request['id'];
+	$body    = $request->get_json_params();
+	$enable  = ! is_array( $body ) || ! isset( $body['enabled'] ) ? true : ! empty( $body['enabled'] );
+
+	if ( $enable ) {
+		update_post_meta( $post_id, OSS_LPB_ENABLED_META, 1 );
+	} else {
+		delete_post_meta( $post_id, OSS_LPB_ENABLED_META );
+	}
+
+	return rest_ensure_response( array(
+		'enabled' => (bool) get_post_meta( $post_id, OSS_LPB_ENABLED_META, true ),
+	) );
 }

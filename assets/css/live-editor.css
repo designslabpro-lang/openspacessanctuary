@@ -217,3 +217,24 @@ html.wp-toolbar { padding-top: 0 !important; }
 .oss-lpb-recover__acts { display: flex; gap: 8px; }
 .oss-lpb-btn-ghost.is-danger { color: #b3261e; border-color: #f0c4c0; }
 .oss-lpb-btn-ghost.is-danger:hover { background: #fdeceb; color: #b3261e; }
+
+/* Enable / disable the builder for a page (Phase 6) */
+.oss-lpb-enable {
+	width: 100%; max-width: 640px; margin: 24px auto; padding: 28px 26px; box-sizing: border-box;
+	background: #fff; border: 1px solid var(--lpb-line); border-radius: 12px; text-align: center;
+	box-shadow: 0 6px 24px rgba(0,0,0,0.06);
+}
+.oss-lpb-enable__title { font-size: 18px; font-weight: 700; margin: 0 0 8px; color: var(--lpb-ink); }
+.oss-lpb-enable__body { font-size: 14px; line-height: 1.6; color: #5b616a; margin: 0 0 14px; }
+.oss-lpb-enable__warn {
+	font-size: 13px; line-height: 1.6; color: #7a5b1e; background: #fef6e7; border: 1px solid #f0d9a8;
+	border-radius: 8px; padding: 10px 12px; margin: 0 0 16px; text-align: left;
+}
+.oss-lpb-enable__warn code { font-size: 12px; background: rgba(0,0,0,0.05); padding: 1px 5px; border-radius: 4px; }
+.oss-lpb-enable .oss-lpb-btn-primary { font-size: 14px; padding: 10px 22px; }
+
+.oss-lpb-disable {
+	width: 100%; max-width: 900px; margin: 0 0 14px; padding: 8px 14px; box-sizing: border-box;
+	display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+	background: #eef2ee; border: 1px solid #d6e0d6; border-radius: 8px; font-size: 13px; color: #46543f;
+}

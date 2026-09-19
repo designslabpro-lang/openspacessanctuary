@@ -14,6 +14,10 @@ defined( 'ABSPATH' ) || exit;
 define( 'OSS_LPB_META', '_oss_lpb' );
 define( 'OSS_LPB_AUTOSAVE_META', '_oss_lpb_autosave' );
 define( 'OSS_LPB_GLOBALS_OPTION', 'oss_lpb_globals' );
+// Per-page opt-in: when truthy, the page renders through the Live Builder
+// instead of its assigned template. Absent by default, so no existing page's
+// design changes until it is deliberately enabled.
+define( 'OSS_LPB_ENABLED_META', '_oss_lpb_enabled' );
 
 /**
  * Capability required to use the builder on a page.

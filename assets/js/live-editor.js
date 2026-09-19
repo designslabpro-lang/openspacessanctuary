@@ -125,6 +125,28 @@
 		} );
 	}
 
+	/* ---- enable / disable the builder for this page (Phase 6) ---- */
+	function enablePage( on ) {
+		var btn = on ? document.getElementById( 'oss-lpb-enable' ) : document.getElementById( 'oss-lpb-disable' );
+		if ( btn ) { btn.disabled = true; }
+		status( 'saving', on ? 'Enabling…' : 'Turning off…' );
+		fetch( OSS_LPB.restEnable, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': OSS_LPB.nonce },
+			credentials: 'same-origin',
+			body: JSON.stringify( { enabled: !! on } )
+		} ).then( function ( r ) {
+			if ( ! r.ok ) { return r.json().then( function ( j ) { throw new Error( ( j && j.message ) || ( 'HTTP ' + r.status ) ); } ); }
+			return r.json();
+		} ).then( function () {
+			// Reload the editor shell so it re-renders in the new mode.
+			window.location.reload();
+		} ).catch( function ( err ) {
+			status( 'error', err.message );
+			if ( btn ) { btn.disabled = false; }
+		} );
+	}
+
 	/* ---- history ---- */
 	function syncHistoryButtons() {
 		undoBtn.disabled = ! history.canUndo();
@@ -439,6 +461,19 @@
 
 	window.addEventListener( 'beforeunload', function ( e ) { if ( dirty ) { e.preventDefault(); e.returnValue = ''; } } );
 
-	syncHistoryButtons();
-	load();
+	var enableBtn = document.getElementById( 'oss-lpb-enable' );
+	var disableBtn = document.getElementById( 'oss-lpb-disable' );
+	if ( enableBtn ) { enableBtn.addEventListener( 'click', function () { enablePage( true ); } ); }
+	if ( disableBtn ) { disableBtn.addEventListener( 'click', function () {
+		if ( window.confirm( 'Turn off the Live Builder for this page? It will go back to its normal template and design. Your builder content is kept and returns if you enable it again.' ) ) { enablePage( false ); }
+	} ); }
+
+	if ( OSS_LPB.isBuilder ) {
+		syncHistoryButtons();
+		load();
+	} else {
+		// Not a builder page: only the "Enable" action is meaningful.
+		saveBtn.disabled = true;
+		UI.hint( 'This page isn’t built with the Live Builder yet. Use the panel on the right to enable it, then click elements to edit them.' );
+	}
 } )();

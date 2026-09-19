@@ -25,6 +25,48 @@ function oss_lpb_editor_url( $post_id ) {
 	return admin_url( 'admin.php?page=oss-live-builder&post=' . (int) $post_id );
 }
 
+/**
+ * Whether a page should render through the Live Builder. True when the page is
+ * explicitly enabled (opt-in meta) OR — for backward compatibility — assigned
+ * the Live Builder template. Everything else renders its normal design.
+ */
+function oss_lpb_is_builder_page( $post_id ) {
+	$post_id = (int) $post_id;
+	if ( ! $post_id ) {
+		return false;
+	}
+	if ( get_post_meta( $post_id, OSS_LPB_ENABLED_META, true ) ) {
+		return true;
+	}
+	return 'page-templates/template-live-builder.php' === get_page_template_slug( $post_id );
+}
+
+/**
+ * Whether a page is builder-enabled via the opt-in meta (as opposed to having
+ * the template assigned the old way). Used to offer a "turn off" control.
+ */
+function oss_lpb_is_enabled_via_meta( $post_id ) {
+	return (bool) get_post_meta( (int) $post_id, OSS_LPB_ENABLED_META, true );
+}
+
+/**
+ * Render an opt-in page through the builder template without the user having to
+ * change Page → Attributes → Template. STRICT no-op unless the page carries the
+ * explicit enable flag, so no existing page's design is ever affected.
+ */
+add_filter( 'template_include', 'oss_lpb_template_include', 99 );
+function oss_lpb_template_include( $template ) {
+	if ( ! is_singular( 'page' ) ) {
+		return $template;
+	}
+	$id = get_queried_object_id();
+	if ( ! $id || ! get_post_meta( $id, OSS_LPB_ENABLED_META, true ) ) {
+		return $template; // Not enabled: leave the normal template untouched.
+	}
+	$builder = locate_template( 'page-templates/template-live-builder.php' );
+	return $builder ? $builder : $template;
+}
+
 /* -------------------------------------------------------------------- */
 /* Pages list: "Edit with Live Builder" row action                       */
 /* -------------------------------------------------------------------- */
@@ -33,6 +75,9 @@ add_filter( 'page_row_actions', 'oss_lpb_row_action', 10, 2 );
 function oss_lpb_row_action( $actions, $post ) {
 	if ( 'page' === $post->post_type && oss_lpb_user_can( $post->ID ) ) {
 		$actions['oss_live_builder'] = '<a href="' . esc_url( oss_lpb_editor_url( $post->ID ) ) . '">' . esc_html__( 'Edit with Live Builder', 'astra-child' ) . '</a>';
+		if ( oss_lpb_is_enabled_via_meta( $post->ID ) ) {
+			$actions['oss_live_builder'] .= ' <span aria-hidden="true">·</span> <a href="' . esc_url( oss_lpb_editor_url( $post->ID ) ) . '" title="' . esc_attr__( 'Live Builder is on for this page', 'astra-child' ) . '">' . esc_html__( '(builder on)', 'astra-child' ) . '</a>';
+		}
 	}
 	return $actions;
 }
@@ -42,7 +87,7 @@ add_action( 'admin_bar_menu', 'oss_lpb_admin_bar', 90 );
 function oss_lpb_admin_bar( $bar ) {
 	if ( is_page() && ! oss_lpb_is_canvas() ) {
 		$id = get_queried_object_id();
-		if ( $id && oss_lpb_user_can( $id ) && is_page_template( 'page-templates/template-live-builder.php' ) ) {
+		if ( $id && oss_lpb_user_can( $id ) && oss_lpb_is_builder_page( $id ) ) {
 			$bar->add_node( array(
 				'id'    => 'oss-live-builder',
 				'title' => '✎ ' . __( 'Edit with Live Builder', 'astra-child' ),
@@ -68,7 +113,9 @@ function oss_lpb_render_editor_shell() {
 	}
 	$post        = get_post( $post_id );
 	$canvas_url  = add_query_arg( 'live-builder-canvas', '1', get_permalink( $post_id ) );
-	$is_builder  = 'page-templates/template-live-builder.php' === get_page_template_slug( $post_id );
+	$is_builder    = oss_lpb_is_builder_page( $post_id );
+	$enabled_meta  = oss_lpb_is_enabled_via_meta( $post_id );
+	$page_template = get_page_template_slug( $post_id );
 	?>
 	<div id="oss-lpb-app" class="oss-lpb-app" data-post="<?php echo esc_attr( $post_id ); ?>">
 		<header class="oss-lpb-topbar">
@@ -104,7 +151,28 @@ function oss_lpb_render_editor_shell() {
 			</aside>
 			<main class="oss-lpb-canvas-wrap">
 				<?php if ( ! $is_builder ) : ?>
-					<div class="oss-lpb-notice"><?php esc_html_e( 'This page does not use the Live Builder template yet, so there are no builder elements to edit. Assign the "Live Builder" template to this page (Page → Attributes → Template) to build it here.', 'astra-child' ); ?></div>
+					<?php $has_custom = $page_template && 'page-templates/template-live-builder.php' !== $page_template; ?>
+					<div class="oss-lpb-enable" id="oss-lpb-enable-panel">
+						<h2 class="oss-lpb-enable__title"><?php esc_html_e( 'This page isn’t built with the Live Builder yet', 'astra-child' ); ?></h2>
+						<p class="oss-lpb-enable__body"><?php esc_html_e( 'Turn on the Live Builder to edit this page visually. It stays off for every page until you enable it, so nothing changes for visitors until you do.', 'astra-child' ); ?></p>
+						<?php if ( $has_custom ) : ?>
+							<p class="oss-lpb-enable__warn">
+								<?php
+								printf(
+									/* translators: %s: template file name */
+									esc_html__( 'Heads up: this page currently uses a custom design (%s). Enabling the Live Builder replaces that design with builder content. You can turn it back off to restore the original design.', 'astra-child' ),
+									'<code>' . esc_html( $page_template ) . '</code>'
+								);
+								?>
+							</p>
+						<?php endif; ?>
+						<button type="button" class="oss-lpb-btn-primary" id="oss-lpb-enable"><?php esc_html_e( 'Enable Live Builder for this page', 'astra-child' ); ?></button>
+					</div>
+				<?php elseif ( $enabled_meta ) : ?>
+					<div class="oss-lpb-disable" id="oss-lpb-disable-bar">
+						<span><?php esc_html_e( 'Live Builder is on for this page.', 'astra-child' ); ?></span>
+						<button type="button" class="oss-lpb-btn-ghost is-danger" id="oss-lpb-disable"><?php esc_html_e( 'Turn off (restore normal page)', 'astra-child' ); ?></button>
+					</div>
 				<?php endif; ?>
 				<div class="oss-lpb-recover" id="oss-lpb-recover" hidden>
 					<span class="oss-lpb-recover__msg"><?php esc_html_e( 'Recovered unsaved changes from your last session.', 'astra-child' ); ?></span>
@@ -149,10 +217,12 @@ function oss_lpb_enqueue_editor( $hook ) {
 		'postId'      => $post_id,
 		'rest'        => esc_url_raw( rest_url( 'oss-lpb/v1/doc/' . $post_id ) ),
 		'restGlobals' => esc_url_raw( rest_url( 'oss-lpb/v1/globals' ) ),
+		'restEnable'  => esc_url_raw( rest_url( 'oss-lpb/v1/enable/' . $post_id ) ),
 		'nonce'       => wp_create_nonce( 'wp_rest' ),
 		'schema'      => oss_lpb_schema(),
 		'globals'     => oss_lpb_get_globals(),
 		'canGlobals'  => oss_lpb_user_can_globals(),
+		'isBuilder'   => oss_lpb_is_builder_page( $post_id ),
 	) );
 }
 
@@ -160,7 +230,7 @@ function oss_lpb_enqueue_editor( $hook ) {
    like any component CSS. No builder JS for normal visitors. */
 add_action( 'wp_enqueue_scripts', 'oss_lpb_enqueue_render', 15 );
 function oss_lpb_enqueue_render() {
-	if ( is_page_template( 'page-templates/template-live-builder.php' ) ) {
+	if ( oss_lpb_is_builder_page( get_queried_object_id() ) ) {
 		$ver = defined( 'OSS_CHILD_VERSION' ) ? OSS_CHILD_VERSION : '1';
 		wp_enqueue_style( 'oss-lpb-render', OSS_CHILD_URI . '/assets/css/live-editor-render.css', array( 'oss-global' ), $ver );
 	}
@@ -170,7 +240,7 @@ function oss_lpb_enqueue_render() {
    rules on every builder page (front end + canvas). Pure CSS, no visitor JS. */
 add_action( 'wp_head', 'oss_lpb_print_globals_css', 5 );
 function oss_lpb_print_globals_css() {
-	if ( is_page_template( 'page-templates/template-live-builder.php' ) ) {
+	if ( oss_lpb_is_builder_page( get_queried_object_id() ) ) {
 		echo oss_lpb_globals_css(); // phpcs:ignore WordPress.Security.EscapeOutput -- values sanitized on save.
 	}
 }
@@ -182,8 +252,8 @@ function oss_lpb_enqueue_canvas() {
 		return;
 	}
 	$id = get_queried_object_id();
-	if ( ! oss_lpb_user_can( $id ) ) {
-		return; // Not a permitted editor: behave like a normal page view.
+	if ( ! oss_lpb_user_can( $id ) || ! oss_lpb_is_builder_page( $id ) ) {
+		return; // Not a permitted editor, or not a builder page: normal view.
 	}
 	$ver = defined( 'OSS_CHILD_VERSION' ) ? OSS_CHILD_VERSION : '1';
 	wp_enqueue_style( 'oss-lpb-canvas', OSS_CHILD_URI . '/assets/css/live-editor-canvas.css', array(), $ver );
