@@ -40,7 +40,7 @@
 }
 
 .oss-header__brand { display: flex; align-items: center; }
-.oss-header__brand img { max-height: 64px; width: auto; display: block; }
+.oss-header__brand img { max-height: 74px; width: auto; display: block; }
 .oss-header__brand .site-title {
 	font-family: var(--oss-font-heading);
 	font-size: 1.4rem;
