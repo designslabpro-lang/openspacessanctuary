@@ -258,23 +258,8 @@ function oss_home_content_page() {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Audience Cards', 'astra-child' ); ?></th>
 					<td>
-						<table class="widefat" style="max-width:700px;">
-							<thead><tr><th style="width:140px;"><?php esc_html_e( 'Icon', 'astra-child' ); ?></th><th><?php esc_html_e( 'Label', 'astra-child' ); ?></th></tr></thead>
-							<tbody>
-							<?php foreach ( $items as $i => $row ) : ?>
-								<tr>
-									<td>
-										<select name="<?php echo esc_attr( OSS_HOME_OPTION . '[serve_items][' . $i . '][icon]' ); ?>">
-											<?php foreach ( array_keys( $icons ) as $icon_key ) : ?>
-												<option value="<?php echo esc_attr( $icon_key ); ?>" <?php selected( $row['icon'], $icon_key ); ?>><?php echo esc_html( ucfirst( $icon_key ) ); ?></option>
-											<?php endforeach; ?>
-										</select>
-									</td>
-									<td><input type="text" class="large-text" name="<?php echo esc_attr( OSS_HOME_OPTION . '[serve_items][' . $i . '][label]' ); ?>" value="<?php echo esc_attr( $row['label'] ); ?>"></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody>
-						</table>
+						<p class="description" style="margin:0 0 10px;"><?php esc_html_e( 'Add, duplicate, reorder, or remove cards. A card with no label is dropped on save.', 'astra-child' ); ?></p>
+						<?php oss_cadmin_card_repeater( OSS_HOME_OPTION, 'serve_items', $items, $icons, false, __( '+ Add Audience Card', 'astra-child' ) ); ?>
 					</td>
 				</tr>
 				<?php oss_home_content_field_row( 'serve_closing', __( 'Closing Line', 'astra-child' ) ); ?>
@@ -407,6 +392,7 @@ function oss_home_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_repeater_js();
 
 	// Collapsible section toggles — styled like core postboxes.
 	$oss_home_admin_css = <<<'CSS'

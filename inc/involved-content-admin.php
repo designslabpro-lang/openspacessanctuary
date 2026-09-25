@@ -103,29 +103,8 @@ function oss_involved_content_page() {
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Cards', 'astra-child' ); ?></th>
 					<td>
-						<p class="description" style="margin-bottom:10px;"><?php esc_html_e( 'Each card links somewhere (the contact page by default). Clear a label to remove that card on save.', 'astra-child' ); ?></p>
-						<table class="widefat" style="max-width:820px;">
-							<thead><tr>
-								<th style="width:150px;"><?php esc_html_e( 'Icon', 'astra-child' ); ?></th>
-								<th><?php esc_html_e( 'Label', 'astra-child' ); ?></th>
-								<th style="width:220px;"><?php esc_html_e( 'Link', 'astra-child' ); ?></th>
-							</tr></thead>
-							<tbody>
-							<?php foreach ( $ways as $i => $row ) : ?>
-								<tr>
-									<td>
-										<select name="<?php echo esc_attr( $o . '[ways][' . $i . '][icon]' ); ?>">
-											<?php foreach ( array_keys( $icons ) as $icon_key ) : ?>
-												<option value="<?php echo esc_attr( $icon_key ); ?>" <?php selected( isset( $row['icon'] ) ? $row['icon'] : '', $icon_key ); ?>><?php echo esc_html( ucfirst( $icon_key ) ); ?></option>
-											<?php endforeach; ?>
-										</select>
-									</td>
-									<td><input type="text" class="large-text" name="<?php echo esc_attr( $o . '[ways][' . $i . '][label]' ); ?>" value="<?php echo esc_attr( isset( $row['label'] ) ? $row['label'] : '' ); ?>"></td>
-									<td><input type="text" class="regular-text" name="<?php echo esc_attr( $o . '[ways][' . $i . '][url]' ); ?>" value="<?php echo esc_attr( isset( $row['url'] ) ? $row['url'] : '/contact/' ); ?>"></td>
-								</tr>
-							<?php endforeach; ?>
-							</tbody>
-						</table>
+						<p class="description" style="margin-bottom:10px;"><?php esc_html_e( 'Add, duplicate, reorder, or remove cards. Each links somewhere (the contact page by default); a card with no label is dropped on save.', 'astra-child' ); ?></p>
+						<?php oss_cadmin_card_repeater( $o, 'ways', $ways, $icons, true, __( '+ Add Card', 'astra-child' ) ); ?>
 					</td>
 				</tr>
 			</table>
@@ -156,5 +135,6 @@ function oss_involved_content_admin_assets( $hook ) {
 	wp_enqueue_media();
 	oss_cadmin_toggle_assets();
 	oss_cadmin_media_js();
+	oss_cadmin_repeater_js();
 }
 add_action( 'admin_enqueue_scripts', 'oss_involved_content_admin_assets' );

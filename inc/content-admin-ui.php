@@ -130,6 +130,85 @@ JS;
 }
 
 /**
+ * One repeatable icon/label(/link) card row. Pair with oss_cadmin_card_repeater()
+ * and oss_cadmin_repeater_js(). Duplicate + Remove buttons per row.
+ */
+function oss_cadmin_card_row( $option, $field, $i, $row, $icons, $with_url = false ) {
+	$row = wp_parse_args( (array) $row, array( 'icon' => 'compass', 'label' => '', 'url' => '/contact/' ) );
+	$n   = $option . '[' . $field . '][' . $i . ']';
+	?>
+	<div class="oss-repeater-row" style="border:1px solid #ccd0d4;background:#fff;padding:12px 16px;margin-bottom:12px;max-width:760px;">
+		<p style="margin:0 0 8px;"><label><strong><?php esc_html_e( 'Icon', 'astra-child' ); ?></strong><br>
+			<select name="<?php echo esc_attr( $n . '[icon]' ); ?>">
+				<?php foreach ( array_keys( $icons ) as $ik ) : ?>
+					<option value="<?php echo esc_attr( $ik ); ?>" <?php selected( $row['icon'], $ik ); ?>><?php echo esc_html( ucfirst( $ik ) ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</label></p>
+		<p style="margin:0 0 8px;"><label><strong><?php esc_html_e( 'Label', 'astra-child' ); ?></strong><br>
+			<input type="text" class="large-text" name="<?php echo esc_attr( $n . '[label]' ); ?>" value="<?php echo esc_attr( $row['label'] ); ?>"></label></p>
+		<?php if ( $with_url ) : ?>
+			<p style="margin:0 0 8px;"><label><strong><?php esc_html_e( 'Link', 'astra-child' ); ?></strong><br>
+				<input type="text" class="regular-text" name="<?php echo esc_attr( $n . '[url]' ); ?>" value="<?php echo esc_attr( $row['url'] ); ?>"></label></p>
+		<?php endif; ?>
+		<p style="margin:0;">
+			<button type="button" class="button oss-repeater-row__duplicate"><?php esc_html_e( 'Duplicate', 'astra-child' ); ?></button>
+			<button type="button" class="button-link-delete oss-repeater-row__remove" style="margin-left:10px;"><?php esc_html_e( 'Remove', 'astra-child' ); ?></button>
+		</p>
+	</div>
+	<?php
+}
+
+/**
+ * A repeatable list of card rows with an "Add" button. Rows with an empty label
+ * are dropped on save (the page's sanitizer handles that).
+ */
+function oss_cadmin_card_repeater( $option, $field, $rows, $icons, $with_url = false, $add_label = '' ) {
+	$add_label = $add_label ? $add_label : __( '+ Add Card', 'astra-child' );
+	?>
+	<div class="oss-repeater" data-field="<?php echo esc_attr( $field ); ?>">
+		<div class="oss-repeater__rows">
+			<?php foreach ( array_values( (array) $rows ) as $i => $row ) { oss_cadmin_card_row( $option, $field, $i, $row, $icons, $with_url ); } ?>
+		</div>
+		<p><button type="button" class="button button-secondary oss-repeater__add"><?php echo esc_html( $add_label ); ?></button></p>
+		<template class="oss-repeater__tpl"><?php oss_cadmin_card_row( $option, $field, '__i__', array(), $icons, $with_url ); ?></template>
+	</div>
+	<?php
+}
+
+/**
+ * Delegated add/duplicate/remove behaviour for oss_cadmin_card_repeater(). Call
+ * from a page's admin_enqueue hook.
+ */
+function oss_cadmin_repeater_js() {
+	$js = <<<'JS'
+		jQuery(function($){
+			function reindex($row, field){
+				var k = 'n' + Date.now() + Math.floor(Math.random() * 1000);
+				var re = new RegExp('\\[' + field + '\\]\\[[^\\]]+\\]');
+				$row.find('[name]').each(function(){ this.name = this.name.replace(re, '[' + field + '][' + k + ']'); });
+			}
+			$(document).on('click', '.oss-repeater__add', function(){
+				var $rep = $(this).closest('.oss-repeater');
+				var html = $rep.find('.oss-repeater__tpl').html().replace(/__i__/g, 'n' + Date.now());
+				$rep.find('.oss-repeater__rows').append(html);
+			});
+			$(document).on('click', '.oss-repeater-row__duplicate', function(){
+				var $row = $(this).closest('.oss-repeater-row');
+				var $rep = $row.closest('.oss-repeater');
+				var $c = $row.clone();
+				var $src = $row.find('select, input, textarea');
+				$c.find('select, input, textarea').each(function(idx){ $(this).val($src.eq(idx).val()); });
+				reindex($c, $rep.data('field'));
+				$row.after($c);
+			});
+			$(document).on('click', '.oss-repeater-row__remove', function(){ $(this).closest('.oss-repeater-row').remove(); });
+		});
+JS;
+	wp_add_inline_script( 'jquery-core', $js );
+}
+
+/**
  * Enqueue the shared toggle CSS + JS. Safe to call from several pages; the
  * open/closed memory is namespaced per admin page via the ?page= slug.
  */
