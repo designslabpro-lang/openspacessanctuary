@@ -39,6 +39,10 @@ function oss_herd_content_sanitize( $input ) {
 	$defaults = oss_herd_content_defaults();
 	$clean    = array();
 	foreach ( $defaults as $key => $default ) {
+		if ( in_array( $key, array( 'hero_body', 'herd_body' ), true ) ) {
+			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
+			continue;
+		}
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 		} elseif ( false !== strpos( $key, '_url' ) ) {
@@ -67,7 +71,7 @@ function oss_herd_content_page() {
 				<?php
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_herd_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_heading', oss_herd_get( 'hero_heading' ), __( 'Heading', 'astra-child' ) );
-				oss_cadmin_field_row( $o, 'hero_body', oss_herd_get( 'hero_body' ), __( 'Intro', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( $o, 'hero_body', oss_herd_get( 'hero_body' ), __( 'Intro', 'astra-child' ) );
 				oss_cadmin_bg_image_row( $o, 'hero_image_id', oss_herd_get( 'hero_image_id' ), oss_herd_get( 'hero_image_pos' ), oss_herd_get( 'hero_image_fit' ), __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
@@ -77,7 +81,7 @@ function oss_herd_content_page() {
 				<?php
 				oss_cadmin_field_row( $o, 'herd_eyebrow', oss_herd_get( 'herd_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'herd_heading', oss_herd_get( 'herd_heading' ), __( 'Heading', 'astra-child' ) );
-				oss_cadmin_field_row( $o, 'herd_body', oss_herd_get( 'herd_body' ), __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( $o, 'herd_body', oss_herd_get( 'herd_body' ), __( 'Body', 'astra-child' ) );
 				oss_cadmin_image_row( $o, 'herd_image_id', oss_herd_get( 'herd_image_id' ), __( 'Photo', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'herd_btn_text', oss_herd_get( 'herd_btn_text' ), __( 'Button Text', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'herd_btn_url', oss_herd_get( 'herd_btn_url' ), __( 'Button Link', 'astra-child' ) );
@@ -96,6 +100,7 @@ function oss_herd_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_editor_assets();
 	oss_cadmin_toggle_assets();
 	oss_cadmin_media_js();
 }

@@ -78,7 +78,7 @@ oss2_page_hero( array(
 <section class="oss-section oss-section--sage oss-cta" style="text-align:center;">
 	<div class="oss-container oss-on-dark">
 		<h2><?php echo esc_html( oss_contact_get( 'cta_heading' ) ); ?></h2>
-		<p><?php echo esc_html( oss_contact_get( 'cta_body' ) ); ?></p>
+		<?php echo oss_rich( oss_contact_get( 'cta_body' ) ); ?>
 		<div class="oss-cta__actions">
 			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_contact_get( 'cta_btn_url' ) ); ?>"><?php echo esc_html( oss_contact_get( 'cta_btn_text' ) ); ?></a>
 		</div>

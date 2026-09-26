@@ -40,7 +40,7 @@ function oss_faq_content_sanitize( $input ) {
 
 	foreach ( array( 'hero_eyebrow', 'hero_heading', 'hero_body', 'hero_image_pos', 'hero_image_fit' ) as $key ) {
 		$clean[ $key ] = isset( $input[ $key ] )
-			? ( 'hero_body' === $key ? sanitize_textarea_field( wp_unslash( $input[ $key ] ) ) : sanitize_text_field( wp_unslash( $input[ $key ] ) ) )
+			? ( 'hero_body' === $key ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : sanitize_text_field( wp_unslash( $input[ $key ] ) ) )
 			: $defaults[ $key ];
 	}
 	$clean['hero_image_id'] = isset( $input['hero_image_id'] ) ? absint( $input['hero_image_id'] ) : 0;
@@ -91,7 +91,7 @@ function oss_faq_content_page() {
 				<?php
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_faq_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_heading', oss_faq_get( 'hero_heading' ), __( 'Heading', 'astra-child' ) );
-				oss_cadmin_field_row( $o, 'hero_body', oss_faq_get( 'hero_body' ), __( 'Intro', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( $o, 'hero_body', oss_faq_get( 'hero_body' ), __( 'Intro', 'astra-child' ) );
 				oss_cadmin_bg_image_row( $o, 'hero_image_id', oss_faq_get( 'hero_image_id' ), oss_faq_get( 'hero_image_pos' ), oss_faq_get( 'hero_image_fit' ), __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
@@ -123,6 +123,7 @@ function oss_faq_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_editor_assets();
 	oss_cadmin_toggle_assets();
 	oss_cadmin_media_js();
 	$js = <<<'JS'

@@ -76,6 +76,24 @@ function oss_bg_image_style( $url, $position = '', $fit = '' ) {
 	return ' style="background-image:url(\'' . esc_url( $url ) . '\');background-position:' . esc_attr( $pos ) . ';background-size:' . esc_attr( $fit ) . ';"';
 }
 
+/**
+ * Render stored rich-text (from the WordPress editor fields): allow only safe
+ * HTML and auto-paragraph plain text, so existing plain content and new
+ * formatted content both render correctly.
+ */
+function oss_rich( $html ) {
+	return wpautop( wp_kses_post( (string) $html ) );
+}
+
+/**
+ * Like oss_rich() but for inline contexts (e.g. inside a blockquote): keep safe
+ * inline HTML but drop a single wrapping paragraph so it doesn't add block gaps.
+ */
+function oss_rich_inline( $html ) {
+	$html = wp_kses_post( (string) $html );
+	return trim( preg_replace( '#^\s*<p>(.*)</p>\s*$#s', '$1', $html ) );
+}
+
 function oss2_page_hero( $args ) {
 	$a = wp_parse_args( $args, array(
 		'eyebrow'        => '',
@@ -93,7 +111,6 @@ function oss2_page_hero( $args ) {
 		$url = $id ? wp_get_attachment_image_url( $id, 'full' ) : '';
 	}
 	$photo_style = oss_bg_image_style( $url, $a['image_position'], $a['image_fit'] );
-	$intro = is_array( $a['intro'] ) ? $a['intro'] : explode( "\n", wp_strip_all_tags( (string) $a['intro'] ) );
 	?>
 	<header class="oss2-page-hero">
 		<div class="oss-container oss2-page-hero__grid">
@@ -101,9 +118,15 @@ function oss2_page_hero( $args ) {
 				<div class="oss2-page-hero__inner">
 					<?php if ( $a['eyebrow'] ) : ?><span class="oss-eyebrow oss2-hero__eyebrow"><?php echo esc_html( $a['eyebrow'] ); ?></span><?php endif; ?>
 					<h1><?php echo esc_html( $a['title'] ); ?></h1>
-					<?php foreach ( $intro as $para ) : ?>
-						<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-					<?php endforeach; ?>
+					<?php
+					if ( is_array( $a['intro'] ) ) {
+						foreach ( $a['intro'] as $para ) {
+							if ( trim( $para ) ) { echo '<p>' . esc_html( trim( $para ) ) . '</p>'; }
+						}
+					} else {
+						echo oss_rich( $a['intro'] ); // phpcs:ignore -- oss_rich() sanitizes.
+					}
+					?>
 					<?php echo $a['after']; // phpcs:ignore -- caller-escaped markup. ?>
 				</div>
 			</div>

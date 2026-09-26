@@ -44,6 +44,11 @@ function oss_about_content_sanitize( $input ) {
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
+		if ( in_array( $key, array( 'hero_body', 'story_body', 'philosophy_body', 'philosophy_quote', 'founder_body', 'final_body' ), true ) ) {
+			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
+			continue;
+		}
+
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 			continue;
@@ -103,7 +108,7 @@ function oss_about_content_page() {
 				<?php
 				oss_about_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
 				oss_about_content_field_row( 'hero_heading', __( 'Heading', 'astra-child' ) );
-				oss_about_content_field_row( 'hero_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_ABOUT_OPTION, 'hero_body', oss_about_get( 'hero_body' ), __( 'Body', 'astra-child' ) );
 				oss_about_content_image_row( 'hero_image_id', __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
@@ -113,7 +118,7 @@ function oss_about_content_page() {
 				<?php
 				oss_about_content_field_row( 'story_eyebrow', __( 'Eyebrow', 'astra-child' ) );
 				oss_about_content_field_row( 'story_heading', __( 'Heading', 'astra-child' ) );
-				oss_about_content_field_row( 'story_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_ABOUT_OPTION, 'story_body', oss_about_get( 'story_body' ), __( 'Body', 'astra-child' ) );
 				oss_about_content_image_row( 'story_image_id', __( 'Photo', 'astra-child' ) );
 				?>
 			</table>
@@ -123,8 +128,8 @@ function oss_about_content_page() {
 				<?php
 				oss_about_content_field_row( 'philosophy_eyebrow', __( 'Eyebrow', 'astra-child' ) );
 				oss_about_content_field_row( 'philosophy_heading', __( 'Heading', 'astra-child' ) );
-				oss_about_content_field_row( 'philosophy_body', __( 'Body', 'astra-child' ), 'textarea' );
-				oss_about_content_field_row( 'philosophy_quote', __( 'Pull Quote', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_ABOUT_OPTION, 'philosophy_body', oss_about_get( 'philosophy_body' ), __( 'Body', 'astra-child' ) );
+				oss_cadmin_editor_row( OSS_ABOUT_OPTION, 'philosophy_quote', oss_about_get( 'philosophy_quote' ), __( 'Pull Quote', 'astra-child' ) );
 				oss_about_content_image_row( 'philosophy_image_id', __( 'Photo', 'astra-child' ) );
 				?>
 			</table>
@@ -134,7 +139,7 @@ function oss_about_content_page() {
 				<?php
 				oss_about_content_field_row( 'founder_heading', __( 'Eyebrow', 'astra-child' ) );
 				oss_about_content_field_row( 'founder_name', __( 'Name', 'astra-child' ) );
-				oss_about_content_field_row( 'founder_body', __( 'Biography', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_ABOUT_OPTION, 'founder_body', oss_about_get( 'founder_body' ), __( 'Biography', 'astra-child' ) );
 				?>
 			</table>
 
@@ -142,7 +147,7 @@ function oss_about_content_page() {
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'final_heading', __( 'Heading', 'astra-child' ) );
-				oss_about_content_field_row( 'final_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_ABOUT_OPTION, 'final_body', oss_about_get( 'final_body' ), __( 'Body', 'astra-child' ) );
 				oss_about_content_field_row( 'final_btn_text', __( 'Button Text', 'astra-child' ) );
 				oss_about_content_field_row( 'final_btn_url', __( 'Button Link', 'astra-child' ) );
 				?>
@@ -160,6 +165,7 @@ function oss_about_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_editor_assets();
 	oss_cadmin_toggle_assets();
 	wp_add_inline_script( 'jquery-core', "
 		jQuery(function($){

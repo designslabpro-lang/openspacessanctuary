@@ -60,9 +60,7 @@ while ( have_posts() ) :
 			<div class="oss2-give__text">
 				<span class="oss-eyebrow"><?php echo esc_html( oss_involved_get( 'give_eyebrow' ) ); ?></span>
 				<h2><?php echo esc_html( oss_involved_get( 'give_heading' ) ); ?></h2>
-				<?php foreach ( explode( "\n", oss_involved_get( 'give_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo oss_rich( oss_involved_get( 'give_body' ) ); ?>
 				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_involved_get( 'give_btn_url' ) ); ?>"><?php echo esc_html( oss_involved_get( 'give_btn_text' ) ); ?></a>
 			</div>
 		</div>

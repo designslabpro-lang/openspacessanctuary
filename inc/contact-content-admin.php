@@ -71,6 +71,11 @@ function oss_contact_content_sanitize( $input ) {
 			continue;
 		}
 
+		if ( in_array( $key, array( 'hero_body', 'cta_body' ), true ) ) {
+			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
+			continue;
+		}
+
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 			continue;
@@ -142,7 +147,7 @@ function oss_contact_content_page() {
 				<?php
 				oss_contact_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
 				oss_contact_content_field_row( 'hero_heading', __( 'Heading', 'astra-child' ) );
-				oss_contact_content_field_row( 'hero_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_CONTACT_OPTION, 'hero_body', oss_contact_get( 'hero_body' ), __( 'Body', 'astra-child' ) );
 				oss_contact_content_image_row( 'hero_image_id', __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
@@ -169,7 +174,7 @@ function oss_contact_content_page() {
 			<table class="form-table">
 				<?php
 				oss_contact_content_field_row( 'cta_heading', __( 'Heading', 'astra-child' ) );
-				oss_contact_content_field_row( 'cta_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_CONTACT_OPTION, 'cta_body', oss_contact_get( 'cta_body' ), __( 'Body', 'astra-child' ) );
 				oss_contact_content_field_row( 'cta_btn_text', __( 'Button Text', 'astra-child' ) );
 				oss_contact_content_field_row( 'cta_btn_url', __( 'Button Link', 'astra-child' ) );
 				?>
@@ -187,6 +192,7 @@ function oss_contact_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_editor_assets();
 	oss_cadmin_toggle_assets();
 	wp_add_inline_script( 'jquery-core', "
 		jQuery(function($){

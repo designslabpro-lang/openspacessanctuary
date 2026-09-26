@@ -42,6 +42,10 @@ function oss_involved_content_sanitize( $input ) {
 		if ( 'ways' === $key ) {
 			continue; // handled below
 		}
+		if ( in_array( $key, array( 'hero_body', 'give_body' ), true ) ) {
+			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
+			continue;
+		}
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 		} elseif ( false !== strpos( $key, '_url' ) ) {
@@ -89,7 +93,7 @@ function oss_involved_content_page() {
 				<?php
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_involved_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_heading', oss_involved_get( 'hero_heading' ), __( 'Heading', 'astra-child' ) );
-				oss_cadmin_field_row( $o, 'hero_body', oss_involved_get( 'hero_body' ), __( 'Intro', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( $o, 'hero_body', oss_involved_get( 'hero_body' ), __( 'Intro', 'astra-child' ) );
 				oss_cadmin_bg_image_row( $o, 'hero_image_id', oss_involved_get( 'hero_image_id' ), oss_involved_get( 'hero_image_pos' ), oss_involved_get( 'hero_image_fit' ), __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
@@ -114,7 +118,7 @@ function oss_involved_content_page() {
 				<?php
 				oss_cadmin_field_row( $o, 'give_eyebrow', oss_involved_get( 'give_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'give_heading', oss_involved_get( 'give_heading' ), __( 'Heading', 'astra-child' ) );
-				oss_cadmin_field_row( $o, 'give_body', oss_involved_get( 'give_body' ), __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( $o, 'give_body', oss_involved_get( 'give_body' ), __( 'Body', 'astra-child' ) );
 				oss_cadmin_image_row( $o, 'give_image_id', oss_involved_get( 'give_image_id' ), __( 'Photo', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'give_btn_text', oss_involved_get( 'give_btn_text' ), __( 'Button Text', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'give_btn_url', oss_involved_get( 'give_btn_url' ), __( 'Button Link', 'astra-child' ) );
@@ -133,6 +137,7 @@ function oss_involved_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	oss_cadmin_editor_assets();
 	oss_cadmin_toggle_assets();
 	oss_cadmin_media_js();
 	oss_cadmin_repeater_js();

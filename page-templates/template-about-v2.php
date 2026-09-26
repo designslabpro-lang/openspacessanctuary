@@ -33,9 +33,7 @@ oss2_page_hero( array(
 			<div>
 				<span class="oss-eyebrow"><?php echo esc_html( oss_about_get( 'story_eyebrow' ) ); ?></span>
 				<h2><?php echo esc_html( oss_about_get( 'story_heading' ) ); ?></h2>
-				<?php foreach ( explode( "\n", oss_about_get( 'story_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo oss_rich( oss_about_get( 'story_body' ) ); ?>
 			</div>
 		</div>
 	</div>
@@ -46,14 +44,12 @@ oss2_page_hero( array(
 		<div class="oss2-feature oss2-feature--reverse">
 			<div class="oss2-feature__media">
 				<?php echo oss2_image( $phil_img, oss_about_get( 'philosophy_heading' ) ); ?>
-				<blockquote class="oss2-feature__quote">&ldquo;<?php echo esc_html( oss_about_get( 'philosophy_quote' ) ); ?>&rdquo;</blockquote>
+				<blockquote class="oss2-feature__quote">&ldquo;<?php echo oss_rich_inline( oss_about_get( 'philosophy_quote' ) ); ?>&rdquo;</blockquote>
 			</div>
 			<div>
 				<span class="oss-eyebrow"><?php echo esc_html( oss_about_get( 'philosophy_eyebrow' ) ); ?></span>
 				<h2><?php echo esc_html( oss_about_get( 'philosophy_heading' ) ); ?></h2>
-				<?php foreach ( explode( "\n", oss_about_get( 'philosophy_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo oss_rich( oss_about_get( 'philosophy_body' ) ); ?>
 			</div>
 		</div>
 	</div>
@@ -69,9 +65,7 @@ oss2_page_hero( array(
 				<span class="oss2-founder__mark" aria-hidden="true">&ldquo;</span>
 				<span class="oss-eyebrow"><?php echo esc_html( oss_about_get( 'founder_heading' ) ); ?></span>
 				<h2><?php echo esc_html( oss_about_get( 'founder_name' ) ); ?></h2>
-				<?php foreach ( explode( "\n", oss_about_get( 'founder_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo oss_rich( oss_about_get( 'founder_body' ) ); ?>
 			</div>
 		</div>
 	</div>
@@ -88,7 +82,7 @@ oss2_page_hero( array(
 			<div class="oss2-close__text">
 				<h2><?php echo esc_html( oss_about_get( 'final_heading' ) ); ?></h2>
 				<div class="oss-divider"></div>
-				<p><?php echo esc_html( oss_about_get( 'final_body' ) ); ?></p>
+				<?php echo oss_rich( oss_about_get( 'final_body' ) ); ?>
 				<div class="oss2-close__actions">
 					<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_about_get( 'final_btn_url' ) ); ?>"><?php echo esc_html( oss_about_get( 'final_btn_text' ) ); ?></a>
 				</div>

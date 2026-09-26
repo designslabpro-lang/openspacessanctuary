@@ -35,9 +35,7 @@ while ( have_posts() ) :
 				<div>
 					<span class="oss-eyebrow"><?php echo esc_html( oss_herd_get( 'herd_eyebrow' ) ); ?></span>
 					<h2><?php echo esc_html( oss_herd_get( 'herd_heading' ) ); ?></h2>
-					<?php foreach ( explode( "\n", oss_herd_get( 'herd_body' ) ) as $para ) : ?>
-						<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-					<?php endforeach; ?>
+					<?php echo oss_rich( oss_herd_get( 'herd_body' ) ); ?>
 					<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_herd_get( 'herd_btn_url' ) ); ?>"><?php echo esc_html( oss_herd_get( 'herd_btn_text' ) ); ?></a>
 				</div>
 			</div>

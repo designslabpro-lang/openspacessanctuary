@@ -71,13 +71,13 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 		<div class="oss2-feature">
 			<div class="oss2-feature__media">
 				<?php echo oss_home_image( 'power_image_id', 'large', 'Open Spaces Sanctuary' ); ?>
-				<blockquote class="oss2-feature__quote">&ldquo;<?php echo esc_html( oss_home_get( 'power_quote' ) ); ?>&rdquo;</blockquote>
+				<blockquote class="oss2-feature__quote">&ldquo;<?php echo oss_rich_inline( oss_home_get( 'power_quote' ) ); ?>&rdquo;</blockquote>
 			</div>
 			<div>
 				<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'power_eyebrow' ) ); ?></span>
 				<h2><?php echo esc_html( oss_home_get( 'power_heading' ) ); ?></h2>
-				<p><?php echo esc_html( oss_home_get( 'power_body1' ) ); ?></p>
-				<p><?php echo esc_html( oss_home_get( 'power_body2' ) ); ?></p>
+				<?php echo oss_rich( oss_home_get( 'power_body1' ) ); ?>
+				<?php echo oss_rich( oss_home_get( 'power_body2' ) ); ?>
 			</div>
 		</div>
 	</div>
@@ -88,7 +88,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 		<div class="oss-section-heading oss-section-heading--center">
 			<span class="oss-eyebrow"><?php esc_html_e( 'Who We Serve', 'astra-child' ); ?></span>
 			<h2><?php echo esc_html( oss_home_get( 'serve_heading' ) ); ?></h2>
-			<p><?php echo esc_html( oss_home_get( 'serve_intro' ) ); ?></p>
+			<?php echo oss_rich( oss_home_get( 'serve_intro' ) ); ?>
 		</div>
 		<div class="oss2-serve-grid">
 			<?php foreach ( oss_home_get( 'serve_items' ) as $i => $item ) : ?>
@@ -110,7 +110,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 		<div class="oss-section-heading oss-section-heading--center" style="text-align:center;margin-left:auto;margin-right:auto;">
 			<span class="oss-eyebrow"><?php esc_html_e( 'What We Offer', 'astra-child' ); ?></span>
 			<h2><?php echo esc_html( oss_home_get( 'programs_heading' ) ); ?></h2>
-			<p><?php echo esc_html( oss_home_get( 'programs_intro' ) ); ?></p>
+			<?php echo oss_rich( oss_home_get( 'programs_intro' ) ); ?>
 		</div>
 		<?php echo do_shortcode( '[oss_programs_grid limit="4"]' ); ?>
 		<p style="text-align:center;margin-top:2.5rem;"><a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( home_url( '/programs/' ) ); ?>"><?php esc_html_e( 'View All Programs', 'astra-child' ); ?></a></p>
@@ -122,9 +122,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 		<div class="oss2-herd__panel">
 			<span class="oss-eyebrow"><?php esc_html_e( 'The Herd', 'astra-child' ); ?></span>
 			<h2><?php echo esc_html( oss_home_get( 'horses_heading' ) ); ?></h2>
-			<?php foreach ( explode( "\n", oss_home_get( 'horses_body' ) ) as $para ) : ?>
-				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-			<?php endforeach; ?>
+			<?php echo oss_rich( oss_home_get( 'horses_body' ) ); ?>
 			<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( home_url( '/meet-the-herd/' ) ); ?>"><?php echo esc_html( oss_home_get( 'horses_sub' ) ); ?></a>
 		</div>
 		<div class="oss2-herd__spacer" aria-hidden="true"></div>
@@ -141,9 +139,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 				<span class="oss2-founder__mark" aria-hidden="true">&ldquo;</span>
 				<span class="oss-eyebrow"><?php echo esc_html( oss_home_get( 'founder_heading' ) ); ?></span>
 				<h2><?php echo esc_html( oss_home_get( 'founder_name' ) ); ?></h2>
-				<?php foreach ( explode( "\n", oss_home_get( 'founder_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo oss_rich( oss_home_get( 'founder_body' ) ); ?>
 				<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php echo esc_html( oss_home_get( 'founder_btn' ) ); ?></a>
 			</div>
 		</div>
@@ -185,9 +181,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 		<div class="oss2-give__text">
 			<span class="oss-eyebrow"><?php esc_html_e( 'Support the Sanctuary', 'astra-child' ); ?></span>
 			<h2><?php echo esc_html( oss_home_get( 'donate_heading' ) ); ?></h2>
-			<?php foreach ( explode( "\n", oss_home_get( 'donate_body' ) ) as $para ) : ?>
-				<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-			<?php endforeach; ?>
+			<?php echo oss_rich( oss_home_get( 'donate_body' ) ); ?>
 			<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'donate_btn_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'donate_btn' ) ); ?></a>
 		</div>
 	</div>
@@ -199,7 +193,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 			<div class="oss2-connect__text">
 				<span class="oss-eyebrow"><?php esc_html_e( 'Newsletter', 'astra-child' ); ?></span>
 				<h2><?php echo esc_html( oss_home_get( 'connect_heading' ) ); ?></h2>
-				<p><?php echo esc_html( oss_home_get( 'connect_body' ) ); ?></p>
+				<?php echo oss_rich( oss_home_get( 'connect_body' ) ); ?>
 			</div>
 			<div class="oss2-connect__form">
 				<?php echo oss_connect_form_html(); ?>
@@ -220,9 +214,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 				<span class="oss-eyebrow"><?php esc_html_e( 'Welcome', 'astra-child' ); ?></span>
 				<h2><?php echo esc_html( oss_home_get( 'final_heading' ) ); ?></h2>
 				<div class="oss-divider"></div>
-				<?php foreach ( explode( "\n", oss_home_get( 'final_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo oss_rich( oss_home_get( 'final_body' ) ); ?>
 				<p class="oss2-close__sub"><?php echo esc_html( oss_home_get( 'final_sub' ) ); ?></p>
 				<div class="oss2-close__actions">
 					<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_home_get( 'final_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'final_btn1_text' ) ); ?></a>

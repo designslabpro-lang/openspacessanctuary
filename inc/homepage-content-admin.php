@@ -59,7 +59,7 @@ function oss_home_content_sanitize( $input ) {
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
-		if ( 'hero_body' === $key ) {
+		if ( in_array( $key, array( 'hero_body', 'power_body1', 'power_body2', 'power_quote', 'serve_intro', 'programs_intro', 'horses_body', 'founder_body', 'donate_body', 'connect_body', 'final_body' ), true ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
 			continue;
 		}
@@ -242,9 +242,9 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'power_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'power_body1', __( 'Paragraph 1', 'astra-child' ), 'textarea' );
-				oss_home_content_field_row( 'power_body2', __( 'Paragraph 2', 'astra-child' ), 'textarea' );
-				oss_home_content_field_row( 'power_quote', __( 'Pull Quote', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'power_body1', oss_home_get( 'power_body1' ), __( 'Paragraph 1', 'astra-child' ) );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'power_body2', oss_home_get( 'power_body2' ), __( 'Paragraph 2', 'astra-child' ) );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'power_quote', oss_home_get( 'power_quote' ), __( 'Pull Quote', 'astra-child' ) );
 				oss_home_content_field_row( 'power_caption', __( 'Photo Caption', 'astra-child' ) );
 				oss_home_content_image_row( 'power_image_id', __( 'Photo', 'astra-child' ) );
 				?>
@@ -258,7 +258,7 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'serve_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'serve_intro', __( 'Intro', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'serve_intro', oss_home_get( 'serve_intro' ), __( 'Intro', 'astra-child' ) );
 				?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Audience Cards', 'astra-child' ); ?></th>
@@ -278,7 +278,7 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'programs_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'programs_intro', __( 'Intro', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'programs_intro', oss_home_get( 'programs_intro' ), __( 'Intro', 'astra-child' ) );
 				?>
 				<tr><th></th><td><p class="description"><?php
 					printf(
@@ -297,7 +297,7 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'horses_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'horses_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'horses_body', oss_home_get( 'horses_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'horses_sub', __( 'Subheading / Link Text', 'astra-child' ) );
 				oss_home_content_image_row( 'horses_image_id', __( 'Photo', 'astra-child' ) );
 				?>
@@ -312,7 +312,7 @@ function oss_home_content_page() {
 				<?php
 				oss_home_content_field_row( 'founder_heading', __( 'Heading', 'astra-child' ) );
 				oss_home_content_field_row( 'founder_name', __( 'Name', 'astra-child' ) );
-				oss_home_content_field_row( 'founder_body', __( 'Biography', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'founder_body', oss_home_get( 'founder_body' ), __( 'Biography', 'astra-child' ) );
 				oss_home_content_field_row( 'founder_btn', __( 'Button Text', 'astra-child' ) );
 				oss_home_content_image_row( 'founder_image_id', __( 'Photo', 'astra-child' ) );
 				?>
@@ -346,7 +346,7 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'donate_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'donate_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'donate_body', oss_home_get( 'donate_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'donate_btn', __( 'Button Text', 'astra-child' ) );
 				oss_home_content_field_row( 'donate_btn_url', __( 'Button Link', 'astra-child' ) );
 				oss_home_content_image_row( 'donate_image_id', __( 'Background Image', 'astra-child' ) );
@@ -361,7 +361,7 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'connect_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'connect_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'connect_body', oss_home_get( 'connect_body' ), __( 'Body', 'astra-child' ) );
 				?>
 				<tr><th></th><td><p class="description"><?php esc_html_e( 'The signup form itself is the [oss_newsletter_signup] shortcode — connect a mailing list plugin any time and it activates automatically.', 'astra-child' ); ?></p></td></tr>
 			</table>
@@ -374,7 +374,7 @@ function oss_home_content_page() {
 			<table class="form-table">
 				<?php
 				oss_home_content_field_row( 'final_heading', __( 'Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'final_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'final_body', oss_home_get( 'final_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'final_sub', __( 'Supporting Line', 'astra-child' ) );
 				oss_home_content_field_row( 'final_btn1_text', __( 'Button 1 Text', 'astra-child' ) );
 				oss_home_content_field_row( 'final_btn1_url', __( 'Button 1 Link', 'astra-child' ) );
