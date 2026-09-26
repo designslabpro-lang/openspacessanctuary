@@ -35,7 +35,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 				<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
 				<a class="oss-btn oss-btn--secondary" href="<?php echo esc_url( oss_home_get( 'hero_btn2_url' ) ); ?>" style="border-color:var(--oss-bg);color:var(--oss-bg);"><?php echo esc_html( oss_home_get( 'hero_btn2_text' ) ); ?></a>
 			</div>
-			<p class="oss2-hero__trust"><?php esc_html_e( 'A 501(c)(3) nonprofit organization', 'astra-child' ); ?></p>
+			<?php if ( oss_home_get( 'hero_trust' ) ) : ?><p class="oss2-hero__trust"><?php echo esc_html( oss_home_get( 'hero_trust' ) ); ?></p><?php endif; ?>
 			</div>
 		</div>
 		<div class="oss2-hero__photo">

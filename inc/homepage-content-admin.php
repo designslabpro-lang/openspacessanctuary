@@ -221,6 +221,7 @@ function oss_home_content_page() {
 				oss_home_content_field_row( 'hero_btn1_url', __( 'Button 1 Link', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_btn2_text', __( 'Button 2 Text', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_btn2_url', __( 'Button 2 Link', 'astra-child' ) );
+				oss_home_content_field_row( 'hero_trust', __( 'Trust Line (below buttons)', 'astra-child' ) );
 				oss_home_content_image_row( 'hero_image_id', __( 'Background Image', 'astra-child' ) );
 				oss_home_content_slide_row( 0, __( 'Slideshow Photo 1', 'astra-child' ) );
 				oss_home_content_slide_row( 1, __( 'Slideshow Photo 2', 'astra-child' ) );
