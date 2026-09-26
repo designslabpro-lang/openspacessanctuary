@@ -83,6 +83,59 @@ function oss_cadmin_field_row( $option, $key, $value, $label, $type = 'text' ) {
 }
 
 /**
+ * A rich-text (WordPress editor) row: bold, italic, link, lists, alignment,
+ * with Visual/Text tabs. Rendered as a plain textarea with class .oss-rte; the
+ * TinyMCE editor is attached lazily by oss_cadmin_editor_assets() when its
+ * section becomes visible (so it works inside the collapsible panels).
+ */
+function oss_cadmin_editor_row( $option, $key, $value, $label ) {
+	$id   = preg_replace( '/[^a-z0-9_-]/i', '-', 'oss-rte-' . $option . '-' . $key );
+	$name = $option . '[' . $key . ']';
+	echo '<tr><th scope="row"><label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label></th><td>';
+	echo '<textarea class="oss-rte large-text" id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '" rows="6">' . esc_textarea( $value ) . '</textarea>';
+	echo '</td></tr>';
+}
+
+/**
+ * Attach WordPress's editor to every .oss-rte textarea. Initializes visible
+ * ones on load and each section's editors when it is opened, and flushes editor
+ * content back to the textareas on submit. Call from a page's admin_enqueue hook.
+ */
+function oss_cadmin_editor_assets() {
+	if ( ! function_exists( 'wp_enqueue_editor' ) ) {
+		return;
+	}
+	wp_enqueue_editor();
+	$js = <<<'JS'
+		jQuery(function($){
+			var inited = {};
+			function initOne(el){
+				var id = el.id;
+				if (!id || inited[id]) { return; }
+				if (window.wp && wp.editor && wp.editor.initialize){
+					wp.editor.initialize(id, {
+						tinymce: {
+							toolbar1: 'formatselect,bold,italic,underline,bullist,numlist,link,unlink,alignleft,aligncenter,alignright,removeformat',
+							block_formats: 'Paragraph=p;Heading=h3;Heading=h4',
+							menubar: false,
+							statusbar: false
+						},
+						quicktags: { buttons: 'strong,em,link,ul,ol,li,close' },
+						mediaButtons: false
+					});
+					inited[id] = true;
+				}
+			}
+			function initVisible(){ $('textarea.oss-rte:visible').each(function(){ initOne(this); }); }
+			initVisible();
+			$('details.oss-section').on('toggle', function(){ if (this.open) { setTimeout(initVisible, 20); } });
+			$(document).on('submit', 'form', function(){ if (window.tinymce) { window.tinymce.triggerSave(); } });
+		});
+JS;
+	wp_add_inline_script( 'jquery-core', $js );
+}
+
+/**
  * A media-picker row (attachment id) for an options-page form table.
  */
 function oss_cadmin_image_row( $option, $key, $id, $label ) {

@@ -59,6 +59,10 @@ function oss_home_content_sanitize( $input ) {
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
+		if ( 'hero_body' === $key ) {
+			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
+			continue;
+		}
 		if ( 'serve_items' === $key ) {
 			$items = array();
 			if ( isset( $input['serve_items'] ) && is_array( $input['serve_items'] ) ) {
@@ -216,7 +220,7 @@ function oss_home_content_page() {
 				<?php
 				oss_home_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_heading', __( 'Supporting Heading', 'astra-child' ) );
-				oss_home_content_field_row( 'hero_body', __( 'Body', 'astra-child' ), 'textarea' );
+				oss_cadmin_editor_row( OSS_HOME_OPTION, 'hero_body', oss_home_get( 'hero_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_btn1_text', __( 'Button 1 Text', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_btn1_url', __( 'Button 1 Link', 'astra-child' ) );
 				oss_home_content_field_row( 'hero_btn2_text', __( 'Button 2 Text', 'astra-child' ) );
@@ -394,6 +398,7 @@ function oss_home_content_admin_assets( $hook ) {
 	}
 	wp_enqueue_media();
 	oss_cadmin_repeater_js();
+	oss_cadmin_editor_assets();
 
 	// Collapsible section toggles — styled like core postboxes.
 	$oss_home_admin_css = <<<'CSS'

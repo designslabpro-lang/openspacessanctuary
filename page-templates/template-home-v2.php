@@ -27,9 +27,7 @@ $hero_slide_ids = array_values( array_filter( array_map( 'intval', oss_home_get(
 			<span class="oss-eyebrow oss2-hero__eyebrow"><?php echo esc_html( oss_home_get( 'hero_eyebrow' ) ); ?></span>
 			<h1><?php echo esc_html( oss_home_get( 'hero_heading' ) ); ?></h1>
 			<div class="oss2-hero__body">
-				<?php foreach ( explode( "\n", oss_home_get( 'hero_body' ) ) as $para ) : ?>
-					<?php if ( trim( $para ) ) : ?><p><?php echo esc_html( trim( $para ) ); ?></p><?php endif; ?>
-				<?php endforeach; ?>
+				<?php echo wpautop( wp_kses_post( oss_home_get( 'hero_body' ) ) ); ?>
 			</div>
 			<div class="oss2-hero__actions">
 				<a class="oss-btn oss-btn--on-sage" href="<?php echo esc_url( oss_home_get( 'hero_btn1_url' ) ); ?>"><?php echo esc_html( oss_home_get( 'hero_btn1_text' ) ); ?></a>
