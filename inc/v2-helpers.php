@@ -33,20 +33,66 @@ function oss2_image( $id, $alt = '' ) {
  * Split page hero: dark panel (eyebrow, h1, intro paragraphs, optional
  * extra markup) on the left, photo on the right.
  */
+/**
+ * Allowed background-image focal positions (CSS value => label).
+ */
+function oss_bg_positions() {
+	return array(
+		'center center' => __( 'Center', 'astra-child' ),
+		'top center'    => __( 'Top', 'astra-child' ),
+		'bottom center' => __( 'Bottom', 'astra-child' ),
+		'center left'   => __( 'Left', 'astra-child' ),
+		'center right'  => __( 'Right', 'astra-child' ),
+		'top left'      => __( 'Top Left', 'astra-child' ),
+		'top right'     => __( 'Top Right', 'astra-child' ),
+		'bottom left'   => __( 'Bottom Left', 'astra-child' ),
+		'bottom right'  => __( 'Bottom Right', 'astra-child' ),
+	);
+}
+
+/**
+ * Allowed background-image fit modes.
+ */
+function oss_bg_fits() {
+	return array(
+		'cover'   => __( 'Fill (cover)', 'astra-child' ),
+		'contain' => __( 'Fit (contain)', 'astra-child' ),
+	);
+}
+
+/**
+ * A safe inline style attribute for a background image with an optional focal
+ * position + fit. Returns '' when there is no url. Position and fit are
+ * whitelisted, so the output is safe to echo.
+ */
+function oss_bg_image_style( $url, $position = '', $fit = '' ) {
+	if ( ! $url ) {
+		return '';
+	}
+	$positions = oss_bg_positions();
+	$fits      = oss_bg_fits();
+	$pos = ( $position && isset( $positions[ $position ] ) ) ? $position : 'center center';
+	$fit = ( $fit && isset( $fits[ $fit ] ) ) ? $fit : 'cover';
+	return ' style="background-image:url(\'' . esc_url( $url ) . '\');background-position:' . esc_attr( $pos ) . ';background-size:' . esc_attr( $fit ) . ';"';
+}
+
 function oss2_page_hero( $args ) {
 	$a = wp_parse_args( $args, array(
-		'eyebrow'   => '',
-		'title'     => '',
-		'intro'     => '',
-		'image_id'  => 0,
-		'image_url' => '',
-		'after'     => '',
+		'eyebrow'        => '',
+		'title'          => '',
+		'intro'          => '',
+		'image_id'       => 0,
+		'image_url'      => '',
+		'image_position' => '',
+		'image_fit'      => '',
+		'after'          => '',
 	) );
 	$url = $a['image_url'];
 	if ( ! $url ) {
 		$id  = oss2_image_id_or( $a['image_id'], oss2_first_hero_slide_id() );
 		$url = $id ? wp_get_attachment_image_url( $id, 'full' ) : '';
 	}
+	$photo_style = oss_bg_image_style( $url, $a['image_position'], $a['image_fit'] );
 	$intro = is_array( $a['intro'] ) ? $a['intro'] : explode( "\n", wp_strip_all_tags( (string) $a['intro'] ) );
 	?>
 	<header class="oss2-page-hero">
@@ -61,7 +107,7 @@ function oss2_page_hero( $args ) {
 					<?php echo $a['after']; // phpcs:ignore -- caller-escaped markup. ?>
 				</div>
 			</div>
-			<div class="oss2-page-hero__photo"<?php echo $url ? ' style="background-image:url(\'' . esc_url( $url ) . '\');"' : ''; ?>></div>
+			<div class="oss2-page-hero__photo"<?php echo $photo_style; // phpcs:ignore -- built by oss_bg_image_style(), values escaped there. ?>></div>
 		</div>
 	</header>
 	<?php

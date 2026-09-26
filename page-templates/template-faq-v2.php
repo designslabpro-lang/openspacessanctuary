@@ -17,10 +17,12 @@ $oss_faqs   = (array) oss_faq_get( 'faqs' );
 $contact_url = home_url( '/contact/' );
 
 oss2_page_hero( array(
-	'eyebrow'  => oss_faq_get( 'hero_eyebrow' ),
-	'title'    => oss_faq_get( 'hero_heading' ),
-	'intro'    => oss_faq_get( 'hero_body' ),
-	'image_id' => (int) oss_faq_get( 'hero_image_id' ),
+	'eyebrow'        => oss_faq_get( 'hero_eyebrow' ),
+	'title'          => oss_faq_get( 'hero_heading' ),
+	'intro'          => oss_faq_get( 'hero_body' ),
+	'image_id'       => (int) oss_faq_get( 'hero_image_id' ),
+	'image_position' => oss_faq_get( 'hero_image_pos' ),
+	'image_fit'      => oss_faq_get( 'hero_image_fit' ),
 ) );
 ?>
 

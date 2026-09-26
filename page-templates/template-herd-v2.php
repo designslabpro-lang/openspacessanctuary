@@ -17,10 +17,12 @@ while ( have_posts() ) :
 	the_post();
 
 	oss2_page_hero( array(
-		'eyebrow'  => oss_herd_get( 'hero_eyebrow' ),
-		'title'    => oss_herd_get( 'hero_heading' ),
-		'intro'    => oss_herd_get( 'hero_body' ),
-		'image_id' => (int) oss_herd_get( 'hero_image_id' ),
+		'eyebrow'        => oss_herd_get( 'hero_eyebrow' ),
+		'title'          => oss_herd_get( 'hero_heading' ),
+		'intro'          => oss_herd_get( 'hero_body' ),
+		'image_id'       => (int) oss_herd_get( 'hero_image_id' ),
+		'image_position' => oss_herd_get( 'hero_image_pos' ),
+		'image_fit'      => oss_herd_get( 'hero_image_fit' ),
 	) );
 	?>
 

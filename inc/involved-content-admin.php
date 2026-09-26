@@ -90,7 +90,7 @@ function oss_involved_content_page() {
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_involved_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_heading', oss_involved_get( 'hero_heading' ), __( 'Heading', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_body', oss_involved_get( 'hero_body' ), __( 'Intro', 'astra-child' ), 'textarea' );
-				oss_cadmin_image_row( $o, 'hero_image_id', oss_involved_get( 'hero_image_id' ), __( 'Background Image', 'astra-child' ) );
+				oss_cadmin_bg_image_row( $o, 'hero_image_id', oss_involved_get( 'hero_image_id' ), oss_involved_get( 'hero_image_pos' ), oss_involved_get( 'hero_image_fit' ), __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
 

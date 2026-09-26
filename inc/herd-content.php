@@ -18,6 +18,8 @@ function oss_herd_content_defaults() {
 		'hero_heading'  => 'Meet the Herd',
 		'hero_body'     => 'Every member of our herd has a story. Get to know the horses who make Open Spaces Sanctuary a place of healing.',
 		'hero_image_id' => 110,
+		'hero_image_pos' => 'center center',
+		'hero_image_fit' => 'cover',
 
 		'herd_eyebrow'  => 'The Herd',
 		'herd_heading'  => 'Meet Our Horses',

@@ -18,6 +18,8 @@ function oss_involved_content_defaults() {
 		'hero_heading'  => 'Get Involved',
 		'hero_body'     => 'There are many ways to support the herd — volunteer, donate, or sponsor a horse. Reach out to learn how you can get involved.',
 		'hero_image_id' => 122,
+		'hero_image_pos' => 'center center',
+		'hero_image_fit' => 'cover',
 
 		'ways_eyebrow'  => 'Get Involved',
 		'ways_heading'  => 'Ways to Get Involved',

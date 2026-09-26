@@ -98,6 +98,37 @@ function oss_cadmin_image_row( $option, $key, $id, $label ) {
 }
 
 /**
+ * A background-image row: the media picker plus focal-position and fit selects.
+ * The position/fit fields are stored as <base>_pos and <base>_fit, where <base>
+ * is the image key with a trailing _id removed (hero_image_id -> hero_image_pos).
+ */
+function oss_cadmin_bg_image_row( $option, $img_key, $id, $pos_val, $fit_val, $label ) {
+	oss_cadmin_image_row( $option, $img_key, $id, $label );
+	$base = preg_replace( '/_id$/', '', $img_key );
+	?>
+	<tr>
+		<th scope="row"><?php esc_html_e( 'Image position &amp; fit', 'astra-child' ); ?></th>
+		<td>
+			<label style="display:inline-block;margin-right:20px;"><?php esc_html_e( 'Focal position', 'astra-child' ); ?><br>
+				<select name="<?php echo esc_attr( $option . '[' . $base . '_pos]' ); ?>">
+					<?php foreach ( oss_bg_positions() as $val => $lbl ) : ?>
+						<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $pos_val, $val ); ?>><?php echo esc_html( $lbl ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</label>
+			<label style="display:inline-block;"><?php esc_html_e( 'Fit', 'astra-child' ); ?><br>
+				<select name="<?php echo esc_attr( $option . '[' . $base . '_fit]' ); ?>">
+					<?php foreach ( oss_bg_fits() as $val => $lbl ) : ?>
+						<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $fit_val, $val ); ?>><?php echo esc_html( $lbl ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</label>
+		</td>
+	</tr>
+	<?php
+}
+
+/**
  * The core media-picker JS for oss_cadmin_image_row() rows. Call from a page's
  * admin_enqueue hook (after wp_enqueue_media()). Delegated, so it also covers
  * rows added dynamically.

@@ -22,10 +22,12 @@ while ( have_posts() ) :
 	the_post();
 
 	oss2_page_hero( array(
-		'eyebrow'  => oss_involved_get( 'hero_eyebrow' ),
-		'title'    => oss_involved_get( 'hero_heading' ),
-		'intro'    => oss_involved_get( 'hero_body' ),
-		'image_id' => (int) oss_involved_get( 'hero_image_id' ),
+		'eyebrow'        => oss_involved_get( 'hero_eyebrow' ),
+		'title'          => oss_involved_get( 'hero_heading' ),
+		'intro'          => oss_involved_get( 'hero_body' ),
+		'image_id'       => (int) oss_involved_get( 'hero_image_id' ),
+		'image_position' => oss_involved_get( 'hero_image_pos' ),
+		'image_fit'      => oss_involved_get( 'hero_image_fit' ),
 	) );
 	?>
 

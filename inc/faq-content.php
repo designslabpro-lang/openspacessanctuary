@@ -15,6 +15,8 @@ function oss_faq_content_defaults() {
 		'hero_heading'  => 'Frequently Asked Questions',
 		'hero_body'     => "Answers to the questions we hear most. Don't see yours? Reach out anytime — we're happy to help.",
 		'hero_image_id' => 0,
+		'hero_image_pos' => 'center center',
+		'hero_image_fit' => 'cover',
 
 		// Questions carried over from the site's content; answers are editable.
 		'faqs' => array(

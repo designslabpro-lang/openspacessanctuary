@@ -38,7 +38,7 @@ function oss_faq_content_sanitize( $input ) {
 	$defaults = oss_faq_content_defaults();
 	$clean    = array();
 
-	foreach ( array( 'hero_eyebrow', 'hero_heading', 'hero_body' ) as $key ) {
+	foreach ( array( 'hero_eyebrow', 'hero_heading', 'hero_body', 'hero_image_pos', 'hero_image_fit' ) as $key ) {
 		$clean[ $key ] = isset( $input[ $key ] )
 			? ( 'hero_body' === $key ? sanitize_textarea_field( wp_unslash( $input[ $key ] ) ) : sanitize_text_field( wp_unslash( $input[ $key ] ) ) )
 			: $defaults[ $key ];
@@ -92,7 +92,7 @@ function oss_faq_content_page() {
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_faq_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_heading', oss_faq_get( 'hero_heading' ), __( 'Heading', 'astra-child' ) );
 				oss_cadmin_field_row( $o, 'hero_body', oss_faq_get( 'hero_body' ), __( 'Intro', 'astra-child' ), 'textarea' );
-				oss_cadmin_image_row( $o, 'hero_image_id', oss_faq_get( 'hero_image_id' ), __( 'Background Image', 'astra-child' ) );
+				oss_cadmin_bg_image_row( $o, 'hero_image_id', oss_faq_get( 'hero_image_id' ), oss_faq_get( 'hero_image_pos' ), oss_faq_get( 'hero_image_fit' ), __( 'Background Image', 'astra-child' ) );
 				?>
 			</table>
 
