@@ -1,0 +1,133 @@
+/* ==================================================================== */
+/* Section Builder — front-end styles for client-added flexible sections. */
+/* Reuses the brand tokens defined on :root in global.css.               */
+/* ==================================================================== */
+
+.oss-sb > .oss-container { width: 100%; }
+
+/* Two-column: image + text -------------------------------------------- */
+.oss-sb-twocol {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: clamp(2rem, 5vw, 4rem);
+	align-items: center;
+}
+.oss-sb-twocol--right .oss-sb-twocol__media { order: 2; }
+.oss-sb-twocol__media img {
+	width: 100%;
+	display: block;
+	border-radius: var(--oss-radius-lg, 20px);
+	aspect-ratio: 4 / 5;
+	object-fit: cover;
+	box-shadow: var(--oss-shadow-lg, 0 20px 45px rgba(0,0,0,0.15));
+}
+.oss-sb-twocol__text h2 { margin-top: 0; }
+.oss-sb-twocol__text .oss-btn { margin-top: 0.5rem; }
+
+/* Icon / feature grid ------------------------------------------------- */
+.oss-sb-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 1.5rem;
+	margin-top: 2rem;
+}
+.oss-sb-card {
+	background: var(--oss-white, #fff);
+	border-radius: var(--oss-radius-lg, 20px);
+	padding: 2rem 1.75rem;
+	box-shadow: var(--oss-shadow-md, 0 10px 30px rgba(0,0,0,0.08));
+	text-align: left;
+}
+.oss-sb-card__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 52px;
+	height: 52px;
+	border-radius: 16px;
+	background: var(--oss-primary, #596B58);
+	color: #fff;
+	margin-bottom: 1.25rem;
+}
+.oss-sb-card__icon svg { width: 26px; height: 26px; }
+.oss-sb-card__label { margin: 0 0 0.5rem; font-size: 1.2rem; }
+.oss-sb-card__text { margin: 0; color: var(--oss-brown, #755B45); }
+
+/* Full-width text ----------------------------------------------------- */
+.oss-sb-text { max-width: 820px; }
+.oss-sb-text--center { max-width: 760px; margin-left: auto; margin-right: auto; text-align: center; }
+.oss-sb-text h2 { margin-top: 0; }
+
+/* CTA banner ---------------------------------------------------------- */
+.oss-sb--cta .oss-container { text-align: center; }
+.oss-sb-cta {
+	max-width: 720px;
+	margin: 0 auto;
+}
+.oss-sb-cta h2 { margin-top: 0; }
+.oss-sb-cta .oss-btn { margin-top: 0.75rem; }
+
+/* Quote / testimonial ------------------------------------------------- */
+.oss-sb-quote {
+	max-width: 760px;
+	margin: 0 auto;
+	text-align: center;
+	border: 0;
+	padding: 0;
+}
+.oss-sb-quote__text {
+	font-family: var(--oss-font-heading, 'Playfair Display', serif);
+	font-style: italic;
+	font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+	line-height: 1.4;
+	color: var(--oss-text, #353A35);
+	margin: 0 0 1.25rem;
+}
+.oss-sb-quote__who {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.75rem;
+}
+.oss-sb-quote__avatar {
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+.oss-sb-quote__who cite {
+	font-style: normal;
+	font-weight: 600;
+	color: var(--oss-brown, #755B45);
+}
+
+/* Photo row ----------------------------------------------------------- */
+.oss-sb-photos {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1.25rem;
+	margin-top: 1.5rem;
+}
+.oss-sb-photos__item img {
+	width: 100%;
+	display: block;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	border-radius: var(--oss-radius-lg, 20px);
+	box-shadow: var(--oss-shadow-md, 0 10px 30px rgba(0,0,0,0.08));
+}
+
+/* Sage (dark) background — keep text and cards readable. -------------- */
+.oss-sb.oss-section--sage h2,
+.oss-sb.oss-section--sage h3,
+.oss-sb.oss-section--sage p,
+.oss-sb.oss-section--sage .oss-sb-quote__text,
+.oss-sb.oss-section--sage cite { color: var(--oss-white, #fff); }
+.oss-sb.oss-section--sage .oss-sb-card { background: rgba(255,255,255,0.08); }
+.oss-sb.oss-section--sage .oss-sb-card__text { color: rgba(255,255,255,0.85); }
+
+/* Responsive ---------------------------------------------------------- */
+@media (max-width: 900px) {
+	.oss-sb-twocol { grid-template-columns: 1fr; }
+	.oss-sb-twocol--right .oss-sb-twocol__media { order: 0; }
+}

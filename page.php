@@ -29,4 +29,7 @@ while ( have_posts() ) :
 	<?php
 endwhile;
 
+if ( function_exists( 'oss_sb_render_current' ) ) {
+	oss_sb_render_current();
+}
 get_footer();

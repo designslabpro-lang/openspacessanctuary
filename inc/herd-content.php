@@ -14,6 +14,9 @@ define( 'OSS_HERD_OPTION', 'oss_herd_content' );
 
 function oss_herd_content_defaults() {
 	return array(
+		'section_order' => array(),
+		'dups'          => array(),
+		'removed'       => array(),
 		'hero_eyebrow'  => 'Our Herd',
 		'hero_heading'  => 'Meet the Herd',
 		'hero_body'     => 'Every member of our herd has a story. Get to know the horses who make Open Spaces Sanctuary a place of healing.',

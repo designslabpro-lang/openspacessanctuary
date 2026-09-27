@@ -53,6 +53,13 @@ function oss_contact_content_sanitize( $input ) {
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
+		if ( function_exists( 'oss_sec_sanitize_key' ) ) {
+			$eng = oss_sec_sanitize_key( 'contact', $key, $input, 'oss_contact_get' );
+			if ( null !== $eng ) {
+				$clean[ $key ] = $eng;
+				continue;
+			}
+		}
 		if ( 'faq' === $key ) {
 			$rows = array();
 			if ( isset( $input['faq'] ) && is_array( $input['faq'] ) ) {
@@ -142,7 +149,7 @@ function oss_contact_content_page() {
 			<form method="post" action="options.php">
 			<?php settings_fields( 'oss_contact_content_group' ); ?>
 
-			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ), 'hero', 'contact' ); ?>
 			<table class="form-table">
 				<?php
 				oss_contact_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -152,7 +159,7 @@ function oss_contact_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'info-form-panels', __( 'Info & Form Panels', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'info-form-panels', __( 'Info & Form Panels', 'astra-child' ), 'info', 'contact' ); ?>
 			<table class="form-table">
 				<?php
 				oss_contact_content_field_row( 'info_heading', __( 'Info Panel Heading', 'astra-child' ) );
@@ -162,7 +169,7 @@ function oss_contact_content_page() {
 				<tr><th></th><td><p class="description"><?php esc_html_e( 'The form plugin shortcode to render, e.g. [gravityform id="1" title="false"]. Leave empty to show the built-in placeholder.', 'astra-child' ); ?></p></td></tr>
 			</table>
 
-			<?php oss_cadmin_section( 'faq', __( 'FAQ', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'faq', __( 'FAQ', 'astra-child' ), 'faq', 'contact' ); ?>
 			<p class="description"><?php esc_html_e( 'Shown as an accordion on the Contact page. A question with no answer yet opens to a "Request Information" link to the form. Rows without a question are dropped on save.', 'astra-child' ); ?></p>
 			<div id="oss-faq-rows">
 				<?php foreach ( array_values( (array) oss_contact_get( 'faq' ) ) as $i => $row ) { oss_contact_content_faq_row( $i, $row ); } ?>
@@ -170,7 +177,7 @@ function oss_contact_content_page() {
 			<p><button type="button" class="button button-secondary" id="oss-faq-add"><?php esc_html_e( '+ Add Question', 'astra-child' ); ?></button></p>
 			<template id="oss-faq-row-template"><?php oss_contact_content_faq_row( '__i__', array() ); ?></template>
 
-			<?php oss_cadmin_section( 'final-cta', __( 'Final CTA', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'final-cta', __( 'Final CTA', 'astra-child' ), 'cta', 'contact' ); ?>
 			<table class="form-table">
 				<?php
 				oss_contact_content_field_row( 'cta_heading', __( 'Heading', 'astra-child' ) );
@@ -180,7 +187,12 @@ function oss_contact_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_sections_end(); ?>
+			<?php
+			oss_cadmin_sections_end();
+			if ( function_exists( 'oss_sec_render_dup_panels' ) ) {
+				oss_sec_render_dup_panels( 'contact' );
+			}
+			?>
 			<?php submit_button(); ?>
 		</form>
 	</div>

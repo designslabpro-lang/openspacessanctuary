@@ -16,34 +16,17 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 
-	oss2_page_hero( array(
-		'eyebrow'        => oss_herd_get( 'hero_eyebrow' ),
-		'title'          => oss_herd_get( 'hero_heading' ),
-		'intro'          => oss_herd_get( 'hero_body' ),
-		'image_id'       => (int) oss_herd_get( 'hero_image_id' ),
-		'image_position' => oss_herd_get( 'hero_image_pos' ),
-		'image_fit'      => oss_herd_get( 'hero_image_fit' ),
-	) );
-	?>
+	if ( function_exists( 'oss_sec_render' ) ) {
+		oss_sec_render( 'herd' );
+	} else {
+		oss_herd_render_section( 'hero', null );
+		oss_herd_render_section( 'herd', null );
+	}
 
-	<section class="oss-section oss-section--cream">
-		<div class="oss-container">
-			<div class="oss2-feature oss2-feature--reverse">
-				<div class="oss2-feature__media">
-					<?php echo oss_herd_image( 'herd_image_id', 'large', esc_attr__( 'A horse at Open Spaces Sanctuary', 'astra-child' ) ); ?>
-				</div>
-				<div>
-					<span class="oss-eyebrow"><?php echo esc_html( oss_herd_get( 'herd_eyebrow' ) ); ?></span>
-					<h2><?php echo esc_html( oss_herd_get( 'herd_heading' ) ); ?></h2>
-					<?php echo oss_rich( oss_herd_get( 'herd_body' ) ); ?>
-					<a class="oss-btn oss-btn--primary" href="<?php echo esc_url( oss_herd_get( 'herd_btn_url' ) ); ?>"><?php echo esc_html( oss_herd_get( 'herd_btn_text' ) ); ?></a>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<?php
 endwhile;
 
+if ( function_exists( 'oss_sb_render_current' ) ) {
+	oss_sb_render_current();
+}
 oss2_connect_panel();
 get_footer();

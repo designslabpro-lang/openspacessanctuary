@@ -44,6 +44,13 @@ function oss_about_content_sanitize( $input ) {
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
+		if ( function_exists( 'oss_sec_sanitize_key' ) ) {
+			$eng = oss_sec_sanitize_key( 'about', $key, $input, 'oss_about_get' );
+			if ( null !== $eng ) {
+				$clean[ $key ] = $eng;
+				continue;
+			}
+		}
 		if ( in_array( $key, array( 'hero_body', 'story_body', 'philosophy_body', 'philosophy_quote', 'founder_body', 'final_body' ), true ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? wp_kses_post( wp_unslash( $input[ $key ] ) ) : $default;
 			continue;
@@ -103,7 +110,7 @@ function oss_about_content_page() {
 			<form method="post" action="options.php">
 			<?php settings_fields( 'oss_about_content_group' ); ?>
 
-			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ), 'hero', 'about' ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'hero_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -113,7 +120,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'our-story', __( 'Our Story', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'our-story', __( 'Our Story', 'astra-child' ), 'story', 'about' ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'story_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -123,7 +130,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'the-healing-power-of-horses', __( 'The Healing Power of Horses', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'the-healing-power-of-horses', __( 'The Healing Power of Horses', 'astra-child' ), 'philosophy', 'about' ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'philosophy_eyebrow', __( 'Eyebrow', 'astra-child' ) );
@@ -134,7 +141,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'meet-our-founder', __( 'Meet Our Founder', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'meet-our-founder', __( 'Meet Our Founder', 'astra-child' ), 'founder', 'about' ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'founder_heading', __( 'Eyebrow', 'astra-child' ) );
@@ -143,7 +150,7 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'final-cta', __( 'Final CTA', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'final-cta', __( 'Final CTA', 'astra-child' ), 'final', 'about' ); ?>
 			<table class="form-table">
 				<?php
 				oss_about_content_field_row( 'final_heading', __( 'Heading', 'astra-child' ) );
@@ -153,7 +160,12 @@ function oss_about_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_sections_end(); ?>
+			<?php
+			oss_cadmin_sections_end();
+			if ( function_exists( 'oss_sec_render_dup_panels' ) ) {
+				oss_sec_render_dup_panels( 'about' );
+			}
+			?>
 			<?php submit_button(); ?>
 		</form>
 	</div>

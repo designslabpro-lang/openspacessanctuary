@@ -5,7 +5,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'OSS_CHILD_VERSION', '1.27.0' );
+define( 'OSS_CHILD_VERSION', '1.36.0' );
 define( 'OSS_CHILD_DIR', get_stylesheet_directory() );
 define( 'OSS_CHILD_URI', get_stylesheet_directory_uri() );
 
@@ -18,18 +18,28 @@ require_once OSS_CHILD_DIR . '/inc/cpt-programs.php';
 require_once OSS_CHILD_DIR . '/inc/shortcodes.php';
 require_once OSS_CHILD_DIR . '/inc/helpers.php';
 require_once OSS_CHILD_DIR . '/inc/content-admin-ui.php';
+require_once OSS_CHILD_DIR . '/inc/section-engine.php';
+require_once OSS_CHILD_DIR . '/inc/section-engine-admin.php';
 require_once OSS_CHILD_DIR . '/inc/homepage-content.php';
+require_once OSS_CHILD_DIR . '/inc/homepage-sections.php';
 require_once OSS_CHILD_DIR . '/inc/homepage-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/homepage-dups-admin.php';
 require_once OSS_CHILD_DIR . '/inc/about-content.php';
 require_once OSS_CHILD_DIR . '/inc/about-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/about-sections.php';
 require_once OSS_CHILD_DIR . '/inc/contact-content.php';
 require_once OSS_CHILD_DIR . '/inc/contact-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/contact-sections.php';
 require_once OSS_CHILD_DIR . '/inc/herd-content.php';
 require_once OSS_CHILD_DIR . '/inc/herd-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/herd-sections.php';
 require_once OSS_CHILD_DIR . '/inc/involved-content.php';
 require_once OSS_CHILD_DIR . '/inc/involved-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/involved-sections.php';
 require_once OSS_CHILD_DIR . '/inc/faq-content.php';
 require_once OSS_CHILD_DIR . '/inc/faq-content-admin.php';
+require_once OSS_CHILD_DIR . '/inc/faq-sections.php';
+require_once OSS_CHILD_DIR . '/inc/section-builder.php';
 require_once OSS_CHILD_DIR . '/inc/v2-helpers.php';
 require_once OSS_CHILD_DIR . '/inc/events-content.php';
 require_once OSS_CHILD_DIR . '/inc/events-content-admin.php';

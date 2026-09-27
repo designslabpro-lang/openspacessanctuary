@@ -19,6 +19,10 @@ define( 'OSS_CONTACT_OPTION', 'oss_contact_content' );
  */
 function oss_contact_content_defaults() {
 	return array(
+		'section_order' => array(),
+		'dups'          => array(),
+		'removed'       => array(),
+
 		'hero_eyebrow' => "We're Here For You",
 		'hero_heading' => 'Contact Us',
 		'hero_body'    => 'Questions about our programs, upcoming events, or how to get involved? We would love to hear from you.',

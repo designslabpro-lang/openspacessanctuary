@@ -111,6 +111,72 @@ function oss_home_content_sanitize( $input ) {
 			continue;
 		}
 
+		if ( 'dups' === $key ) {
+			if ( isset( $input['dups'] ) && is_array( $input['dups'] ) && function_exists( 'oss_home_sanitize_dups' ) ) {
+				$clean['dups'] = oss_home_sanitize_dups( $input['dups'] );
+			} else {
+				// No duplicate content in this submission → keep what's stored.
+				$clean['dups'] = (array) oss_home_get( 'dups' );
+			}
+			continue;
+		}
+
+		if ( 'removed' === $key ) {
+			if ( ! isset( $input['removed'] ) || ! is_array( $input['removed'] ) ) {
+				$clean['removed'] = (array) oss_home_get( 'removed' );
+			} else {
+				$valid = function_exists( 'oss_home_default_order' ) ? oss_home_default_order() : array();
+				$out   = array();
+				foreach ( $input['removed'] as $rk ) {
+					$rk = sanitize_key( $rk );
+					if ( in_array( $rk, $valid, true ) && ! in_array( $rk, $out, true ) ) {
+						$out[] = $rk;
+					}
+				}
+				$clean['removed'] = $out;
+			}
+			continue;
+		}
+
+		if ( 'section_order' === $key ) {
+			// Missing from POST (e.g. JS off) → keep the existing saved order.
+			if ( ! isset( $input['section_order'] ) || ! is_array( $input['section_order'] ) ) {
+				$clean['section_order'] = (array) oss_home_get( 'section_order' );
+				continue;
+			}
+			$originals = function_exists( 'oss_home_default_order' ) ? oss_home_default_order() : array();
+			// Duplicate ids that are valid: those in this submission's dups, or already stored.
+			$dupids = array();
+			if ( isset( $input['dups'] ) && is_array( $input['dups'] ) ) {
+				$dupids = array_keys( $input['dups'] );
+			}
+			if ( function_exists( 'oss_home_dups' ) ) {
+				$dupids = array_merge( $dupids, array_keys( oss_home_dups() ) );
+			}
+			$valid = array_merge( $originals, $dupids );
+			$order = array();
+			foreach ( $input['section_order'] as $sk ) {
+				$sk = sanitize_text_field( $sk );
+				if ( in_array( $sk, $valid, true ) && ! in_array( $sk, $order, true ) ) {
+					$order[] = $sk;
+				}
+			}
+			$clean['section_order'] = $order;
+			continue;
+		}
+
+		if ( '_layout' === substr( $key, -7 ) ) {
+			$val               = isset( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : $default;
+			$clean[ $key ]     = in_array( $val, array( '1', '2' ), true ) ? $val : '1';
+			continue;
+		}
+
+		// Skip any array-valued default not handled above (avoids strpos on arrays).
+		if ( is_array( $default ) ) {
+			$clean[ $key ] = isset( $input[ $key ] ) && is_array( $input[ $key ] ) ? $input[ $key ] : $default;
+			continue;
+		}
+
 		if ( false !== strpos( $key, '_image_id' ) ) {
 			$clean[ $key ] = isset( $input[ $key ] ) ? absint( $input[ $key ] ) : 0;
 			continue;
@@ -208,10 +274,26 @@ function oss_home_content_page() {
 		<p class="oss-sections-toolbar">
 			<button type="button" class="button" id="oss-sections-expand"><?php esc_html_e( 'Expand all', 'astra-child' ); ?></button>
 			<button type="button" class="button" id="oss-sections-collapse"><?php esc_html_e( 'Collapse all', 'astra-child' ); ?></button>
-			<span class="description"><?php esc_html_e( 'Each homepage section below is a toggle. Open the one you want to edit; your open/closed choices are remembered after saving.', 'astra-child' ); ?></span>
+			<span class="description"><?php esc_html_e( 'Drag a section by the ⠿ handle (or use ↑ / ↓) to reorder how it appears on the homepage. Click a title to expand and edit. Remember to Save Changes.', 'astra-child' ); ?></span>
 		</p>
 		<form method="post" action="options.php">
-			<?php settings_fields( 'oss_home_content_group' ); ?>
+			<?php
+			settings_fields( 'oss_home_content_group' );
+			// Feed the current order + panel-id→key map to the reorder script.
+			$oss_order_map = array();
+			foreach ( oss_home_sections_list() as $skey => $sdata ) {
+				$oss_order_map[ $sdata['id'] ] = $skey;
+			}
+			foreach ( oss_home_dups() as $did => $ddata ) {
+				$oss_order_map[ 'oss-section-dup-' . $did ] = $did;
+			}
+			?>
+			<script type="text/javascript">
+				window.ossHomeSectionMap = <?php echo wp_json_encode( $oss_order_map ); ?>;
+				window.ossHomeSectionOrder = <?php echo wp_json_encode( oss_home_section_order() ); ?>;
+			</script>
+
+			<div id="oss-home-sections">
 
 			<details class="oss-section" id="oss-section-hero">
 				<summary><span class="oss-section__title"><?php esc_html_e( 'Hero', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
@@ -241,6 +323,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'power_layout',
+					oss_home_get( 'power_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Photo on the left, text on the right (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Text leads, photo on the right', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'power_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'power_body1', oss_home_get( 'power_body1' ), __( 'Paragraph 1', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'power_body2', oss_home_get( 'power_body2' ), __( 'Paragraph 2', 'astra-child' ) );
@@ -257,6 +349,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'serve_layout',
+					oss_home_get( 'serve_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Centered card grid (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Left-aligned list of rows', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'serve_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'serve_intro', oss_home_get( 'serve_intro' ), __( 'Intro', 'astra-child' ) );
 				?>
@@ -277,6 +379,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'programs_layout',
+					oss_home_get( 'programs_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Centered header (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Left-aligned header', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'programs_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'programs_intro', oss_home_get( 'programs_intro' ), __( 'Intro', 'astra-child' ) );
 				?>
@@ -296,6 +408,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'horses_layout',
+					oss_home_get( 'horses_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Text panel on the left (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Text panel on the right', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'horses_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'horses_body', oss_home_get( 'horses_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'horses_sub', __( 'Subheading / Link Text', 'astra-child' ) );
@@ -310,6 +432,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'founder_layout',
+					oss_home_get( 'founder_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Photo left, biography right (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Centered round portrait testimonial', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'founder_heading', __( 'Heading', 'astra-child' ) );
 				oss_home_content_field_row( 'founder_name', __( 'Name', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'founder_body', oss_home_get( 'founder_body' ), __( 'Biography', 'astra-child' ) );
@@ -324,7 +456,19 @@ function oss_home_content_page() {
 				<summary><span class="oss-section__title"><?php esc_html_e( 'Stories of Hope', 'astra-child' ); ?></span><span class="oss-section__hint"><?php esc_html_e( 'Click to expand / collapse', 'astra-child' ); ?></span></summary>
 				<div class="oss-section__body">
 			<table class="form-table">
-				<?php oss_home_content_field_row( 'stories_heading', __( 'Heading', 'astra-child' ) ); ?>
+				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'stories_layout',
+					oss_home_get( 'stories_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Multi-column card grid (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Single centered column', 'astra-child' ),
+					)
+				);
+				oss_home_content_field_row( 'stories_heading', __( 'Heading', 'astra-child' ) );
+				?>
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Testimonials', 'astra-child' ); ?></th>
 					<td>
@@ -345,6 +489,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'donate_layout',
+					oss_home_get( 'donate_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Image left, text right (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Image right, text left', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'donate_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'donate_body', oss_home_get( 'donate_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'donate_btn', __( 'Button Text', 'astra-child' ) );
@@ -360,6 +514,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'connect_layout',
+					oss_home_get( 'connect_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Text left, form right (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Centered, form below text', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'connect_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'connect_body', oss_home_get( 'connect_body' ), __( 'Body', 'astra-child' ) );
 				?>
@@ -373,6 +537,16 @@ function oss_home_content_page() {
 				<div class="oss-section__body">
 			<table class="form-table">
 				<?php
+				oss_cadmin_select_row(
+					OSS_HOME_OPTION,
+					'final_layout',
+					oss_home_get( 'final_layout' ),
+					__( 'Section Design', 'astra-child' ),
+					array(
+						'1' => __( 'Style 1 — Image left, text right (default)', 'astra-child' ),
+						'2' => __( 'Style 2 — Image right, text left', 'astra-child' ),
+					)
+				);
 				oss_home_content_field_row( 'final_heading', __( 'Heading', 'astra-child' ) );
 				oss_cadmin_editor_row( OSS_HOME_OPTION, 'final_body', oss_home_get( 'final_body' ), __( 'Body', 'astra-child' ) );
 				oss_home_content_field_row( 'final_sub', __( 'Supporting Line', 'astra-child' ) );
@@ -386,6 +560,16 @@ function oss_home_content_page() {
 
 			</div></details>
 
+			<?php
+			// Duplicate section panels (rendered after the originals; the reorder
+			// script places them into the saved order on load).
+			foreach ( oss_home_dups() as $oss_did => $oss_ddata ) {
+				oss_home_render_dup_panel( $oss_did, $oss_ddata, $icons );
+			}
+			?>
+
+			</div><!-- #oss-home-sections -->
+
 			<?php submit_button(); ?>
 		</form>
 	</div>
@@ -397,6 +581,7 @@ function oss_home_content_admin_assets( $hook ) {
 		return;
 	}
 	wp_enqueue_media();
+	wp_enqueue_script( 'jquery-ui-sortable' );
 	oss_cadmin_repeater_js();
 	oss_cadmin_editor_assets();
 
@@ -417,6 +602,19 @@ function oss_home_content_admin_assets( $hook ) {
 		.oss-section[open] .oss-section__hint{display:none;}
 		.oss-section__body{padding:0 16px 8px;}
 		.oss-section__body .form-table{margin-top:0;}
+		.oss-section > summary{gap:8px;}
+		.oss-section__hint{display:none;}
+		.oss-section__handle{cursor:grab;color:#8c8f94;font-size:18px;width:26px;height:30px;line-height:30px;text-align:center;border-radius:4px;flex:0 0 auto;transition:color .12s ease,background .12s ease;}
+		.oss-section__handle:hover{color:#1d2327;background:#f0f0f1;}
+		.oss-section__handle:active{cursor:grabbing;}
+		.oss-section__move{display:inline-flex;align-items:center;gap:4px;flex:0 0 auto;margin-left:auto;}
+		.oss-section__move .button{width:32px;height:32px;min-height:32px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;color:#50575e;box-shadow:none;}
+		.oss-section__move .button:hover{color:#135e96;border-color:#135e96;background:#f6f7f7;}
+		.oss-section__move .button .dashicons{display:block;width:18px;height:18px;font-size:18px;line-height:18px;}
+		.oss-sortable-placeholder{border:2px dashed #2271b1;background:#f0f6fc;border-radius:4px;margin:0 0 12px;height:54px;max-width:1100px;}
+		.oss-section.ui-sortable-helper{box-shadow:0 10px 26px rgba(0,0,0,.16);}
+		@media (max-width:782px){.oss-section > summary{flex-wrap:wrap;}.oss-section__title{flex:1 1 100%;}.oss-section__move{margin-left:0;}}
+		.oss-section.ui-sortable-helper{box-shadow:0 8px 22px rgba(0,0,0,.16);}
 CSS;
 	wp_register_style( 'oss-home-content-admin', false, array(), null );
 	wp_enqueue_style( 'oss-home-content-admin' );
@@ -487,6 +685,51 @@ CSS;
 				wrap.find('img').hide();
 				$(this).hide();
 			});
+		});
+		jQuery(function($){
+			// Reorder homepage sections: drag by the handle or use the up/down
+			// buttons. A hidden input per panel captures the order; the panels
+			// live inside the settings form, so DOM order == submitted order.
+			var map   = window.ossHomeSectionMap || {};
+			var order = window.ossHomeSectionOrder || [];
+			var $container = $('#oss-home-sections');
+			if (!$container.length) { return; }
+
+			$container.children('.oss-section').each(function(){
+				var $panel = $(this), key = map[this.id];
+				if (!key) { return; }
+				var $summary = $panel.children('summary');
+				if (!$summary.find('.oss-section__handle').length) {
+					$summary.prepend('<span class="oss-section__handle dashicons dashicons-menu" title="Drag to reorder"></span>');
+					$summary.append('<span class="oss-section__move"><button type="button" class="button oss-move-up" title="Move up"><span class="dashicons dashicons-arrow-up-alt2"></span></button><button type="button" class="button oss-move-down" title="Move down"><span class="dashicons dashicons-arrow-down-alt2"></span></button></span>');
+				}
+				if (!$panel.children('.oss-order-input').length) {
+					$('<input>', { type:'hidden', 'class':'oss-order-input', name:'oss_home_content[section_order][]', value:key }).appendTo($panel);
+				}
+			});
+
+			// Apply the saved order to the panels on load.
+			order.forEach(function(key){
+				for (var id in map) { if (map[id] === key) { var el = document.getElementById(id); if (el) { $container.append(el); } } }
+			});
+
+			// Keep the handle / arrow buttons from toggling the <details>.
+			$container.on('click', '.oss-section__handle, .oss-move-up, .oss-move-down', function(e){ e.preventDefault(); e.stopPropagation(); });
+			function ossMoveSafe($p, fn){
+				if (window.ossCadminSaveRemove) { window.ossCadminSaveRemove($p); }
+				fn();
+				if (window.ossCadminInitEditors) { setTimeout(window.ossCadminInitEditors, 40); }
+			}
+			$container.on('click', '.oss-move-up', function(){ var $p=$(this).closest('.oss-section'), $prev=$p.prev('.oss-section'); if ($prev.length) { ossMoveSafe($p, function(){ $p.insertBefore($prev); }); } });
+			$container.on('click', '.oss-move-down', function(){ var $p=$(this).closest('.oss-section'), $next=$p.next('.oss-section'); if ($next.length) { ossMoveSafe($p, function(){ $p.insertAfter($next); }); } });
+
+			if ($.fn.sortable) {
+				$container.sortable({
+					handle:'.oss-section__handle', items:'> .oss-section', placeholder:'oss-sortable-placeholder', forcePlaceholderSize:true, tolerance:'pointer', axis:'y',
+					start: function(e, ui){ if (window.ossCadminSaveRemove) { window.ossCadminSaveRemove(ui.item); } },
+					stop:  function(e, ui){ if (window.ossCadminInitEditors) { setTimeout(window.ossCadminInitEditors, 40); } }
+				});
+			}
 		});
 JS;
 	wp_add_inline_script( 'jquery-core', $oss_home_admin_js );

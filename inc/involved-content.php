@@ -14,6 +14,10 @@ define( 'OSS_INVOLVED_OPTION', 'oss_involved_content' );
 
 function oss_involved_content_defaults() {
 	return array(
+		'section_order' => array(),
+		'dups'          => array(),
+		'removed'       => array(),
+
 		'hero_eyebrow'  => 'Get Involved',
 		'hero_heading'  => 'Get Involved',
 		'hero_body'     => 'There are many ways to support the herd — volunteer, donate, or sponsor a horse. Reach out to learn how you can get involved.',

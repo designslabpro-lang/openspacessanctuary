@@ -197,6 +197,21 @@
 }
 .oss2-feature--reverse .oss2-feature__media { order: 2; }
 
+/* Style 2 — text column leads on the left, photo on the right, wider copy. */
+.oss2-feature--textlead {
+	grid-template-columns: 1.1fr 0.9fr;
+	align-items: center;
+}
+.oss2-feature--textlead .oss2-feature__media { order: 2; }
+.oss2-feature--textlead .oss2-feature__media img { aspect-ratio: 3 / 4; }
+.oss2-feature--textlead .oss2-feature__quote {
+	left: auto;
+	right: 1.5rem;
+	bottom: auto;
+	top: 1.5rem;
+}
+.oss2-feature--textlead > div:not(.oss2-feature__media) { order: 1; }
+
 .oss2-feature__media {
 	position: relative;
 }
@@ -225,7 +240,9 @@
 }
 @media (max-width: 900px) {
 	.oss2-feature { grid-template-columns: 1fr; }
-	.oss2-feature--reverse .oss2-feature__media { order: 0; }
+	.oss2-feature--reverse .oss2-feature__media,
+	.oss2-feature--textlead .oss2-feature__media { order: 0; }
+	.oss2-feature--textlead > div:not(.oss2-feature__media) { order: 0; }
 	.oss2-feature__quote { position: static; margin-top: 1.25rem; max-width: none; }
 }
 
@@ -276,6 +293,36 @@
 }
 .oss2-serve-card__icon svg { width: 22px; height: 22px; }
 .oss2-serve-card__num { display: none; }
+
+/* Who We Serve — Style 2: left-aligned single-column list of horizontal rows. */
+.oss2-serve-section--alt { text-align: left; }
+.oss2-serve-grid--rows {
+	grid-template-columns: 1fr;
+	gap: 1rem;
+	max-width: 820px;
+}
+.oss2-serve-grid--rows .oss2-serve-card {
+	flex-direction: row;
+	align-items: center;
+	min-height: 0;
+	padding: 1.15rem 1.6rem;
+	border-radius: 16px;
+}
+.oss2-serve-grid--rows .oss2-serve-card__icon {
+	margin-bottom: 0;
+	margin-right: 1.25rem;
+	flex: 0 0 auto;
+}
+.oss2-serve-grid--rows .oss2-serve-card__num {
+	display: block;
+	font-family: var(--oss-font-heading);
+	font-size: 1.1rem;
+	color: rgba(255,255,255,0.55);
+	margin-right: 1rem;
+	flex: 0 0 auto;
+}
+.oss2-serve-grid--rows .oss2-serve-card__label { font-size: 1.05rem; }
+.oss2-serve-grid--rows .oss2-serve-card:hover { transform: translateX(6px); }
 .oss2-serve-card__label {
 	display: block;
 	font-weight: 600;
@@ -466,6 +513,30 @@
 	display: block;
 	margin-bottom: -1rem;
 }
+/* Our Founder — Style 2: centered portrait testimonial, single column. */
+.oss2-founder--alt {
+	grid-template-columns: 1fr;
+	max-width: 720px;
+	margin: 0 auto;
+	text-align: center;
+	gap: 1.75rem;
+}
+.oss2-founder--alt .oss2-founder__media {
+	width: 200px;
+	margin: 0 auto;
+}
+.oss2-founder--alt .oss2-founder__media img {
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+	box-shadow: var(--oss-shadow-lg);
+}
+.oss2-founder--alt .oss2-founder__mark {
+	margin-bottom: -1.5rem;
+	color: var(--oss-gold);
+}
+.oss2-founder--alt .oss-eyebrow { display: block; }
+.oss2-founder--alt p { font-size: 1.12rem; }
+
 @media (max-width: 900px) {
 	.oss2-founder { grid-template-columns: 1fr; }
 }
@@ -647,6 +718,61 @@
 .oss2-close__actions { display: flex; flex-wrap: wrap; gap: 1rem; }
 @media (max-width: 900px) {
 	.oss2-close { grid-template-columns: 1fr; }
+}
+
+/* ==================================================================== */
+/* Section design — Style 2 alternates (opt-in per section via editor). */
+/* Each defaults to Style 1; these rules only apply when the client      */
+/* selects "Style 2" and the template adds the --alt / variant class.    */
+/* ==================================================================== */
+
+/* Our Programs — Style 2: left-aligned section header. */
+.oss2-programs-section--alt .oss-section-heading {
+	max-width: 820px;
+	margin-left: 0;
+	margin-right: 0;
+	text-align: left;
+}
+
+/* Meet Our Horses — Style 2: text panel on the right, mirrored gradient. */
+.oss2-herd--alt::before {
+	background: linear-gradient(270deg, rgba(30,34,28,0.88) 0%, rgba(30,34,28,0.5) 42%, rgba(30,34,28,0) 52%);
+}
+.oss2-herd--alt .oss2-herd__panel { order: 2; margin-left: auto; }
+.oss2-herd--alt .oss2-herd__spacer { order: 1; }
+
+/* Stories of Hope — Style 2: single centered column of larger cards. */
+.oss2-stories--alt .oss2-stories__grid {
+	grid-template-columns: 1fr;
+	max-width: 720px;
+	margin-left: auto;
+	margin-right: auto;
+	gap: 1.25rem;
+}
+.oss2-stories--alt .oss2-stories__card { padding: 2.4rem 2.25rem; }
+.oss2-stories--alt .oss2-stories__quote { font-size: 1.2rem; }
+
+/* Help Us Change Lives — Style 2: image on the right. */
+.oss2-give--alt .oss2-give__media { order: 2; }
+
+/* Stay Connected — Style 2: centered, stacked (text above the form). */
+.oss2-connect--alt {
+	grid-template-columns: 1fr;
+	max-width: 620px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+.oss2-connect--alt .oss2-connect__text { text-align: center; }
+
+/* Final CTA — Style 2: image on the right. */
+.oss2-close--alt .oss2-close__media { order: 2; }
+
+@media (max-width: 900px) {
+	.oss2-herd--alt .oss2-herd__panel { order: 0; margin-left: 0; }
+	.oss2-herd--alt::before {
+		background: linear-gradient(90deg, rgba(30,34,28,0.88) 0%, rgba(30,34,28,0.6) 100%);
+	}
 }
 
 /* Keep the two hero buttons (Learn More / Donate Now) side by side on phones

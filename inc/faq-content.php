@@ -11,6 +11,10 @@ define( 'OSS_FAQ_OPTION', 'oss_faq_content' );
 
 function oss_faq_content_defaults() {
 	return array(
+		'section_order' => array(),
+		'dups'          => array(),
+		'removed'       => array(),
+
 		'hero_eyebrow'  => 'Questions & Answers',
 		'hero_heading'  => 'Frequently Asked Questions',
 		'hero_body'     => "Answers to the questions we hear most. Don't see yours? Reach out anytime — we're happy to help.",

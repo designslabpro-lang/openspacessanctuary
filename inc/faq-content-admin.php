@@ -60,6 +60,15 @@ function oss_faq_content_sanitize( $input ) {
 	}
 	$clean['faqs'] = $rows;
 
+	if ( function_exists( 'oss_sec_sanitize_key' ) ) {
+		foreach ( array( 'section_order', 'dups', 'removed' ) as $ek ) {
+			$v = oss_sec_sanitize_key( 'faq', $ek, $input, 'oss_faq_get' );
+			if ( null !== $v ) {
+				$clean[ $ek ] = $v;
+			}
+		}
+	}
+
 	return $clean;
 }
 
@@ -86,7 +95,7 @@ function oss_faq_content_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'oss_faq_content_group' ); ?>
 
-			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ), 'hero', 'faq' ); ?>
 			<table class="form-table">
 				<?php
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_faq_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
@@ -96,7 +105,7 @@ function oss_faq_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'questions', __( 'Questions & Answers', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'questions', __( 'Questions & Answers', 'astra-child' ), 'faqs', 'faq' ); ?>
 			<table class="form-table">
 				<tr>
 					<th scope="row"><?php esc_html_e( 'Questions', 'astra-child' ); ?></th>
@@ -111,7 +120,12 @@ function oss_faq_content_page() {
 				</tr>
 			</table>
 
-			<?php oss_cadmin_sections_end(); ?>
+			<?php
+			oss_cadmin_sections_end();
+			if ( function_exists( 'oss_sec_render_dup_panels' ) ) {
+				oss_sec_render_dup_panels( 'faq' );
+			}
+			?>
 			<?php submit_button(); ?>
 		</form>
 	</div>

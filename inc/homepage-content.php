@@ -28,6 +28,9 @@ function oss_home_content_defaults() {
 		'hero_image_id'   => 52,
 		'hero_trust'      => 'A 501(c)(3) nonprofit organization',
 		'hero_slide_ids'  => array( 52, 110, 87 ),
+		'section_order'   => array(),   // Client-chosen homepage section order; empty = default order.
+		'dups'            => array(),   // Duplicated section instances: id => array( 'type' => key, ...overrides ).
+		'removed'         => array(),   // Built-in section keys the client hid from the page (restorable).
 
 		'power_eyebrow'   => 'Healing Begins Here',
 		'power_heading'   => 'The Healing Power of Horses',
@@ -36,6 +39,7 @@ function oss_home_content_defaults() {
 		'power_quote'     => "Healing doesn't happen because of what we do to the horses. It happens because of the experiences and relationships we build with them.",
 		'power_caption'   => "Connection\nChanges Lives",
 		'power_image_id'  => 110,
+		'power_layout'    => '1',       // '1' = image left, '2' = image right (stacked lead).
 
 		'serve_heading'   => 'Who We Serve',
 		'serve_intro'     => "Open Spaces Sanctuary welcomes everyone navigating life's challenges while offering specialized programs for:",
@@ -49,22 +53,27 @@ function oss_home_content_defaults() {
 			array( 'icon' => 'compass', 'label' => 'Individuals, Families, and Professionals looking to grow, heal, and reconnect' ),
 		),
 		'serve_closing'   => "No matter your story, you'll find compassion, acceptance, and support here.",
+		'serve_layout'    => '1',       // '1' = centered card grid, '2' = left-aligned row list.
 
 		'programs_heading' => 'Our Programs',
 		'programs_intro'   => 'Every person arrives with unique experiences and goals. Our programs are thoughtfully designed to meet you where you are.',
+		'programs_layout'  => '1',      // '1' = centered header, '2' = left-aligned header.
 
 		'horses_heading'  => 'Meet Our Horses',
 		'horses_body'     => "Every horse at Open Spaces Sanctuary has a story.\n\nSome have overcome hardship. Some have found a second chance. Together, they become remarkable teachers—offering honesty, patience, trust, and unconditional acceptance to every person they meet.\n\nOur horses are not tools. They are partners in healing.",
 		'horses_sub'      => 'Meet the Herd',
 		'horses_image_id' => 52,
+		'horses_layout'   => '1',       // '1' = text panel left, '2' = text panel right.
 
 		'founder_heading' => 'Our Founder',
 		'founder_name'    => 'Donna Blem',
 		'founder_body'    => "Open Spaces Sanctuary was founded by Donna Blem, whose lifelong passion for horses and service has impacted thousands of lives.\n\nAs the co-founder and Executive Director of one of the nation's largest therapeutic riding centers, Donna spent over two decades building programs that changed lives while mentoring staff, volunteers, and equine partners. Her experience in nonprofit leadership, equine-assisted learning, and natural horsemanship now guides the vision of Open Spaces Sanctuary—a place where healing, hope, and connection flourish for both people and horses.",
 		'founder_btn'     => 'Meet Donna',
 		'founder_image_id' => 0,
+		'founder_layout'  => '1',       // '1' = image left + text, '2' = centered portrait testimonial.
 
 		'stories_heading' => 'Stories of Hope',
+		'stories_layout'  => '1',       // '1' = multi-column card grid, '2' = single stacked column.
 		'testimonials'    => array(
 			array( 'quote' => "Coming to the ranch was truly a game changer for me... After transitioning out of the military, I've often felt disconnected. Today I left with a sense of lightness and hope.", 'name' => 'Doug B.' ),
 			array( 'quote' => "Donna truly 'gets it.' Every lesson leaves me feeling seen and heard. She has helped me better understand myself while creating a safe, supportive environment for healing.", 'name' => 'Linda H.' ),
@@ -76,9 +85,11 @@ function oss_home_content_defaults() {
 		'donate_btn'      => 'Donate Today',
 		'donate_btn_url'  => '/contact/',
 		'donate_image_id' => 52,
+		'donate_layout'   => '1',       // '1' = image left, text right, '2' = image right, text left.
 
 		'connect_heading' => 'Stay Connected',
 		'connect_body'    => 'Join our community and receive inspiring stories, upcoming events, program updates, and opportunities to make a difference.',
+		'connect_layout'  => '1',       // '1' = text left, form right, '2' = centered stacked.
 
 		'final_heading'   => 'Everyone Deserves a Place to Heal.',
 		'final_body'      => "Whether you're looking for support, searching for meaningful ways to give back, or simply curious about the incredible partnership between people and horses, we'd love to welcome you to Open Spaces Sanctuary.",
@@ -88,6 +99,7 @@ function oss_home_content_defaults() {
 		'final_btn2_text' => 'Donate Now',
 		'final_btn2_url'  => '/contact/',
 		'final_image_id'  => 110,
+		'final_layout'    => '1',       // '1' = image left, text right, '2' = image right, text left.
 	);
 }
 
@@ -126,6 +138,30 @@ function oss_home_get( $key ) {
  */
 function oss_home_image( $key, $size = 'large', $alt = '' ) {
 	$id = (int) oss_home_get( $key );
+	if ( $id && wp_get_attachment_image_src( $id, $size ) ) {
+		return wp_get_attachment_image( $id, $size, false, array( 'alt' => $alt ) );
+	}
+	return '<div class="oss-image-placeholder" aria-hidden="true"></div>';
+}
+
+/**
+ * Instance-aware field read. For an original section ($ctx null) it returns the
+ * shared value from oss_home_get(). For a duplicate section ($ctx = that
+ * instance's content array) it returns the instance's own value, falling back
+ * to the original when a field was not overridden.
+ */
+function oss_home_f( $ctx, $key ) {
+	if ( is_array( $ctx ) && array_key_exists( $key, $ctx ) ) {
+		return $ctx[ $key ];
+	}
+	return oss_home_get( $key );
+}
+
+/**
+ * Instance-aware image render (mirrors oss_home_image but honours $ctx).
+ */
+function oss_home_img_ctx( $ctx, $key, $size = 'large', $alt = '' ) {
+	$id = (int) oss_home_f( $ctx, $key );
 	if ( $id && wp_get_attachment_image_src( $id, $size ) ) {
 		return wp_get_attachment_image( $id, $size, false, array( 'alt' => $alt ) );
 	}

@@ -17,7 +17,7 @@ function oss_cadmin_toolbar() {
 	<p class="oss-sections-toolbar">
 		<button type="button" class="button" id="oss-sections-expand"><?php esc_html_e( 'Expand all', 'astra-child' ); ?></button>
 		<button type="button" class="button" id="oss-sections-collapse"><?php esc_html_e( 'Collapse all', 'astra-child' ); ?></button>
-		<span class="description"><?php esc_html_e( 'Each section below is a toggle. Open the one you want to edit; your open/closed choices are remembered after saving.', 'astra-child' ); ?></span>
+		<span class="description"><?php esc_html_e( 'Click a section title to edit it. Use the ⠿ handle or ↑ / ↓ to reorder, Duplicate to copy a section, or Delete to hide it — then Save Changes.', 'astra-child' ); ?></span>
 	</p>
 	<?php
 }
@@ -26,12 +26,16 @@ function oss_cadmin_toolbar() {
  * Open a collapsible section. $id is a short slug (unique on the page); $title
  * is the visible heading.
  */
-function oss_cadmin_section_open( $id, $title ) {
+function oss_cadmin_section_open( $id, $title, $key = '', $group = '' ) {
+	$data = ( '' !== $key && '' !== $group )
+		? ' data-oss-key="' . esc_attr( $key ) . '" data-oss-group="' . esc_attr( $group ) . '"'
+		: '';
 	printf(
-		'<details class="oss-section" id="oss-section-%1$s"><summary><span class="oss-section__title">%2$s</span><span class="oss-section__hint">%3$s</span></summary><div class="oss-section__body">',
+		'<details class="oss-section" id="oss-section-%1$s"%4$s><summary><span class="oss-section__title">%2$s</span><span class="oss-section__hint">%3$s</span></summary><div class="oss-section__body">',
 		esc_attr( $id ),
 		esc_html( $title ),
-		esc_html__( 'Click to expand / collapse', 'astra-child' )
+		esc_html__( 'Click to expand / collapse', 'astra-child' ),
+		$data // phpcs:ignore WordPress.Security.EscapeOutput -- pre-escaped attributes above.
 	);
 }
 
@@ -48,11 +52,11 @@ function oss_cadmin_section_close() {
  * oss_cadmin_sections_end() before the submit button — works whatever a
  * section contains (a form table, a repeater, anything).
  */
-function oss_cadmin_section( $id, $title ) {
+function oss_cadmin_section( $id, $title, $key = '', $group = '' ) {
 	if ( ! empty( $GLOBALS['__oss_cadmin_open'] ) ) {
 		oss_cadmin_section_close();
 	}
-	oss_cadmin_section_open( $id, $title );
+	oss_cadmin_section_open( $id, $title, $key, $group );
 	$GLOBALS['__oss_cadmin_open'] = true;
 }
 
@@ -108,10 +112,11 @@ function oss_cadmin_editor_assets() {
 	wp_enqueue_editor();
 	$js = <<<'JS'
 		jQuery(function($){
-			var inited = {};
 			function initOne(el){
 				var id = el.id;
-				if (!id || inited[id]) { return; }
+				if (!id) { return; }
+				// Already have a live editor for this textarea? leave it.
+				if (window.tinymce && window.tinymce.get(id)) { return; }
 				if (window.wp && wp.editor && wp.editor.initialize){
 					wp.editor.initialize(id, {
 						tinymce: {
@@ -123,12 +128,28 @@ function oss_cadmin_editor_assets() {
 						quicktags: { buttons: 'strong,em,link,ul,ol,li,close' },
 						mediaButtons: false
 					});
-					inited[id] = true;
 				}
 			}
 			function initVisible(){ $('textarea.oss-rte:visible').each(function(){ initOne(this); }); }
-			initVisible();
-			$('details.oss-section').on('toggle', function(){ if (this.open) { setTimeout(initVisible, 20); } });
+			// Save a section's editors back to their textareas and tear them down.
+			// Used before the panel is moved (reorder/drag) so the DOM move can't
+			// blank the TinyMCE iframe or lose content.
+			function saveRemove($scope){
+				if (!window.tinymce || !window.wp || !wp.editor) { return; }
+				( $scope || $(document) ).find('textarea.oss-rte').each(function(){
+					var ed = window.tinymce.get(this.id);
+					if (ed) { try { ed.save(); } catch(e){} try { wp.editor.remove(this.id); } catch(e){} }
+				});
+			}
+			// Exposed so the reorder/sortable code can keep editors intact across moves.
+			window.ossCadminInitEditors = initVisible;
+			window.ossCadminSaveRemove  = saveRemove;
+
+			// Defer the on-load init so any section reordering finishes first —
+			// otherwise a remembered-open section's editor is built, then moved,
+			// then shows blank.
+			setTimeout( initVisible, 0 );
+			$('details.oss-section').on('toggle', function(){ if (this.open) { setTimeout(initVisible, 30); } });
 			$(document).on('submit', 'form', function(){ if (window.tinymce) { window.tinymce.triggerSave(); } });
 		});
 JS;
@@ -241,6 +262,19 @@ function oss_cadmin_card_row( $option, $field, $i, $row, $icons, $with_url = fal
 		</p>
 	</div>
 	<?php
+}
+
+/**
+ * A labelled <select> row for an options-page form table.
+ */
+function oss_cadmin_select_row( $option, $key, $value, $label, $choices ) {
+	$id = $option . '_' . $key;
+	echo '<tr><th scope="row"><label for="' . esc_attr( $id ) . '">' . esc_html( $label ) . '</label></th><td>';
+	echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $option . '[' . $key . ']' ) . '">';
+	foreach ( $choices as $val => $lbl ) {
+		echo '<option value="' . esc_attr( $val ) . '" ' . selected( $value, $val, false ) . '>' . esc_html( $lbl ) . '</option>';
+	}
+	echo '</select></td></tr>';
 }
 
 /**

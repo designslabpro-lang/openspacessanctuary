@@ -18,6 +18,10 @@ define( 'OSS_ABOUT_OPTION', 'oss_about_content' );
  */
 function oss_about_content_defaults() {
 	return array(
+		'section_order' => array(),
+		'dups'          => array(),
+		'removed'       => array(),
+
 		'hero_eyebrow' => 'About Us',
 		'hero_heading' => 'Our Story',
 		'hero_body'    => 'Nestled in the peaceful countryside of Ocala, Florida.',

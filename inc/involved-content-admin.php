@@ -39,6 +39,13 @@ function oss_involved_content_sanitize( $input ) {
 	$clean    = array();
 
 	foreach ( $defaults as $key => $default ) {
+		if ( function_exists( 'oss_sec_sanitize_key' ) ) {
+			$eng = oss_sec_sanitize_key( 'involved', $key, $input, 'oss_involved_get' );
+			if ( null !== $eng ) {
+				$clean[ $key ] = $eng;
+				continue;
+			}
+		}
 		if ( 'ways' === $key ) {
 			continue; // handled below
 		}
@@ -88,7 +95,7 @@ function oss_involved_content_page() {
 		<form method="post" action="options.php">
 			<?php settings_fields( 'oss_involved_content_group' ); ?>
 
-			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'page-banner', __( 'Page Banner', 'astra-child' ), 'hero', 'involved' ); ?>
 			<table class="form-table">
 				<?php
 				oss_cadmin_field_row( $o, 'hero_eyebrow', oss_involved_get( 'hero_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
@@ -98,7 +105,7 @@ function oss_involved_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_section( 'ways-to-get-involved', __( 'Ways to Get Involved', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'ways-to-get-involved', __( 'Ways to Get Involved', 'astra-child' ), 'ways', 'involved' ); ?>
 			<table class="form-table">
 				<?php
 				oss_cadmin_field_row( $o, 'ways_eyebrow', oss_involved_get( 'ways_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
@@ -113,7 +120,7 @@ function oss_involved_content_page() {
 				</tr>
 			</table>
 
-			<?php oss_cadmin_section( 'support-the-sanctuary', __( 'Support the Sanctuary', 'astra-child' ) ); ?>
+			<?php oss_cadmin_section( 'support-the-sanctuary', __( 'Support the Sanctuary', 'astra-child' ), 'give', 'involved' ); ?>
 			<table class="form-table">
 				<?php
 				oss_cadmin_field_row( $o, 'give_eyebrow', oss_involved_get( 'give_eyebrow' ), __( 'Eyebrow', 'astra-child' ) );
@@ -125,7 +132,12 @@ function oss_involved_content_page() {
 				?>
 			</table>
 
-			<?php oss_cadmin_sections_end(); ?>
+			<?php
+			oss_cadmin_sections_end();
+			if ( function_exists( 'oss_sec_render_dup_panels' ) ) {
+				oss_sec_render_dup_panels( 'involved' );
+			}
+			?>
 			<?php submit_button(); ?>
 		</form>
 	</div>
